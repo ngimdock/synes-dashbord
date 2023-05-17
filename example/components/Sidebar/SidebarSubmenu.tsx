@@ -81,7 +81,7 @@ function SidebarSubmenu({ route, linkClicked }: ISidebarSubmenu) {
                   href={r.path || ""}
                   scroll={false}
                 >
-                  <a
+                  <span
                     className={`w-full inline-block ${
                       routeIsActive(pathname, r)
                       ? 'dark:text-gray-100 text-gray-800'
@@ -90,7 +90,7 @@ function SidebarSubmenu({ route, linkClicked }: ISidebarSubmenu) {
                     onClick={linkClicked}
                   >
                     {r.name}
-                  </a>
+                  </span>
                 </Link>
               </li>
             ))

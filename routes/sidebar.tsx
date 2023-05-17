@@ -10,7 +10,8 @@ interface IRoute{
   name: string
   routes?: IRoute[]
   checkActive?(pathname: String, route: IRoute): boolean
-  exact?: boolean
+  exact?: boolean,
+  block?: boolean
 }
 
 export function routeIsActive (pathname: String, route: IRoute): boolean {
@@ -25,69 +26,81 @@ export function routeIsActive (pathname: String, route: IRoute): boolean {
 
 const routes: IRoute[] = [
   {
-    path: '/example', // the url
-    icon: 'HomeIcon', // the component being exported from icons/index.js
-    name: 'Dashboard', // name that appear in Sidebar
+    block: true,
+    name: "Vos salons",
+  },
+  {
+    path: "/rooms/general/communique", // the url
+    icon: "HomeIcon", // the component being exported from icons/index.js
+    name: "General", // name that appear in Sidebar
     exact: true,
   },
   {
-    path: '/example/forms',
-    icon: 'FormsIcon',
-    name: 'Forms',
+    path: "/rooms/plaintes",
+    icon: "FormsIcon",
+    name: "Plaintes",
   },
   {
-    path: '/example/cards',
-    icon: 'CardsIcon',
-    name: 'Cards',
+    path: "/rooms/notifications",
+    icon: "OutlineBellIcon",
+    name: "Notifications",
   },
   {
-    path: '/example/charts',
-    icon: 'ChartsIcon',
-    name: 'Charts',
+    block: true,
+    name: "Organisation",
   },
   {
-    path: '/example/buttons',
-    icon: 'ButtonsIcon',
-    name: 'Buttons',
+    path: "/example/charts",
+    icon: "ChartsIcon",
+    name: "Services",
   },
   {
-    path: '/example/modals',
-    icon: 'ModalsIcon',
-    name: 'Modals',
+    block: true,
+    name: "Votre compte",
   },
   {
-    path: '/example/tables',
-    icon: 'TablesIcon',
-    name: 'Tables',
+    path: "/profile",
+    icon: "OutlinePersonIcon",
+    name: "Profil",
   },
   {
-    icon: 'PagesIcon',
-    name: 'Pages',
-    routes: [
-      // submenu
-      {
-        path: '/example/login',
-        name: 'Login',
-      },
-      {
-        path: '/example/create-account',
-        name: 'Create account',
-      },
-      {
-        path: '/example/forgot-password',
-        name: 'Forgot password',
-      },
-      {
-        path: '/example/404',
-        name: '404',
-      },
-      {
-        path: '/example/blank',
-        name: 'Blank',
-      },
-    ],
+    path: "/example/modals",
+    icon: "OutlineCogIcon",
+    name: "Parametres",
   },
-]
+  {
+    path: "/example/tables",
+    icon: "OutlineLogoutIcon",
+    name: "Déconnexion",
+  },
+  // {
+  //   icon: 'PagesIcon',
+  //   name: 'Pages',
+  //   routes: [
+  //     // submenu
+  //     {
+  //       path: '/example/login',
+  //       name: 'Login',
+  //     },
+  //     {
+  //       path: '/example/create-account',
+  //       name: 'Create account',
+  //     },
+  //     {
+  //       path: '/example/forgot-password',
+  //       name: 'Forgot password',
+  //     },
+  //     {
+  //       path: '/example/404',
+  //       name: '404',
+  //     },
+  //     {
+  //       path: '/example/blank',
+  //       name: 'Blank',
+  //     },
+  //   ],
+  // },
+];
 
 export type {IRoute}
 export default routes

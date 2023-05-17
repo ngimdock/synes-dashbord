@@ -10,7 +10,7 @@ function CrateAccount() {
   const imgSource = mode === 'dark' ? '/assets/img/create-account-office-dark.jpeg' : '/assets/img/create-account-office.jpeg'
 
   return (
-    <div className="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
+    <div className="flex items-center min-h-screen p-6 bg-gray-900 dark:bg-gray-900">
       <div className="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
         <div className="flex flex-col overflow-y-auto md:flex-row">
           <div className="relative h-32 md:h-auto md:w-1/2">
@@ -69,11 +69,11 @@ function CrateAccount() {
 
               <p className="mt-4">
                 <Link href="/example/login">
-                  <a
+                  <span
                     className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
                   >
                     Already have an account? Login
-                  </a>
+                  </span>
                 </Link>
               </p>
             </div>

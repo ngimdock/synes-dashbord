@@ -1,5 +1,7 @@
 import Layout from 'example/containers/Layout'
 import { ForbiddenIcon } from 'icons'
+import Link from "next/link";
+
 
 function Page404() {
   return (
@@ -9,9 +11,9 @@ function Page404() {
         <h1 className="text-6xl font-semibold text-gray-700 dark:text-gray-200">404</h1>
         <p className="text-gray-700 dark:text-gray-300">
           Page not found. Check the address or{' '}
-          <a className="text-purple-600 hover:underline dark:text-purple-300" href="../index.html">
+          <Link className="text-purple-600 hover:underline dark:text-purple-300" href="../index.html">
             go back
-          </a>
+          </Link>
           .
         </p>
       </div>
