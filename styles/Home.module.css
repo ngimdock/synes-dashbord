@@ -1,3 +1,13 @@
+@font-face {
+  font-family: "Poppins-Bold";
+  src: url("../assets/fonts/Poppins-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-Regular";
+  src: url("../assets/fonts/Poppins-Regular.ttf");
+}
+
 .container {
   width: 100vw;
   min-height: 100vh;
@@ -11,7 +21,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-
+  overflow-y: auto;
 }
 
 .bg {
@@ -25,10 +35,11 @@
 
 .main {
   width: 100%;
+  /* height: 100%; */
   padding: 4rem 10rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   z-index: 2;
 }
@@ -38,7 +49,7 @@
   font-weight: 700;
   color: rgba(255, 255, 255, 0.9);
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  font-family: "Poppins-Bold";
 }
 
 .header {
@@ -47,6 +58,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: "Poppins-Regular";
 }
 
 .footer {
@@ -67,7 +79,7 @@
 
 .hero {
   width: 100%;
-  height: calc(100vh - 250px);
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -92,6 +104,11 @@
   font-weight: 900;
   margin-bottom: 30px;
   color: rgba(255, 255, 255, 0.8);
+  font-family: "Poppins-Bold";
+}
+
+.title span {
+  color: var(--primary-color);
 }
 
 .title,
@@ -103,6 +120,7 @@
   line-height: 1.2;
   font-size: 1.5rem;
   color: rgba(255, 255, 255, 0.8);
+  font-family: "Poppins-Regular";
 }
 
 .grid {
@@ -112,6 +130,8 @@
   flex-wrap: wrap;
   max-width: 800px;
   margin-top: 3rem;
+  gap: 30px;
+  font-family: "Poppins-Regular";
 }
 
 .code {
@@ -167,9 +187,63 @@
   margin-left: 0.5rem;
 }
 
+@media screen and (max-width: 1200px) {
+  .main {
+    padding: 4rem 8rem;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .main {
+    padding: 3rem 5rem;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .description {
+    font-size: 1.3rem;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .main {
+    padding: 2rem 3rem;
+  }
+
+  .title {
+    font-size: 2.2rem;
+  }
+}
+
 @media (max-width: 600px) {
+  .main {
+    padding: 1rem 2rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: 1.2rem;
+  }
+
   .grid {
     width: 100%;
     flex-direction: column;
+    gap: 10px;
+  }
+
+  .grid button,
+  .grid a {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .main {
+    padding: 0rem 1rem;
   }
 }

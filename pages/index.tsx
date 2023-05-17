@@ -47,7 +47,6 @@ const Home: NextPage = () => {
             <Link href="/rooms/general/communique">
               <Button
                 style={{
-                  marginLeft: 20,
                   paddingInline: 30,
                   backgroundColor: Colors.primary,
                 }}
