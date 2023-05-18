@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@dilane3/gx": "^1.2.6",
+    "@headlessui/react": "^1.7.14",
     "chart.js": "^3.6.1",
     "classnames": "^2.3.1",
     "next": "^13.4.2",
