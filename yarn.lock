@@ -3997,6 +3997,11 @@ prop-types@^15.6.2, prop-types@^15.8.1:
     object-assign "^4.1.1"
     react-is "^16.13.1"
 
+punycode@>=0.2.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.0.tgz#f67fa67c94da8f4d0cfff981aee4118064199b8f"
+  integrity sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==
+
 punycode@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
@@ -4139,6 +4144,13 @@ regjsparser@^0.7.0:
   integrity sha512-A4pcaORqmNMDVwUjWoTzuhwMGpP+NykpfqAsEgI1FSH/EzC7lrN5TMd+kN8YCovX+jMpu8eaqXgXPCa0g8FQNQ==
   dependencies:
     jsesc "~0.5.0"
+
+request-cookies@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/request-cookies/-/request-cookies-1.1.0.tgz#7581d3d9b2ac5dc436e6459b216a62e3c7e68cf1"
+  integrity sha512-asS2B6EdlD0zEiyPCHbsG239TkLTAw3GiIDHLXy9rNE1r+VjjOAz96mqeAHSabUOS2utqbpvOMtCpwTieEvcOA==
+  dependencies:
+    tough-cookie "0.12.x"
 
 require-from-string@^2.0.2:
   version "2.0.2"
@@ -4561,6 +4573,13 @@ to-regex-range@^5.0.1:
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
+
+tough-cookie@0.12.x:
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-0.12.1.tgz#8220c7e21abd5b13d96804254bd5a81ebf2c7d62"
+  integrity sha512-+gd4PklNJsxzu1NoNjhGRfOZZ5llND6VtQZGuaDXdmI0Ii79V5+YCa2sLx8Q6lYhYN2+9frCzUwOLQpuwHvO4Q==
+  dependencies:
+    punycode ">=0.2.0"
 
 tsconfig-paths@^3.14.1:
   version "3.14.2"
