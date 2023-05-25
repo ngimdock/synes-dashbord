@@ -1,0 +1,57 @@
+/* style d'un post communique */
+
+.singleCommunique {
+  /* flex: 0 0 calc(33.33% - 15px); */
+}
+
+.imageCommunique {
+  width: 100vw;
+  /* height: 400px; */
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+/* style du sous composant file de communique  */
+
+.fileBox {
+  margin-block: 3px;
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  justify-content: space-between;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  height: 70px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.pdfLogo {
+  margin-left: 5px;
+  color: red;
+  height: 40px;
+  width: 40px;
+}
+
+.pdfDownload {
+  height: 35px;
+  width: 35px;
+  color: #878787;
+  margin-right: 20px;
+}
+
+.pdfSize {
+  color: #878787;
+}
+
+/* style qui se trouve dans la section de posts de communiques */
+.salonComs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 15px;
+  grid-auto-rows: auto;
+  grid-auto-flow: dense;
+  row-gap: 25px;
+  /* display: flex;
+  flex-wrap: wrap; */
+}
