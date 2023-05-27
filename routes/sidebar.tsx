@@ -50,7 +50,7 @@ const routes: IRoute[] = [
     name: "Organisation",
   },
   {
-    path: "/example/charts",
+    path: "/services",
     icon: "ChartsIcon",
     name: "Services",
   },
