@@ -46,6 +46,7 @@ const AddCommunique = () => {
         setPath(secondPath);
       }
     }
+    setFiles(tmp);
   };
 
   return (
