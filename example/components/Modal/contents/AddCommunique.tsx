@@ -20,17 +20,24 @@ const AddCommunique = () => {
     }
   };
 
+  // to check that file does not already contain the file to upload
+  const checkExistance = (file: FileList) => {
+    return files.find((item) => item[0].name === file[0].name);
+  };
+
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     console.log("target :", e.target.files, e.target.value);
 
-    const newArrayState: FileList[] = [
-      ...files,
-      e.target.files || new DataTransfer().files,
-    ];
-    setFiles(newArrayState);
-    if (e.target.files) {
-      const imageUrl = URL.createObjectURL(e.target.files[0]);
-      setPath([...image, imageUrl]);
+    if (!checkExistance(e.target.files || new DataTransfer().files)) {
+      const newArrayState: FileList[] = [
+        ...files,
+        e.target.files || new DataTransfer().files,
+      ];
+      setFiles(newArrayState);
+      if (e.target.files) {
+        const imageUrl = URL.createObjectURL(e.target.files[0]);
+        setPath([...image, imageUrl]);
+      }
     }
   };
 
@@ -121,6 +128,7 @@ const AddCommunique = () => {
                   <div
                     style={{
                       borderBottom: "2px gray",
+                      // height: "80px",
                     }}
                   >
                     <Button
