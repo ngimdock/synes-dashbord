@@ -55,3 +55,48 @@
   /* display: flex;
   flex-wrap: wrap; */
 }
+
+/* style de la section d'upload */
+.upload_section {
+  border: 1px gray dashed;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.files_section {
+  width: 40vh;
+}
+.files_display {
+  overflow-y: scroll;
+  /* overflow-x: hidden; */
+  max-height: 200px;
+}
+.coms_modals {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.coms_modals_first_part {
+  width: 100%;
+}
+.default_file_input {
+  opacity: 0;
+  /* height: 100vh; */
+  z-index: 100;
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  /* styles pour les appareils mobiles */
+  .salonComs {
+    grid-template-columns: repeat(1, 1fr);
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  /* styles pour les appareils mobiles large et tablettes */
+  .salonComs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

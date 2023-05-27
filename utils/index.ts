@@ -1,6 +1,8 @@
 export const Colors = {
   primary: "#8160AB",
   white: "#FFFFFF",
+  lightGray: "#F5F5F5",
+  red: "#FF0000",
 };
 
 export const formatDate = (d: any) => {
