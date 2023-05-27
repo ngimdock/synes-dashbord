@@ -5,6 +5,8 @@ import PageTitle from "../Typography/PageTitle";
 import { Tab as TabBar } from "@headlessui/react";
 import { Tabs } from "../../../constants";
 import Link from "next/link";
+import { useActions } from "@dilane3/gx";
+import { ModalType } from "gx/signals/modal";
 
 type TabProps = {
   children: React.ReactNode;
@@ -13,6 +15,18 @@ type TabProps = {
 
 export default function Tab({ children, tabname }: TabProps) {
   "use client";
+
+  const { openModal } = useActions("modal");
+
+  const handleOpenModal = () => {
+    const payload = {
+      modalStatus: true,
+      type: ModalType.COMMUNIQUE,
+      payload: null,
+    };
+
+    openModal(payload);
+  };
 
   const tabs = [
     {
@@ -29,33 +43,50 @@ export default function Tab({ children, tabname }: TabProps) {
     },
   ];
 
-  const generateButtonText = (tabname: Tabs) => {
+  const generateButton = (tabname: Tabs) => {
     switch (tabname) {
       case Tabs.Communique:
-        return "Nouveau communiqué";
+        return (
+          <Button
+            iconLeft={AddIcon}
+            size="regular"
+            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
+            onClick={handleOpenModal}
+          >
+            Nouveau communiqué
+          </Button>
+        );
       case Tabs.Events:
-        return "Nouvel évènement";
+        return (
+          <Button
+            iconLeft={AddIcon}
+            size="regular"
+            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
+          >
+            Nouveau communiqué
+          </Button>
+        );
       case Tabs.Sanctions:
-        return "Nouvelle sanction";
+        return (
+          <Button
+            iconLeft={AddIcon}
+            size="regular"
+            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
+          >
+            Nouveau communiqué
+          </Button>
+        );
       default:
         return "Nouveau communiqué";
     }
-  }
+  };
 
   return (
     <section className="w-full px-2 py-2 flex flex-col">
       <div className="flex flex-row justify-between items-center">
         <PageTitle>Salon général</PageTitle>
 
-        <div className="">
-          <Button
-            iconLeft={AddIcon}
-            size="regular"
-            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
-          >
-            {generateButtonText(tabname)}
-          </Button>
-        </div>
+        <div className="">{generateButton(tabname)}</div>
       </div>
 
       <TabBar.Group
