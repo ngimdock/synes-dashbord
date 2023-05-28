@@ -27,6 +27,10 @@ export default function Tab({ children, tabname }: TabProps) {
       name: Tabs.Sanctions,
       href: "/rooms/general/sanctions",
     },
+    {
+      name: Tabs.Contributions,
+      href: "/rooms/general/contributions",
+    },
   ];
 
   const generateButtonText = (tabname: Tabs) => {
@@ -37,10 +41,12 @@ export default function Tab({ children, tabname }: TabProps) {
         return "Nouvel évènement";
       case Tabs.Sanctions:
         return "Nouvelle sanction";
+      case Tabs.Contributions:
+        return "Nouvelle contribution";
       default:
         return "Nouveau communiqué";
     }
-  }
+  };
 
   return (
     <section className="w-full px-2 py-2 flex flex-col">
