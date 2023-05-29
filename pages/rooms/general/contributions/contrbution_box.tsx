@@ -5,16 +5,13 @@ import styles from "./contribution.module.css";
 export const Contrbution_box = () => {
   return (
     <div className={styles.content_box}>
-      <div className={styles.avatar}>
-        <Avatar
-          style={{ border: "none", margin: 0 }}
-          alt="Blondelle image"
-          src="../../../assets/images/university.jpg"
-        />
-        <span className="avatarName"> Blondelle</span>
+      {/* <div className={styles.avatar}>
+        <Avatar style={{ margin: 0 }} src="/assets/images/img1.jpg" />
+        <span className={styles.avatarName}> Kana Zanlefack Blondelle </span>
       </div>
-      <span className={styles.title}> Titre </span>
-      <span className={styles.montant}> Montant </span>
+      <span className={styles.title}> Secretaire du BEN </span>
+      <span className={styles.montant}> 12.000 F </span> */}
+      
     </div>
   );
 };

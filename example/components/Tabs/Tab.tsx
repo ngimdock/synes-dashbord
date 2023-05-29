@@ -5,6 +5,8 @@ import PageTitle from "../Typography/PageTitle";
 import { Tab as TabBar } from "@headlessui/react";
 import { Tabs } from "../../../constants";
 import Link from "next/link";
+import { useActions } from "@dilane3/gx";
+import { ModalType } from "gx/signals/modal";
 
 type TabProps = {
   children: React.ReactNode;
@@ -13,6 +15,28 @@ type TabProps = {
 
 export default function Tab({ children, tabname }: TabProps) {
   "use client";
+
+  const { openModal } = useActions("modal");
+
+  const handleOpenModal = () => {
+    const payload = {
+      modalStatus: true,
+      type: ModalType.COMMUNIQUE,
+      payload: null,
+    };
+
+    openModal(payload);
+  };
+
+  const handleOpenModalContribution = () => {
+    const payload = {
+      modalStatus: true,
+      type: ModalType.CONTRIBUTION,
+      payload: null,
+    };
+
+    openModal(payload);
+  };
 
   const tabs = [
     {
@@ -33,16 +57,42 @@ export default function Tab({ children, tabname }: TabProps) {
     },
   ];
 
-  const generateButtonText = (tabname: Tabs) => {
+  const generateButton = (tabname: Tabs) => {
     switch (tabname) {
       case Tabs.Communique:
-        return "Nouveau communiqué";
+        return (
+          <Button
+            iconLeft={AddIcon}
+            size="regular"
+            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
+            onClick={handleOpenModal}
+          >
+            Nouveau communiqué
+          </Button>
+        );
       case Tabs.Events:
-        return "Nouvel évènement";
+        return (
+          <Button
+            iconLeft={AddIcon}
+            size="regular"
+            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
+          >
+            Nouveau evenement
+          </Button>
+        );
       case Tabs.Sanctions:
         return "Nouvelle sanction";
       case Tabs.Contributions:
-        return "Nouvelle contribution";
+        return (
+          <Button
+            iconLeft={AddIcon}
+            size="regular"
+            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
+            onClick={handleOpenModalContribution}
+          >
+            Nouvelle contribution
+          </Button>
+        );
       default:
         return "Nouveau communiqué";
     }
@@ -53,15 +103,7 @@ export default function Tab({ children, tabname }: TabProps) {
       <div className="flex flex-row justify-between items-center">
         <PageTitle>Salon général</PageTitle>
 
-        <div className="">
-          <Button
-            iconLeft={AddIcon}
-            size="regular"
-            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
-          >
-            {generateButtonText(tabname)}
-          </Button>
-        </div>
+        <div className="">{generateButton(tabname)}</div>
       </div>
 
       <TabBar.Group
