@@ -6,7 +6,7 @@ import Communique from "example/components/Posts/Communique";
 import { coms } from "utils/demo/tableData";
 import style from "styles/communique.module.css";
 import Post from "../../../../entities/posts/Post";
-import { math } from "@tensorflow/tfjs-node";
+// import { math } from "@tensorflow/tfjs-node";
 
 export default function CommuniquePage() {
   const [columnOne, columnTwo, columnThree] = useMemo(() => {
@@ -26,7 +26,7 @@ export default function CommuniquePage() {
       }
     }
     return [columnOne, columnTwo, columnThree];
-  }, [coms]);
+  }, []);
 
   return (
     <Layout title="Communiqué" description="Communiqué">

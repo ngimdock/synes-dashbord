@@ -7,10 +7,17 @@ import { Tabs } from "../../../constants";
 import Link from "next/link";
 import { useActions } from "@dilane3/gx";
 import { ModalType } from "gx/signals/modal";
+import SectionTitle from "../Typography/SectionTitle";
 
 type TabProps = {
   children: React.ReactNode;
   tabname: Tabs;
+};
+
+type ModalPayload = {
+  modalStatus: boolean,
+  type: ModalType,
+  payload: null,
 };
 
 export default function Tab({ children, tabname }: TabProps) {
@@ -18,12 +25,7 @@ export default function Tab({ children, tabname }: TabProps) {
 
   const { openModal } = useActions("modal");
 
-  const handleOpenModal = () => {
-    const payload = {
-      modalStatus: true,
-      type: ModalType.COMMUNIQUE,
-      payload: null,
-    };
+  const handleOpenModal = (payload: ModalPayload) => {
 
     openModal(payload);
   };
@@ -51,7 +53,11 @@ export default function Tab({ children, tabname }: TabProps) {
             iconLeft={AddIcon}
             size="regular"
             style={{ backgroundColor: Colors.primary, fill: "#fff" }}
-            onClick={handleOpenModal}
+            onClick={() => handleOpenModal({
+              modalStatus: true,
+              type: ModalType.COMMUNIQUE,
+              payload: null,
+            })}
           >
             Nouveau communiqué
           </Button>
@@ -62,8 +68,13 @@ export default function Tab({ children, tabname }: TabProps) {
             iconLeft={AddIcon}
             size="regular"
             style={{ backgroundColor: Colors.primary, fill: "#fff" }}
+            onClick={() => handleOpenModal({
+              modalStatus: true,
+              type: ModalType.EVENEMENT,
+              payload: null,
+            })}
           >
-            Nouveau communiqué
+            Nouvel événement
           </Button>
         );
       case Tabs.Sanctions:
@@ -73,7 +84,7 @@ export default function Tab({ children, tabname }: TabProps) {
             size="regular"
             style={{ backgroundColor: Colors.primary, fill: "#fff" }}
           >
-            Nouveau communiqué
+            Nouvelle sanction
           </Button>
         );
       default:
@@ -84,8 +95,10 @@ export default function Tab({ children, tabname }: TabProps) {
   return (
     <section className="w-full px-2 py-2 flex flex-col">
       <div className="flex flex-row justify-between items-center">
-        <PageTitle>Salon général</PageTitle>
-
+        <div className="flex flex-col justify-start mb-6">
+          <PageTitle>Salon général</PageTitle>
+          <span>Consulter les derniers communiqués et évènements du syndicat.</span>
+        </div>
         <div className="">{generateButton(tabname)}</div>
       </div>
 

@@ -9,6 +9,7 @@ import { useSignal, useActions } from "@dilane3/gx";
 import React from "react";
 import { ModalStateType, ModalType } from "gx/signals/modal";
 import AddCommunique from "./contents/AddCommunique";
+import AddEvent from "./contents/AddEvent";
 
 const ModalContainer = () => {
   const { modalStatus, type } = useSignal<ModalStateType>("modal");
@@ -19,7 +20,7 @@ const ModalContainer = () => {
       case ModalType.COMMUNIQUE:
         return <AddCommunique />;
       case ModalType.EVENEMENT:
-        return null;
+        return <AddEvent />;
 
       default:
         return null;

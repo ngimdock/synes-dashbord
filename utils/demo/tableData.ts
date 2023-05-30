@@ -1,5 +1,3 @@
-import Post from "entities/posts/Post";
-
 interface ITableData {
   avatar: string;
   name: string;
@@ -373,6 +371,46 @@ const tableData: ITableData[] = [
 ];
 
 export const coms = [
+  {
+    description:
+      "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent ",
+    file: "",
+    photo: "",
+  },
+  {
+    description:
+      "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent ",
+    file: "communique du jour",
+    photo: "",
+  },
+  {
+    description:
+      "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent ",
+    file: "",
+    photo: "",
+  },
+  {
+    description:
+      "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent ",
+    file: "",
+    photo: "login-office.jpeg",
+  },
+  {
+    description:
+      "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent ",
+    file: "",
+    photo: "",
+  },
+  {
+    description:
+      "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent ",
+    file: "",
+    photo: "profil3.jpg",
+  },
+];
+
+
+export const synesEvents = [
   {
     description:
       "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent ",

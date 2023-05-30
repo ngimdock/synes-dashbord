@@ -119,6 +119,7 @@ const AddCommunique = () => {
                 const imgFile = "/assets/img" + `${item[0].name}`;
                 return (
                   <div
+                    key={`${item[0].name+index}`}
                     style={{
                       borderBottom: "2px gray",
                     }}
