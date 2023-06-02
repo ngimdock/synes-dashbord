@@ -58,12 +58,18 @@
 
 /* style de la section d'upload */
 .upload_section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px gray dashed;
   border-radius: 10px;
   cursor: pointer;
 }
 .files_section {
   width: 40vh;
+}
+.upload_image_illustration {
+  align-self: center;
 }
 .files_display {
   overflow-y: scroll;
@@ -76,13 +82,14 @@
   justify-content: center;
 }
 .coms_modals_first_part {
-  width: 100%;
+  width: 50%;
 }
 .default_file_input {
   opacity: 0;
   /* height: 100vh; */
   z-index: 100;
   cursor: pointer;
+  display: none;
 }
 
 @media (max-width: 767px) {

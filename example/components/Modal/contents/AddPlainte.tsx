@@ -3,21 +3,19 @@ import FilepdfPost from "example/components/Posts/FilepdfPost";
 import { AddIcon } from "icons";
 import { AiOutlineClose } from "react-icons/ai";
 import Image from "next/image";
+import { useActions } from "@dilane3/gx";
 import React, { ChangeEvent, useRef, useState } from "react";
 
 import style from "styles/communique.module.css";
 import { Colors } from "utils";
-import { useActions } from "@dilane3/gx";
 
-const AddCommunique = () => {
-  const { closeModal } = useActions("modal");
-
+const AddPlainte = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const { closeModal } = useActions("modal");
   const [files, setFiles] = useState<FileList[]>([]);
   const [image, setPath] = useState<string[]>([]);
 
-  const annulerCommunique = () => {
+  const annulerPlainte = () => {
     closeModal();
   };
   const handleUploadClick = () => {
@@ -66,12 +64,12 @@ const AddCommunique = () => {
     <div className={style.coms_modals}>
       <div className={`${style.coms_modals_first_part} ml-2 flex flex-col`}>
         <p className="mb-8 text-xl font-semibold dark:text-gray-300  self-start">
-          Créer un communiqué
+          Créer une plainte
         </p>
         <Textarea
           className="mt-1 h-40"
           rows={3}
-          placeholder="Contenu de votre communiqué."
+          placeholder="Contenu explicite de votre plainte."
         />
         <div className="flex justify-between mt-8 ">
           <Button
@@ -82,7 +80,7 @@ const AddCommunique = () => {
               fill: "#000",
               color: "#000",
             }}
-            onClick={annulerCommunique}
+            onClick={annulerPlainte}
           >
             Annuler
           </Button>
@@ -92,13 +90,13 @@ const AddCommunique = () => {
             style={{ backgroundColor: Colors.primary, fill: "#fff" }}
             // onClick={handleOpenModal}
           >
-            Publier
+            Se plaindre
           </Button>
         </div>
       </div>
       <div className="ml-6">
         <p className="mb-8 text-xl font-semibold dark:text-gray-300">
-          Ajouter un fichier
+          Ajouter des images
         </p>
         {files.length > 0 ? (
           <div className={style.files_section}>
@@ -120,7 +118,7 @@ const AddCommunique = () => {
               <input
                 className={`${style.default_file_input} `}
                 type="file"
-                accept="image/*,.pdf"
+                accept="image/*"
                 onChange={handleOnChange}
                 ref={inputRef}
                 name="files"
@@ -172,16 +170,17 @@ const AddCommunique = () => {
         ) : (
           <div className={style.upload_section} onClick={handleUploadClick}>
             <Image
+              className={style.upload_image_illustration}
               priority
               src="/assets/img/Uploading.png"
               height={200}
               width={200}
-              alt="Click to upload your file"
+              alt="Click to upload your images"
             />
             <input
               className={`${style.default_file_input} `}
               type="file"
-              accept="image/*,.pdf"
+              accept="image/*"
               onChange={handleOnChange}
               ref={inputRef}
               name="files"
@@ -194,4 +193,4 @@ const AddCommunique = () => {
   );
 };
 
-export default AddCommunique;
+export default AddPlainte;

@@ -1,0 +1,41 @@
+.modalContribution {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.addMemberCont {
+  display: flex;
+  flex-direction: column;
+  margin-right: 40px;
+}
+.input {
+  width: 100%;
+  margin-bottom: 20px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+.selectMember {
+  display: flex;
+  flex-direction: column;
+}
+.selectMemberContainer {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid gray;
+  border-radius: 8px;
+  height: auto;
+  width: 100%;
+}
+.memberContaint {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid;
+}
+.memberName {
+  color: gray;
+  font-weight: bold;
+  margin-right: 20px;
+}

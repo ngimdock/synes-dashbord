@@ -4,6 +4,8 @@ export enum ModalType {
   COMMUNIQUE = "communique",
   EVENEMENT = "evenement",
   ADD_MEMBER = "add-member",
+  CONTRIBUTION = "contribution",
+  PLAINTE = "plainte",
   DEFAULT = "default",
 }
 

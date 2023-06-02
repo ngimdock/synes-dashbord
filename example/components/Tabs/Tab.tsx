@@ -28,6 +28,16 @@ export default function Tab({ children, tabname }: TabProps) {
     openModal(payload);
   };
 
+  const handleOpenModalContribution = () => {
+    const payload = {
+      modalStatus: true,
+      type: ModalType.CONTRIBUTION,
+      payload: null,
+    };
+
+    openModal(payload);
+  };
+
   const tabs = [
     {
       name: Tabs.Communique,
@@ -40,6 +50,10 @@ export default function Tab({ children, tabname }: TabProps) {
     {
       name: Tabs.Sanctions,
       href: "/rooms/general/sanctions",
+    },
+    {
+      name: Tabs.Contributions,
+      href: "/rooms/general/contributions",
     },
   ];
 
@@ -56,6 +70,17 @@ export default function Tab({ children, tabname }: TabProps) {
             Nouveau communiqué
           </Button>
         );
+      case Tabs.Plaintes:
+        return (
+          <Button
+            iconLeft={AddIcon}
+            size="regular"
+            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
+            onClick={handleOpenModal}
+          >
+            Nouvelle plainte
+          </Button>
+        );
       case Tabs.Events:
         return (
           <Button
@@ -63,17 +88,20 @@ export default function Tab({ children, tabname }: TabProps) {
             size="regular"
             style={{ backgroundColor: Colors.primary, fill: "#fff" }}
           >
-            Nouveau communiqué
+            Nouveau evenement
           </Button>
         );
       case Tabs.Sanctions:
+        return "Nouvelle sanction";
+      case Tabs.Contributions:
         return (
           <Button
             iconLeft={AddIcon}
             size="regular"
             style={{ backgroundColor: Colors.primary, fill: "#fff" }}
+            onClick={handleOpenModalContribution}
           >
-            Nouveau communiqué
+            Nouvelle contribution
           </Button>
         );
       default:
