@@ -3,4 +3,5 @@ export enum Tabs {
   Events = "Evenements",
   Sanctions = "Sanctions",
   Contributions = "Contributions",
+  Plaintes = "Plaintes",
 }

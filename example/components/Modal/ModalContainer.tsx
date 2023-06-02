@@ -10,6 +10,7 @@ import React from "react";
 import { ModalStateType, ModalType } from "gx/signals/modal";
 import AddCommunique from "./contents/AddCommunique";
 import AddContribution from "./contents/AddContribution";
+import AddPlainte from "./contents/AddPlainte";
 
 const ModalContainer = () => {
   const { modalStatus, type } = useSignal<ModalStateType>("modal");
@@ -19,6 +20,8 @@ const ModalContainer = () => {
     switch (type) {
       case ModalType.COMMUNIQUE:
         return <AddCommunique />;
+      case ModalType.PLAINTE:
+        return <AddPlainte />;
       case ModalType.EVENEMENT:
         return null;
       case ModalType.CONTRIBUTION:

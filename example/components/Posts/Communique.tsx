@@ -11,6 +11,8 @@ import style from "styles/communique.module.css";
 
 const Communique = (props: any) => {
   const communique = props.communique as Post;
+  const imagePath = "/assets/img/" + communique.getPhoto();
+  console.log("images paths", imagePath);
   // communique: Post;
   return (
     <Card className={`${style.singleCommunique} max-w-sm mb-3`}>
@@ -32,7 +34,8 @@ const Communique = (props: any) => {
         {communique.getFile() && <FilepdfPost />}
         {communique.getPhoto() && (
           <Image
-            src="/assets/img/login-office.jpeg"
+            // src="/assets/img/login-office.jpeg"
+            src={imagePath}
             width={500}
             height={100}
             alt="Picture of the communique"
@@ -40,8 +43,7 @@ const Communique = (props: any) => {
           />
         )}
         <p className="my-2 text-md text-gray-700">
-          Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous
-          annonce que le budget est assez consequent
+          {communique.getDesciption()}
         </p>
         <div className="flex items-start justify-between">
           <div className="flex ">

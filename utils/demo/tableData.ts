@@ -410,6 +410,44 @@ export const coms = [
     photo: "profil3.jpg",
   },
 ];
+export const Plaintes = [
+  {
+    description:
+      "C'est avec mecontentement que je viens au pres de vous en tant simple membre du SYNES a la SSE de l'unuversite de Yaounde 1 pour denoncer et meme devoiler la terrible situation qui se passe au sein du bureau de cette institution. En effect les membres du bureau son malsein et son de meches avec l'arrestation rescente du secretaire general du BEN. Ces derniers nous doivent de explications pour cela je suggere qu'une commission Add-hoc soit enclenche. Merci pour votre attention!  ",
+    file: "",
+    photo: "escrot.jpg",
+  },
+  {
+    description:
+      "Cette organisation doit etre dissoute, alors que des mesure soit prise ",
+    file: "",
+    photo: "fin.jpg",
+  },
+  {
+    description:
+      "Mais nous somme en periode electorale et on me refuse ce qui m'est de droit 'VOTER' pourtant je fais tout ce qu'il faut pour etre en regle et je le suis. S'il vous plait regardez mon cas de pres parce que je suis furieux ",
+    file: "",
+    photo: "vote.jpg",
+  },
+  {
+    description:
+      "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent et tout le monde doit mettre la main dans la poche pour qu'on puisse y arriver' ce sont la les parole du secretaire du BEN; Mais des membres n'ayant pas contribues restent sans sanction et je refuse de l'accepter. Les contributions concernes tous le mondes si tu es l'epouse d'un haut grade du syndicat sa ne me regarde pas 'Je ne vise personne'",
+    file: "",
+    photo: "",
+  },
+  {
+    description:
+      "Salut, le Tresorier de l'universitee de Bamenda Mr Fenyep a prit l'argent destinee a entretenir nos outils informatique pour aller jouer la vie a Douala, regarder ses statut pendant que nous on souffre quelque chose doit etre fait et vite.",
+    file: "",
+    photo: "vole.jpg",
+  },
+  {
+    description:
+      "Salut, je crois fermement que pour avancer dans notre mouvement syndicale nous devont etre transparant et vrai.Mais suite aux precedentes elections nous reclamons de explications pour ne pas se presser et parler de trucage electorale (RETOUR AUX URNES) car Mr Kombou D3 est notre elu quoi qu'il en soit. ",
+    file: "",
+    photo: "urne.jpg",
+  },
+];
 
 export default tableData;
 export type { ITableData };
