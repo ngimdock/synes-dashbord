@@ -25,7 +25,7 @@ export default function CommuniquePage() {
       }
     }
     return [columnOne, columnTwo, columnThree];
-  }, [coms]);
+  }, []);
 
   return (
     <Layout title="Communiqué" description="Communiqué">

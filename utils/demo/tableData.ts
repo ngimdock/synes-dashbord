@@ -1,5 +1,3 @@
-import Post from "entities/posts/Post";
-
 interface ITableData {
   avatar: string;
   name: string;
@@ -446,6 +444,46 @@ export const Plaintes = [
       "Salut, je crois fermement que pour avancer dans notre mouvement syndicale nous devont etre transparant et vrai.Mais suite aux precedentes elections nous reclamons de explications pour ne pas se presser et parler de trucage electorale (RETOUR AUX URNES) car Mr Kombou D3 est notre elu quoi qu'il en soit. ",
     file: "",
     photo: "urne.jpg",
+  },
+];
+
+
+export const synesEvents = [
+  {
+    description:
+      "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent ",
+    file: "",
+    photo: "",
+  },
+  {
+    description:
+      "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent ",
+    file: "communique du jour",
+    photo: "",
+  },
+  {
+    description:
+      "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent ",
+    file: "",
+    photo: "",
+  },
+  {
+    description:
+      "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent ",
+    file: "",
+    photo: "login-office.jpeg",
+  },
+  {
+    description:
+      "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent ",
+    file: "",
+    photo: "",
+  },
+  {
+    description:
+      "Dans le cadre de l’aménagement de l’espace vert du SYNES, je vous annonce que le budget est assez consequent ",
+    file: "",
+    photo: "profil3.jpg",
   },
 ];
 
