@@ -1,3 +1,4 @@
+import { useActions } from "@dilane3/gx";
 import {
   TableContainer,
   Table,
@@ -9,10 +10,14 @@ import {
   Badge,
   TableFooter,
   Pagination,
+  Button,
 } from "@roketid/windmill-react-ui";
 import ServiceCard from "example/components/Services/ServiceCard";
 import PageTitle from "example/components/Typography/PageTitle";
 import Layout from "example/containers/Layout";
+import { ModalType } from "gx/signals/modal";
+import { AddIcon } from "icons";
+import { Colors } from "utils";
 
 const users = [
   {
@@ -27,7 +32,7 @@ const users = [
   {
     id: 2,
     name: "Daniela Dewitt",
-    avatar: "https://picsum.photos/200",
+    avatar: "https://picsum.photos/201",
     role: "Sécrétaire du BEN",
     adhesion: "2020-01-01",
     status: "actif",
@@ -36,7 +41,7 @@ const users = [
   {
     id: 3,
     name: "Hans Jonatan",
-    avatar: "https://picsum.photos/200",
+    avatar: "https://picsum.photos/202",
     role: "Membre",
     adhesion: "2020-01-01",
     status: "actif",
@@ -49,29 +54,41 @@ const services = [
     id: 1,
     name: "Congrès",
     members: 10,
-    color: "red"
+    color: "red",
   },
   {
     id: 2,
     name: "Conseil National",
     members: 12,
-    color: "green"
+    color: "green",
   },
   {
     id: 3,
     name: "Bureau Exécutif National",
     members: 5,
-    color: "orange"
+    color: "orange",
   },
   {
     id: 4,
     name: "Section SYNES de l'UYI",
     members: 10,
-    color: "#3e4bff"
-  }
-]
+    color: "#3e4bff",
+  },
+];
 
 export default function ServicePage() {
+  const { openModal } = useActions("modal");
+
+  const handleOpenModal = () => {
+    const payload = {
+      modalStatus: true,
+      type: ModalType.ADD_MEMBER,
+      payload: null,
+    };
+
+    openModal(payload);
+  };
+
   return (
     <Layout title="Services" description="Les services et membres du SYNES">
       <PageTitle>Organisation du SYNES</PageTitle>
@@ -80,16 +97,24 @@ export default function ServicePage() {
         <h2 className="text-xl">Les services (4)</h2>
 
         <div className="w-full flex flex-row">
-          {
-            services.map(service => (
-              <ServiceCard key={service.id} service={service} />
-            ))
-          }
+          {services.map((service) => (
+            <ServiceCard key={service.id} service={service} />
+          ))}
         </div>
       </div>
 
       <div className="w-full flex flex-col align-start mt-10">
-        <h2 className="text-xl">Les membres (104)</h2>
+        <div className="flex flex-row justify-between">
+          <h2 className="text-xl">Les membres (104)</h2>
+          <Button
+            iconLeft={AddIcon}
+            size="regular"
+            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
+            onClick={handleOpenModal}
+          >
+            Nouveau membre
+          </Button>
+        </div>
 
         <div className="w-full flex flex-row mt-4">
           <TableContainer className="mb-8">
@@ -133,8 +158,8 @@ export default function ServicePage() {
             </Table>
             <TableFooter>
               <Pagination
-                totalResults={0}
-                resultsPerPage={0}
+                totalResults={users.length}
+                resultsPerPage={5}
                 onChange={() => {}}
                 label="Table navigation"
               />
