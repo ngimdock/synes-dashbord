@@ -56,6 +56,17 @@ export default function Tab({ children, tabname }: TabProps) {
             Nouveau communiqué
           </Button>
         );
+      case Tabs.Plaintes:
+        return (
+          <Button
+            iconLeft={AddIcon}
+            size="regular"
+            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
+            onClick={handleOpenModal}
+          >
+            Nouvelle plainte
+          </Button>
+        );
       case Tabs.Events:
         return (
           <Button

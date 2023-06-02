@@ -3,6 +3,7 @@ import { createSignal } from "@dilane3/gx";
 export enum ModalType {
   COMMUNIQUE = "communique",
   EVENEMENT = "evenement",
+  PLAINTE = "plainte",
   DEFAULT = "default",
 }
 
