@@ -152,18 +152,18 @@ function Header() {
                   className="w-4 h-4 mr-3"
                   aria-hidden="true"
                 />
-                <span>Profile</span>
+                <span>Profil</span>
               </DropdownItem>
               <DropdownItem tag="a" href="#">
                 <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
-                <span>Settings</span>
+                <span>Parametres</span>
               </DropdownItem>
               <DropdownItem onClick={() => alert("Log out!")}>
                 <OutlineLogoutIcon
                   className="w-4 h-4 mr-3"
                   aria-hidden="true"
                 />
-                <span>Log out</span>
+                <span>Déconnexion</span>
               </DropdownItem>
             </Dropdown>
           </li>
