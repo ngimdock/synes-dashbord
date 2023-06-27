@@ -25,6 +25,8 @@ export default function useAuth() {
       const user = new User(data);
 
       login(user);
+    } else {
+      login(null);
     }
   };
 }

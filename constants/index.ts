@@ -7,3 +7,4 @@ export enum Tabs {
 }
 
 export const HOME_PAGE_LINK = "/rooms/general/communique";
+export const LOGIN_PAGE_LINK = "/auth/signin";
