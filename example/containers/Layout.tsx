@@ -8,6 +8,7 @@ import useAuth from "hooks/useAuth";
 import { useSignal } from "@dilane3/gx";
 import { CurrentUserState } from "gx/signals/current-user";
 import { LOGIN_PAGE_LINK } from "../../constants";
+import { getModifiedCookieValues } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 interface ILayout {
   children: React.ReactNode;
@@ -29,8 +30,6 @@ function Layout({ children, title, description }: ILayout) {
     if (!loading && !currentUser) {
       window.location.href = LOGIN_PAGE_LINK;
     }
-
-    console.log({ currentUser, loading })
   }, [loading, currentUser]);
 
   return (
