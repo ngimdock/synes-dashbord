@@ -4,6 +4,7 @@ import Sidebar from "example/components/Sidebar";
 import Header from "example/components/Header";
 import Main from "./Main";
 import Head from "next/head";
+import useAuth from "hooks/useAuth";
 
 interface ILayout {
   children: React.ReactNode;
@@ -13,6 +14,9 @@ interface ILayout {
 
 function Layout({ children, title, description }: ILayout) {
   const { isSidebarOpen } = useContext(SidebarContext);
+
+  // Get current user data
+  useAuth();
 
   return (
     <>
