@@ -5,3 +5,5 @@ export enum Tabs {
   Contributions = "Contributions",
   Plaintes = "Plaintes",
 }
+
+export const HOME_PAGE_LINK = "/rooms/general/communique";

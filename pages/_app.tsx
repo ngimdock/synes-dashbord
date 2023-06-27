@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import "tailwindcss/tailwind.css";
+import "react-toastify/dist/ReactToastify.css";
 import GXProvider from "@dilane3/gx";
 import store from "../gx/store";
 
@@ -7,10 +8,10 @@ import React from "react";
 import { Windmill } from "@roketid/windmill-react-ui";
 import type { AppProps } from "next/app";
 import ModalContainer from "example/components/Modal/ModalContainer";
+import { ToastContainer } from "react-toastify";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  // suppress useLayoutEffect warnings when running outside a browser
-  if (!process.browser) React.useLayoutEffect = React.useEffect;
+  if (typeof window !== "undefined") React.useLayoutEffect = React.useEffect;
 
   return (
     <GXProvider store={store}>
@@ -18,6 +19,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
 
         <ModalContainer />
+        <ToastContainer 
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={true}
+        />
       </Windmill>
     </GXProvider>
   );

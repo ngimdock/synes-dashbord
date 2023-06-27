@@ -49,10 +49,10 @@ export default function Tab({ children, tabname }: TabProps) {
       name: Tabs.Events,
       href: "/rooms/general/events",
     },
-    {
-      name: Tabs.Sanctions,
-      href: "/rooms/general/sanctions",
-    },
+    // {
+    //   name: Tabs.Sanctions,
+    //   href: "/rooms/general/sanctions",
+    // },
     {
       name: Tabs.Contributions,
       href: "/rooms/general/contributions",

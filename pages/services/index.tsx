@@ -27,7 +27,7 @@ const users = [
     role: "Membre",
     adhesion: "2020-01-01",
     status: "démissionné",
-    active: "danger",
+    active: "danger" as "danger",
   },
   {
     id: 2,
@@ -36,7 +36,7 @@ const users = [
     role: "Sécrétaire du BEN",
     adhesion: "2020-01-01",
     status: "actif",
-    active: "success",
+    active: "success" as "success",
   },
   {
     id: 3,
@@ -45,7 +45,7 @@ const users = [
     role: "Membre",
     adhesion: "2020-01-01",
     status: "actif",
-    active: "success",
+    active: "success" as "success",
   },
 ];
 
@@ -94,7 +94,7 @@ export default function ServicePage() {
       <PageTitle>Organisation du SYNES</PageTitle>
 
       <div className="w-full flex flex-col align-start">
-        <h2 className="text-xl">Les services (4)</h2>
+        <h2 className="text-xl mt-4">Les services (4)</h2>
 
         <div className="w-full flex flex-row">
           {services.map((service) => (

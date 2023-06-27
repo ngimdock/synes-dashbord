@@ -53,10 +53,10 @@ export const formatDateWithHour = (d: any) => {
   return `${12}h${minutes < 10 ? `0${minutes}`: minutes}`;
 }
 
-export const asynchronousEmulation = async () => {
+export const asynchronousEmulation = async (ms = 1000) => {
     await new Promise((resolve) => {
     setTimeout(() => {
       resolve("Loading the events");
-    }, 1000);
+    }, ms);
   });
 } 
