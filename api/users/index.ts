@@ -25,3 +25,29 @@ export const getMe = async () => {
     };
   }
 };
+
+/**
+ * Get all users
+ * @returns users data
+ */
+export const getUsers = async () => {
+  try {
+    const response = await instance.get("/users");
+
+    if (response.status === 200) {
+      return {
+        data: response.data.data.data,
+      };
+    }
+
+    return {
+      error: true,
+    };
+  } catch (error) {
+    console.log(error);
+
+    return {
+      error: true,
+    };
+  }
+}

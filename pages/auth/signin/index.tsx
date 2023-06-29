@@ -13,6 +13,7 @@ import { object, string } from 'yup';
 import { toast } from "react-toastify";
 import { asynchronousEmulation } from '../../../utils';
 import { HOME_PAGE_LINK } from '../../../constants';
+import Loader from "example/components/Loader/Loader";
 
 const LoginSchema = object({
   email: string().email("Invalid email").required("Required"),
@@ -155,6 +156,10 @@ function LoginPage() {
                 </Link>
               </p>
             </div>
+
+            {
+              loading && <Loader />
+            }
           </main>
         </div>
       </div>

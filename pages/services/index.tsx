@@ -1,4 +1,4 @@
-import { useActions } from "@dilane3/gx";
+import { useActions, useSignal } from "@dilane3/gx";
 import {
   TableContainer,
   Table,
@@ -16,6 +16,8 @@ import ServiceCard from "example/components/Services/ServiceCard";
 import PageTitle from "example/components/Typography/PageTitle";
 import Layout from "example/containers/Layout";
 import { ModalType } from "gx/signals/modal";
+import { UsersState } from "gx/signals/users";
+import useGetUsers from "hooks/useGetUsers";
 import { AddIcon } from "icons";
 import { Colors } from "utils";
 
@@ -64,7 +66,7 @@ const services = [
   },
   {
     id: 3,
-    name: "Bureau Exécutif National",
+    name: "Bureau Exécutif Nat.",
     members: 5,
     color: "orange",
   },
@@ -77,7 +79,14 @@ const services = [
 ];
 
 export default function ServicePage() {
+  // Global actions
   const { openModal } = useActions("modal");
+
+  // Global state
+  const { users } = useSignal<UsersState>("users");
+
+  // Load users
+  useGetUsers();
 
   const handleOpenModal = () => {
     const payload = {
@@ -105,7 +114,7 @@ export default function ServicePage() {
 
       <div className="w-full flex flex-col align-start mt-10">
         <div className="flex flex-row justify-between">
-          <h2 className="text-xl">Les membres (104)</h2>
+          <h2 className="text-xl">Les membres ({users.length})</h2>
           <Button
             iconLeft={AddIcon}
             size="regular"
@@ -133,23 +142,23 @@ export default function ServicePage() {
                       <div className="flex items-center text-sm">
                         <Avatar
                           className="hidden mr-3 md:block"
-                          src={user.avatar}
+                          src={"https://picsum.photos/200" || user.avatar}
                           alt="User avatar"
                         />
                         <div>
                           <p className="font-semibold">{user.name}</p>
                           <p className="text-xs text-gray-600 dark:text-gray-400">
-                            {user.role}
+                            {user.specialization}
                           </p>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge type={user.active}>{user.status}</Badge>
+                      <Badge type={true}>{"Actif"}</Badge>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">
-                        {new Date(user.adhesion).toLocaleDateString()}
+                        {new Date(user.memberAt).toLocaleDateString()}
                       </span>
                     </TableCell>
                   </TableRow>
