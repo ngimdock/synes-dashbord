@@ -5,12 +5,15 @@ import { GiAlarmClock } from "react-icons/gi";
 import { MdAccessAlarm } from "react-icons/md";
 
 import { formatDate } from "utils";
-import Post from "entities/posts/Post";
 import FilepdfPost from "./FilepdfPost";
 import style from "styles/communique.module.css";
+import Communique from "entities/communique/communique";
 
-const Communique = (props: any) => {
-  const communique = props.communique as Post;
+type CommuniqueItemType = {
+  communique: Communique
+}
+
+const CommuniqueItem = ({ communique }: CommuniqueItemType) => {
   const imagePath = "/assets/img/" + communique.getPhoto();
   console.log("images paths", imagePath);
   // communique: Post;
@@ -58,4 +61,4 @@ const Communique = (props: any) => {
   );
 };
 
-export default Communique;
+export default CommuniqueItem;

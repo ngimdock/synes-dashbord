@@ -1,5 +1,5 @@
 import { createSignal } from "@dilane3/gx";
-import { synesEvent } from "entities/events/SynesEvent";
+import { synesEvent } from "entities/events/synesEvent";
 import { asynchronousEmulation } from "utils";
 import { synesEvents } from "utils/demo/tableData";
 

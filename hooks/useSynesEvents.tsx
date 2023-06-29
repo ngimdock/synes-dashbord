@@ -1,4 +1,4 @@
-import { synesEvent } from "entities/events/SynesEvent";
+import { synesEvent } from "entities/events/synesEvent";
 import { useEffect, useState } from "react"
 import { synesEvents } from "utils/demo/tableData";
 

@@ -6,7 +6,7 @@ import { MdAccessAlarm } from "react-icons/md";
 import { Colors, formatDate } from "utils";
 import FilepdfPost from "./FilepdfPost";
 import style from "styles/event.module.css";
-import SynesEvent from "entities/events/SynesEvent";
+import SynesEvent from "entities/events/synesEvent";
 
 type EventPostType = {
   event: SynesEvent

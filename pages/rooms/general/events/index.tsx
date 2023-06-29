@@ -3,9 +3,9 @@ import Tab from "example/components/Tabs/Tab";
 import Layout from "example/containers/Layout";
 import style from "styles/event.module.css";
 import { useEffect, useMemo } from "react";
-import SynesEvent from "../../../../entities/events/SynesEvent";
-import EventPost from "example/components/Posts/EventPost";
+import SynesEvent from "../../../../entities/events/synesEvent";
 import { useAction, useSignal } from "@dilane3/gx";
+import EventPost from "../../../../example/components/Posts/EventPost";
 
 export default function EventsPage() {
 

@@ -50,7 +50,7 @@ const synesComplainSignal = createSignal<SynesComplainsState>({
     addSynesComplain: (state, payload: synesComplain) => {
       const newSynesComplainList = state.complains;
       newSynesComplainList.push(payload);
-      return { ...state, payload: newSynesComplainList }    
+      return { ...state, complains: newSynesComplainList }    
     }
   },
 })
