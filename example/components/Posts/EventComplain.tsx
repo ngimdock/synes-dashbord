@@ -6,13 +6,13 @@ import { MdAccessAlarm } from "react-icons/md";
 import { Colors, formatDate } from "utils";
 import FilepdfPost from "./FilepdfPost";
 import style from "styles/event.module.css";
-import SynesEvent from "entities/events/SynesEvent";
+import SynesComplain from "entities/complains/synesComplain";
 
-type EventPostType = {
-  event: SynesEvent
+type ComplainType = {
+  complain: SynesComplain
 }
 
-const EventPost = ({ event }: EventPostType) => {
+const EventComplain = ({complain}: ComplainType) => {
   return (
     <Card className={`${style.singleEvent} max-w-sm mb-3`}>
       <CardBody className="p-0">
@@ -35,8 +35,8 @@ const EventPost = ({ event }: EventPostType) => {
               </p>
             </div>
           </div>
-          {event.getFile() && <FilepdfPost />}
-          {event.getPhoto() && (
+          {complain.getFile() && <FilepdfPost />}
+          {complain.getPhoto() && (
             <Image
               src="/assets/img/login-office.jpeg"
               width={500}
@@ -45,7 +45,7 @@ const EventPost = ({ event }: EventPostType) => {
               className={style.eventImage}
             />
           )}
-          <p className="py-2 text-md text-gray-700">{event.getDesciption()}</p>
+          <p className="py-2 text-md text-gray-700">{complain.getContent()}</p>
         </div>
       </CardBody>
       <div
@@ -61,4 +61,4 @@ const EventPost = ({ event }: EventPostType) => {
   );
 };
 
-export default EventPost;
+export default EventComplain;

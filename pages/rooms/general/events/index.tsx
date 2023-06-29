@@ -51,7 +51,9 @@ export default function EventsPage() {
               columnOne.map((item, index) => {
                 const event = new SynesEvent(item);
 
-                return <EventPost key={index} synesEvent={event} />;
+                return <>
+                  <EventPost key={event.getDesciption()+index} event={event} />;
+                </>
               })}
           </div>
           <div>
@@ -59,7 +61,9 @@ export default function EventsPage() {
               columnTwo.map((item, index) => {
                 const event = new SynesEvent(item);
 
-                return <EventPost key={index} synesEvent={event} />;
+                return <>
+                  <EventPost key={event.getDesciption()+index} event={event} />;
+                </>
               })}
           </div>
           <div>
@@ -67,7 +71,9 @@ export default function EventsPage() {
               columnThree.map((item, index) => {
                 const event = new SynesEvent(item);
 
-                return <EventPost key={index} synesEvent={event} />;
+                return <>
+                  <EventPost key={event.getDesciption()+index} event={event} />;
+                </>
               })}
           </div>
         </section>

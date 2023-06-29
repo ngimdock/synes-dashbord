@@ -6,7 +6,8 @@ import { complains } from "utils/demo/tableData";
 export type SynesComplainsState = {
   loading: boolean,
   error: boolean,
-  payload: synesComplain[] | synesComplain | null;
+  complains: synesComplain[];
+  selectedComplain: synesComplain | null
 }
 
 const synesComplainSignal = createSignal<SynesComplainsState>({
@@ -14,7 +15,8 @@ const synesComplainSignal = createSignal<SynesComplainsState>({
   state: {
     loading: false,
     error: false,
-    payload: [],
+    complains: [],
+    selectedComplain: null,
   },
   actions: {
     loadSynesComplains: (state) => {
@@ -42,12 +44,12 @@ const synesComplainSignal = createSignal<SynesComplainsState>({
       
       return {
         ...state,
-        payload: synesComplainsList
+        complains: synesComplainsList
       }
     },
-    addSynesComplain: (state, payload) => {
-      const newSynesComplainList = state.payload as synesComplain[];
-      newSynesComplainList?.push(payload);
+    addSynesComplain: (state, payload: synesComplain) => {
+      const newSynesComplainList = state.complains;
+      newSynesComplainList.push(payload);
       return { ...state, payload: newSynesComplainList }    
     }
   },

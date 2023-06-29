@@ -9,7 +9,7 @@ export const Colors = {
 export const formatDate = (d: any) => {
   const date = new Date(d);
 
-  console.log({ d, date });
+  // console.log({ d, date });
 
   const day = date.getDate();
   const month = date.getMonth();

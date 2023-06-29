@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Button } from "@roketid/windmill-react-ui";
 import { Tabs } from "../../../constants";
 // import Tab from "example/components/Tabs/Tab";
@@ -7,17 +7,30 @@ import PageTitle from "example/components/Typography/PageTitle";
 import Layout from "example/containers/Layout";
 import { AddIcon } from "icons";
 import { Colors } from "utils";
-import { Plaintes } from "utils/demo/tableData";
-import Post from "../../../entities/posts/Post";
 
 import style from "styles/communique.module.css";
-import Communique from "example/components/Posts/Communique";
-import { useActions } from "@dilane3/gx";
+import { useAction, useActions, useSignal } from "@dilane3/gx";
 import { ModalType } from "gx/signals/modal";
+import { SynesComplainsState } from "gx/signals/synesComplains";
+import EventComplain from "example/components/Posts/EventComplain";
+import SynesComplain from "../../../entities/complains/synesComplain";
 
 export default function PlaintePage() {
   const { openModal } = useActions("modal");
 
+  const loadSynesComplains = useAction("synesComplains", "loadSynesComplains");
+  const synesComplains = useSignal<SynesComplainsState>("synesComplains");
+
+  const { complains } = synesComplains;
+
+  useEffect(() => {
+    loadSynesComplains();
+    
+    return () => {
+      console.log("unMounted");  
+    }
+  }, []);
+  
   const handleOpenModal = () => {
     const payload = {
       modalStatus: true,
@@ -27,28 +40,32 @@ export default function PlaintePage() {
 
     openModal(payload);
   };
-  console.log("les plaintes :", Plaintes);
+
+
   const [columnOne, columnTwo, columnThree] = useMemo(() => {
     const columnOne = [];
     const columnTwo = [];
     const columnThree = [];
 
-    for (let i = 0; i < Plaintes.length; i++) {
+    console.log("Executed", complains)
+
+    for (let i = 0; i < complains.length; i++) {
       if (i % 3 === 0) {
-        columnOne.push(Plaintes[i]);
+        columnOne.push(complains[i]);
       } else {
         if (i % 3 === 1) {
-          columnTwo.push(Plaintes[i]);
+          columnTwo.push(complains[i]);
         } else {
-          columnThree.push(Plaintes[i]);
+          columnThree.push(complains[i]);
         }
       }
     }
+
     return [columnOne, columnTwo, columnThree];
-  }, [Plaintes]);
+  }, [complains]);
 
   return (
-    <Layout title="Plaintes" description="Plaintes">
+    <Layout title="complains" description="complains">
       <div className="flex flex-row justify-between items-center">
         <PageTitle>Plaintes</PageTitle>
 
@@ -70,25 +87,31 @@ export default function PlaintePage() {
         <div>
           {columnOne.length > 0 &&
             columnOne.map((item, index) => {
-              const post = new Post(item);
+              const complain = new SynesComplain(item);
 
-              return <Communique key={index} communique={post} />;
+              return  (<>
+                <EventComplain key={index+(item.content[index] ?? "")} complain={complain} />;
+              </>)
             })}
         </div>
         <div>
           {columnTwo.length > 0 &&
             columnTwo.map((item, index) => {
-              const post = new Post(item);
+              const complain = new SynesComplain(item);
 
-              return <Communique key={index} communique={post} />;
+              return  (<>
+                <EventComplain key={index+(item.content[index] ?? "")} complain={complain} />;
+              </>)
             })}
         </div>
         <div>
           {columnThree.length > 0 &&
             columnThree.map((item, index) => {
-              const post = new Post(item);
+              const complain = new SynesComplain(item);
 
-              return <Communique key={index} communique={post} />;
+              return  (<>
+                <EventComplain key={index+(item.content[index] ?? "")} complain={complain} />;
+              </>)
             })}
         </div>
       </section>
