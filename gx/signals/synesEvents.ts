@@ -3,13 +3,13 @@ import { synesEvent } from "entities/events/SynesEvent";
 import { asynchronousEmulation } from "utils";
 import { synesEvents } from "utils/demo/tableData";
 
-export type SynesState = {
+export type SynesEventsState = {
   loading: boolean,
   error: boolean,
   payload: synesEvent[] | synesEvent | null;
 };
 
-const synesEventsSignal = createSignal<SynesState>({
+const synesEventsSignal = createSignal<SynesEventsState>({
   name: "synesEvents",
   state: {
     loading: false,

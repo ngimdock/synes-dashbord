@@ -10,13 +10,13 @@ import { useAction } from "@dilane3/gx";
 import RoundSpinner from "example/components/Spinner/RoundSpinner";
 
 const AddEvent = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  // const inputRef = useRef<HTMLInputElement>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
 
   const [error, setError] = useState<boolean| null>(null);
 
-  const addSynesEvent  = useAction("synesEvents", "addSynesEvent");
+  const addSynesEvent = useAction("synesEvents", "addSynesEvent");
 
   const [event, setEvent] = useState({
     description: "",
@@ -30,6 +30,38 @@ const AddEvent = () => {
       eventDate: event.eventDate
     });
   }
+
+
+  // const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   console.log("target :", e.target.files, e.target.value);
+
+  //   if (!checkExistance(e.target.files || new DataTransfer().files)) {
+  //     const newArrayState: FileList[] = [
+  //       ...files,
+  //       e.target.files || new DataTransfer().files,
+  //     ];
+  //     setFiles(newArrayState);
+  //     if (e.target.files) {
+  //       const imageUrl = URL.createObjectURL(e.target.files[0]);
+  //       setPath([...image, imageUrl]);
+  //     }
+  //   }
+  // };
+
+  // const handleRemoveFile = (name: string) => {
+  //   let tmp: FileList[] = [];
+  //   for (let i = 0; i < files.length; i++) {
+  //     const element = files[i];
+  //     if (element[0].name !== name) {
+  //       tmp.push(element);
+  //     } else {
+  //       let secondPath = [...image];
+  //       secondPath.splice(i, 1);
+  //       setPath(secondPath);
+  //     }
+  //   }
+  //   setFiles(tmp);
+  // };
 
   const handleSubmit = async () => {
 
