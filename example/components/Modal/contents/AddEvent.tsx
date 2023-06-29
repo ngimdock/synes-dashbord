@@ -3,10 +3,11 @@ import Image from "next/image";
 import React, { ChangeEvent, useRef, useState } from "react";
 
 import style from "styles/event.module.css";
-import { Colors, formatDate, formatDateWithHour } from "utils";
+import { asynchronousEmulation, Colors, formatDate, formatDateWithHour } from "utils";
 import SectionTitle from "example/components/Typography/SectionTitle";
 import { MdAccessAlarm } from "react-icons/md";
 import { useAction } from "@dilane3/gx";
+import RoundSpinner from "example/components/Spinner/RoundSpinner";
 
 const AddEvent = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -30,7 +31,7 @@ const AddEvent = () => {
     });
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
 
     console.log("Clicked");
     
@@ -38,6 +39,8 @@ const AddEvent = () => {
       setLoading(true)
 
       console.log(loading);
+
+      await asynchronousEmulation(3000);
 
       addSynesEvent({
         description: event.description.trim(),
@@ -50,13 +53,17 @@ const AddEvent = () => {
       setTimeout(() => {
         setError(null)
         clearForm();
-      }, 3000)
+      }, 3000);
       setLoading(false);
       
       console.log(loading);
 
     } else {
-      throw new Error("The description is needed");
+      setError(true)
+      setTimeout(() => {
+        setError(null)
+        clearForm();
+      }, 3000);
     }
   }
 
@@ -73,7 +80,7 @@ const AddEvent = () => {
         <SectionTitle>Préparer un évènement</SectionTitle>
         {error != null ? !error ? 
         <FormSubmitResponse message="Event added successfully" status={true} />: 
-        <FormSubmitResponse message="Event added successfully" status={false} /> : null}
+        <FormSubmitResponse message="Event has not been added" status={false} /> : null}
         
         <Textarea
           className="mt-1 h-40 resize-x-none max-h-60 min-h-[100px]"
@@ -110,7 +117,10 @@ const AddEvent = () => {
               boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)" }}
             onClick={handleSubmit}
           >
-            {loading.toString()}
+            { loading ? 
+              <RoundSpinner />
+            : null}
+            Publier
           </Button>
         </div>
       </div>
