@@ -20,7 +20,7 @@ export default function useGetUsers() {
 
   // Some handlers
   const getUsersHandler = async () => {
-    const { data } = await getUsers(5);
+    const { data } = await getUsers(20);
 
     if (data) {
       const users: User[] = data.users.map((user: any) => new User(user));

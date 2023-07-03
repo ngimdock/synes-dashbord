@@ -21,10 +21,14 @@
 .selectMemberContainer {
   display: flex;
   flex-direction: column;
-  border: 1px solid gray;
+  border: 1px solid #eee;
   border-radius: 8px;
   height: auto;
+  min-height: 200px;
+  max-height: 200px;
+  overflow-y: auto;
   width: 100%;
+  min-width: 200px;
 }
 .memberContaint {
   display: flex;
@@ -32,7 +36,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid;
+  border-bottom: 1px solid #eee;
 }
 .memberName {
   color: gray;

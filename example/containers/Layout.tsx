@@ -9,6 +9,7 @@ import { useSignal } from "@dilane3/gx";
 import { CurrentUserState } from "gx/signals/current-user";
 import { LOGIN_PAGE_LINK } from "../../constants";
 import { getModifiedCookieValues } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+import useGetUsers from "hooks/useGetUsers";
 
 interface ILayout {
   children: React.ReactNode;
@@ -25,6 +26,9 @@ function Layout({ children, title, description }: ILayout) {
 
   // Get current user data
   useAuth();
+
+  // Load users
+  useGetUsers();
 
   React.useEffect(() => {
     if (!loading && !currentUser) {

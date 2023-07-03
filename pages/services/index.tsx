@@ -79,9 +79,6 @@ export default function ServicePage() {
     }
   }, [currentPage]);
 
-  // Load users
-  useGetUsers();
-
   const handleOpenModal = () => {
     const payload = {
       modalStatus: true,
