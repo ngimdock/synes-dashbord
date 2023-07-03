@@ -33,8 +33,6 @@ const synesEventsSignal = createSignal<SynesState>({
         synesEventsList.push(newSynesEvent);
       }
 
-      console.log(synesEventsList);
-
       asynchronousEmulation();
 
       state.loading = false ;

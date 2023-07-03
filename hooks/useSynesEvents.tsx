@@ -10,9 +10,6 @@ export const useSynesEvents = () => {
   const loadSynesEvents = async () => {
     setEventsLoading(true)
 
-    console.log("Rexecuted");
-    
-
     const synesEventsList: synesEvent[] = [];
 
     for (let index = 0; index < synesEvents.length; index++) {
@@ -25,8 +22,6 @@ export const useSynesEvents = () => {
 
       synesEventsList.push(newSynesEvent);
     }
-
-    console.log(synesEventsList);
 
     await new Promise((resolve) => {
       setTimeout(() => {
@@ -50,8 +45,7 @@ export const useSynesEvents = () => {
   const addSynesEvent = (newSynesevent: synesEvent) => {
     const newSynesEventsList = synesEventsList;
     newSynesEventsList.push(newSynesevent);
-    setSynesEventsList(newSynesEventsList);    
-    console.log(synesEventsList);
+    setSynesEventsList(newSynesEventsList);
   }
 
   const removeSynesEvent = (newSynesevent: synesEvent) => {

@@ -32,8 +32,6 @@ function LoginPage() {
     const verification = async () => {
       const payload = await verifyForm();
 
-      console.log(payload);
-
       if (payload) setVerified(true);
       else setVerified(false);
     };

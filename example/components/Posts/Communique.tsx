@@ -12,7 +12,6 @@ import style from "styles/communique.module.css";
 const Communique = (props: any) => {
   const communique = props.communique as Post;
   const imagePath = "/assets/img/" + communique.getPhoto();
-  console.log("images paths", imagePath);
   // communique: Post;
   return (
     <Card className={`${style.singleCommunique} max-w-sm mb-3`}>

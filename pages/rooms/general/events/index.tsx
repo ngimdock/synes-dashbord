@@ -27,8 +27,6 @@ export default function EventsPage() {
     const columnTwo = [];
     const columnThree = [];    
 
-    console.log(synesEvents.payload);
-
     for (let i = 0; i < synesEvents.payload.length; i++) {
       if (i % 3 === 0) {
         columnOne.push(synesEvents.payload[i]);

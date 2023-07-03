@@ -9,8 +9,6 @@ export const Colors = {
 export const formatDate = (d: any) => {
   const date = new Date(d);
 
-  console.log({ d, date });
-
   const day = date.getDate();
   const month = date.getMonth();
   const year = date.getFullYear();
@@ -33,30 +31,42 @@ export const formatDate = (d: any) => {
   return `${day} ${months[month]} ${year}`;
 };
 
+export const formatDateForInput = (d: any) => {
+  const date = new Date(d);
+
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+
+  const stringMonth = month < 10 ? `0${month}` : month;
+  const stringDay = day < 10 ? `0${day}` : day;
+
+  return `${year}-${stringMonth}-${stringDay}`;
+};
+
 type DateOptions = {
-  year: number,
-  month: number,
-  day: number,
-  hour: number,
-  minute: number,
-  hour12: false
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+  hour12: false;
 };
 
 export const formatDateWithHour = (d: any) => {
-
   const date = new Date(d);
 
   const hours = date.getHours();
   const minutes = date.getMinutes();
   const seconds = date.getSeconds();
 
-  return `${12}h${minutes < 10 ? `0${minutes}`: minutes}`;
-}
+  return `${12}h${minutes < 10 ? `0${minutes}` : minutes}`;
+};
 
 export const asynchronousEmulation = async (ms = 1000) => {
-    await new Promise((resolve) => {
+  await new Promise((resolve) => {
     setTimeout(() => {
       resolve("Loading the events");
     }, ms);
   });
-} 
+};

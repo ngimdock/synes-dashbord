@@ -31,13 +31,8 @@ const AddEvent = () => {
   }
 
   const handleSubmit = () => {
-
-    console.log("Clicked");
-    
     if(event.description.trim() != "") {
-      setLoading(true)
-
-      console.log(loading);
+      setLoading(true);
 
       addSynesEvent({
         description: event.description.trim(),
@@ -52,9 +47,6 @@ const AddEvent = () => {
         clearForm();
       }, 3000)
       setLoading(false);
-      
-      console.log(loading);
-
     } else {
       throw new Error("The description is needed");
     }

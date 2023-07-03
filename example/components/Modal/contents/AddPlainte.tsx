@@ -30,8 +30,6 @@ const AddPlainte = () => {
   };
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log("target :", e.target.files, e.target.value);
-
     if (!checkExistance(e.target.files || new DataTransfer().files)) {
       const newArrayState: FileList[] = [
         ...files,

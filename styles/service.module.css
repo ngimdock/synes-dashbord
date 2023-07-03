@@ -1,0 +1,6 @@
+.formSection {
+  overflow-y: auto;
+  height: "auto";
+  max-height: 300px;
+  min-height: 300px;
+}

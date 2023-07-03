@@ -27,7 +27,7 @@ export default function PlaintePage() {
 
     openModal(payload);
   };
-  console.log("les plaintes :", Plaintes);
+  
   const [columnOne, columnTwo, columnThree] = useMemo(() => {
     const columnOne = [];
     const columnTwo = [];

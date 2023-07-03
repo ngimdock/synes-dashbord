@@ -20,14 +20,12 @@ export default function useGetUsers() {
 
   // Some handlers
   const getUsersHandler = async () => {
-    const { data } = await getUsers();
+    const { data } = await getUsers(5);
 
     if (data) {
-      const users: User[] = data.map((user: any) => new User(user));
+      const users: User[] = data.users.map((user: any) => new User(user));
 
-      console.log(users);
-
-      addUsers(users);
+      addUsers({ users, hasMore: data.hasMore, total: data.total });
     } else {
       console.log("error")
     }
