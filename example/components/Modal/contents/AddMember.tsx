@@ -8,7 +8,7 @@ import {
 import { AddIcon } from "icons";
 import { AiOutlineClose } from "react-icons/ai";
 import Image from "next/image";
-import { useActions } from "@dilane3/gx";
+import { useActions, useSignal } from "@dilane3/gx";
 import React, { ChangeEvent, useRef, useState } from "react";
 
 import style from "styles/communique.module.css";
@@ -21,6 +21,7 @@ import { CreateUserDto, Sexe } from "api/users/dto";
 import Loader from "example/components/Loader/Loader";
 import { toast } from "react-toastify";
 import User from "../../../../entities/users/User";
+import School from "entities/schools/School";
 
 const formSchema = object({
   name: string().required("Le nom est obligatoire"),
@@ -31,6 +32,7 @@ const formSchema = object({
   specialization: string().required("La specialisation est obligatoire"),
   sexe: string().required("Le sexe est obligatoire"),
   memberAt: date().required("La date d'adhésion est obligatoire"),
+  schoolId: string().required("L'ID de l'école est obligatoire"),
 });
 
 const AddMember = () => {
@@ -39,6 +41,9 @@ const AddMember = () => {
   // Global actions
   const { closeModal } = useActions("modal");
   const { addUser } = useActions("users");
+
+  // Global state
+  const schools = useSignal<School[]>("schools");
 
   // Local state
   const [file, setFile] = useState<File | null>(null);
@@ -49,6 +54,7 @@ const AddMember = () => {
   const [specialization, setSpecialization] = useState<string>("");
   const [sexe, setSexe] = useState<Sexe>(Sexe.Male);
   const [memberAt, setMemberAt] = useState<Date | null>(null);
+  const [schoolId, setSchoolId] = useState("");
 
   const [loading, setLoading] = useState<boolean>(false);
   const [verified, setVerified] = useState<boolean>(false);
@@ -60,7 +66,7 @@ const AddMember = () => {
     };
 
     verify();
-  }, [name, email, phone, specialization, sexe, memberAt]);
+  }, [name, email, phone, specialization, sexe, memberAt, schoolId]);
 
   const cancelCreationMember = () => {
     closeModal();
@@ -87,6 +93,10 @@ const AddMember = () => {
 
       case "phone":
         setPhone(e.target.value);
+        break;
+
+      case "schoolId":
+        setSchoolId(e.target.value);
         break;
 
       case "specialization":
@@ -149,6 +159,7 @@ const AddMember = () => {
           sexe,
           avatar,
           memberAt,
+          establishmentId: schoolId,
         } as CreateUserDto;
 
         // Create member
@@ -181,6 +192,7 @@ const AddMember = () => {
       sexe,
       avatar,
       memberAt,
+      establishmentId: schoolId,
     } as CreateUserDto;
 
     // Create member
@@ -211,6 +223,7 @@ const AddMember = () => {
         specialization,
         sexe,
         memberAt,
+        schoolId,
       });
 
       setVerified(true);
@@ -258,6 +271,21 @@ const AddMember = () => {
             value={phone}
             onChange={(e) => handleOnChange(e, "phone")}
           />
+        </Label>
+
+        <Label className="mt-4">
+          <span>Université</span>
+          <Select
+            className="mt-1"
+            value={schoolId}
+            onChange={(e) => handleOnChange(e, "schoolId")}
+          >
+            <option value="">#</option>
+
+            {schools.map((school) => (
+              <option value={school.id}>{school.name}</option>
+            ))}
+          </Select>
         </Label>
 
         <Label className="mt-4">

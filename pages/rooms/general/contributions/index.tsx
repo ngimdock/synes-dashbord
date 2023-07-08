@@ -106,7 +106,6 @@ export default function ContributionPage() {
               <TableHeader>
                 <tr>
                   <TableCell>Nom</TableCell>
-                  <TableCell>Titre</TableCell>
                   <TableCell>Contribution</TableCell>
                   <TableCell>Montant</TableCell>
                 </tr>
@@ -127,9 +126,6 @@ export default function ContributionPage() {
                           </p>
                         </div>
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">Sécrétaire du BEN</span>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">

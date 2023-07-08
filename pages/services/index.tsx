@@ -145,6 +145,7 @@ export default function ServicePage() {
               <TableHeader>
                 <tr>
                   <TableCell>Noms</TableCell>
+                  <TableCell>Université</TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell>Date d'adhésion</TableCell>
                 </tr>
@@ -162,10 +163,15 @@ export default function ServicePage() {
                         <div>
                           <p className="font-semibold">{user.name}</p>
                           <p className="text-xs text-gray-600 dark:text-gray-400">
-                            {user.specialization}
+                            Professeur en {user.specialization}
                           </p>
                         </div>
                       </div>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">
+                        {user.establishment?.name}
+                      </span>
                     </TableCell>
                     <TableCell>
                       <Badge type={true}>{"Actif"}</Badge>

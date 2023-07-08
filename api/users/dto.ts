@@ -11,4 +11,5 @@ export type CreateUserDto = {
   specialization: string;
   sexe: Sexe;
   memberAt: Date;
+  establishmentId: string;
 };
