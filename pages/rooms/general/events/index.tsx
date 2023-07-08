@@ -9,23 +9,22 @@ import EventPost from "../../../../example/components/Posts/EventPost";
 import { PostCategoryState } from "gx/signals/post_categories";
 import { getPosts } from "api/posts";
 import { SynesPostsState } from "gx/signals/synesPosts";
+import { useSynesCategory } from "hooks/useSynesCategory";
 
 export default function EventsPage() {
 
   const { events: synesEvents } = useSignal<SynesPostsState>("synesPosts");
 
-  const { postCategories } = useSignal<PostCategoryState>("postCategories");
-
   const loadSynesEvents = useAction("synesPosts", "loadSynesEvents");
 
-  const postCategorie = useMemo(() => postCategories.find((e) => e.getName() === "évènnements"), [postCategories]);
+  const { categoryId } = useSynesCategory("évènnements");
 
   const cachedLoadSynesEvents = useCallback(async () => {
-    console.log(postCategorie);
+    console.log(categoryId);
 
-    if(!postCategorie) return [];
+    if(!categoryId) return [];
 
-    const { data } = await getPosts(postCategorie.getId());
+    const { data } = await getPosts(categoryId);
 
     console.log(data.posts);
 

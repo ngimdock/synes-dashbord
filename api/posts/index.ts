@@ -38,7 +38,10 @@ export type CreatePostDto = {
  * @param payload post data
  * @returns data or error
  */
-export const createPost = async (payload: CreatePostDto) => {
+export const createPost = async (
+  // payload: FormData
+  payload: CreatePostDto
+  ) => {
   try {
     const response = await instance.post("/posts", payload);
 

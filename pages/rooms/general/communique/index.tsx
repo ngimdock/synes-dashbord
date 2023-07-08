@@ -7,26 +7,24 @@ import { synesCommunique } from "../../../../entities/communique/communique";
 import { useAction, useSignal } from "@dilane3/gx";
 import CommuniqueItem from "example/components/Posts/Communique";
 import Communique from "../../../../entities/communique/communique";
-import { PostCategoryState } from "gx/signals/post_categories";
 import { getPosts } from "api/posts";
 import { SynesPostsState } from "gx/signals/synesPosts";
+import { useSynesCategory } from "hooks/useSynesCategory";
 
 export default function CommuniquePage() {
 
   const { communiques: synesCommuniques } = useSignal<SynesPostsState>("synesPosts");
 
-  const { postCategories } = useSignal<PostCategoryState>("postCategories");
+  const { categoryId } = useSynesCategory("communiqués");
 
   const loadSynesCommuniques = useAction("synesPosts", "loadSynesCommuniques");
 
-  const postCategorie = useMemo(() => postCategories.find((e) => e.getName() === "communiqués"), [postCategories]);
-
   const cachedLoadSynesCommuniques = useCallback(async () => {
-    console.log(postCategorie);
+    console.log(categoryId);
 
-    if(!postCategorie) return [];
+    if(!categoryId) return [];
 
-    const { data } = await getPosts(postCategorie.getId());
+    const { data } = await getPosts(categoryId);
 
     console.log(data.posts);
 
@@ -57,7 +55,6 @@ export default function CommuniquePage() {
       console.log("unMounted");  
     }
   }, []);
-
 
   const [columnOne, columnTwo, columnThree] = useMemo(() => {
     const columnOne = [];

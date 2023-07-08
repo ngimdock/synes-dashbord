@@ -8,18 +8,24 @@ import React, { ChangeEvent, useRef, useState } from "react";
 import style from "styles/communique.module.css";
 import { Colors } from "utils";
 import { useActions } from "@dilane3/gx";
+import { createPost, CreatePostDto } from "api/posts";
+import { useSynesCategory } from "hooks/useSynesCategory";
 
 const AddCommunique = () => {
   const { closeModal } = useActions("modal");
+
+  const { categoryId } = useSynesCategory("communiqués");
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [files, setFiles] = useState<FileList[]>([]);
   const [image, setPath] = useState<string[]>([]);
+  const [description, setDescription] = useState<string>("")
 
   const annulerCommunique = () => {
     closeModal();
   };
+
   const handleUploadClick = () => {
     if (inputRef.current) {
       inputRef.current.click();
@@ -62,6 +68,24 @@ const AddCommunique = () => {
     setFiles(tmp);
   };
 
+  /**
+   * Function to create a post
+   */
+  const handleSubmit = async () => {
+
+    console.log("description", description.trim());
+    console.log("categorieId", categoryId);
+
+    const newSynesCommunique: CreatePostDto = {
+      description: description,
+      categoryId: categoryId ? categoryId : ""
+    }
+
+    const result = await createPost(newSynesCommunique);
+
+    console.log(result)
+  }
+
   return (
     <div className={style.coms_modals}>
       <div className={`${style.coms_modals_first_part} ml-2 flex flex-col`}>
@@ -72,6 +96,8 @@ const AddCommunique = () => {
           className="mt-1 h-40"
           rows={3}
           placeholder="Contenu de votre communiqué."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
         <div className="flex justify-between mt-8 ">
           <Button
@@ -90,7 +116,7 @@ const AddCommunique = () => {
             // iconLeft={AddIcon}
             size="regular"
             style={{ backgroundColor: Colors.primary, fill: "#fff" }}
-            // onClick={handleOpenModal}
+            onClick={() => handleSubmit()}
           >
             Publier
           </Button>

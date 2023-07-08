@@ -1,13 +1,15 @@
 import { Button, Textarea } from "@roketid/windmill-react-ui";
 import Image from "next/image";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 import style from "styles/event.module.css";
 import { asynchronousEmulation, Colors, formatDate, formatDateWithHour } from "utils";
 import SectionTitle from "example/components/Typography/SectionTitle";
 import { MdAccessAlarm } from "react-icons/md";
-import { useAction } from "@dilane3/gx";
+import { useAction, useSignal } from "@dilane3/gx";
 import RoundSpinner from "example/components/Spinner/RoundSpinner";
+import { createPost, CreatePostDto } from "api/posts";
+import { useSynesCategory } from "hooks/useSynesCategory";
 
 const AddEvent = () => {
   // const inputRef = useRef<HTMLInputElement>(null);
@@ -16,7 +18,9 @@ const AddEvent = () => {
 
   const [error, setError] = useState<boolean| null>(null);
 
-  const addSynesEvent = useAction("synesEvents", "addSynesEvent");
+  const { categoryId } = useSynesCategory("évènnements");
+
+  const addSynesEvent = useAction("synesPosts", "addSynesEvent");
 
   const [event, setEvent] = useState({
     description: "",
@@ -30,6 +34,31 @@ const AddEvent = () => {
       eventDate: event.eventDate
     });
   }
+
+  //   /**
+  //  * Function to create a post
+  //  */
+  // const handleSubmit = async () => {
+
+  //   console.log("description", description.trim());
+  //   console.log("categorieId", postCategorie?.getId());
+
+  //   // const formData = new FormData();
+  //   // formData.append('description', description.trim());
+  //   // if(postCategorie) formData.append('categoryId', postCategorie.getId());
+  //   // formData.append('programDate', new Date());
+  //   // formData.append('files', description.trim());
+
+  //   const newSynesCommunique: CreatePostDto = {
+  //     description: description,
+  //     categoryId: postCategorie ? postCategorie.getId() : ""
+  //   }
+
+  //   // const result = await createPost(formData);
+  //   const result = await createPost(newSynesCommunique);
+
+  //   console.log(result)
+  // }
 
 
   // const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -72,7 +101,19 @@ const AddEvent = () => {
 
       console.log(loading);
 
-      await asynchronousEmulation(3000);
+      console.log("description", event.description.trim());
+      console.log("categorieId", categoryId);
+      console.log("EventDate", event.eventDate);
+
+      const newSynesEvent: CreatePostDto = {
+        description: event.description.trim(),
+        categoryId: categoryId ? categoryId : "",
+        programDate: event.eventDate,
+      }
+
+      const result = await createPost(newSynesEvent);
+
+      console.log(result)
 
       addSynesEvent({
         description: event.description.trim(),
