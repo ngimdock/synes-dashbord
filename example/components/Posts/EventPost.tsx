@@ -45,7 +45,7 @@ const EventPost = ({ event }: EventPostType) => {
               className={style.eventImage}
             />
           )}
-          <p className="py-2 text-md text-gray-700">{event.getDesciption()}</p>
+          <p className="py-2 text-md text-gray-700">{event.getDescription()}</p>
         </div>
       </CardBody>
       <div

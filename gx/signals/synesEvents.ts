@@ -1,12 +1,13 @@
 import { createSignal } from "@dilane3/gx";
-import { synesEvent } from "entities/events/synesEvent";
+import SynesEvent, { synesEvent } from "entities/events/synesEvent";
 import { asynchronousEmulation } from "utils";
 import { synesEvents } from "utils/demo/tableData";
 
 export type SynesEventsState = {
   loading: boolean,
   error: boolean,
-  payload: synesEvent[] | synesEvent | null;
+  selectedEvent: SynesEvent | null
+  events: SynesEvent[]
 };
 
 const synesEventsSignal = createSignal<SynesEventsState>({
@@ -14,38 +15,15 @@ const synesEventsSignal = createSignal<SynesEventsState>({
   state: {
     loading: false,
     error: false,
-    payload: []
+    selectedEvent: null,
+    events: []
   },
   actions: {
-    loadSynesEvents: (state) => {
-      state.loading = true;
-      
-      const synesEventsList: synesEvent[] = [];
-
-      for (let index = 0; index < synesEvents.length; index++) {
-        const newSynesEvent: synesEvent = {
-          description: synesEvents[index].description,
-          file: synesEvents[index].file,
-          photo: synesEvents[index].photo,
-          createdAt: new Date(),
-        }
-
-        synesEventsList.push(newSynesEvent);
-      }
-
-      console.log(synesEventsList);
-
-      asynchronousEmulation();
-
-      state.loading = false ;
-      
-      return {
-        ...state,
-        payload: synesEventsList
-      }
+    loadSynesEvents: (state, payload: SynesEvent[]) => {
+      return {...state, communiques: payload}
     },
-    addSynesEvent: (state, payload) => {
-      const newSynesEventsList = state.payload as synesEvent[];
+    addSynesEvent: (state, payload: SynesEvent) => {
+      const newSynesEventsList = state.events;
       newSynesEventsList?.push(payload);
       return { ...state, payload: newSynesEventsList }    
     }

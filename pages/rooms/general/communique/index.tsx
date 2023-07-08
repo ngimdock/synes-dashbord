@@ -1,23 +1,59 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Tabs } from "../../../../constants";
 import Tab from "example/components/Tabs/Tab";
 import Layout from "example/containers/Layout";
 import style from "styles/communique.module.css";
-import Post from "../../../../entities/communique/communique";
+import Post, { synesCommunique } from "../../../../entities/communique/communique";
 import { useAction, useSignal } from "@dilane3/gx";
 import { SynesCommuniqueState } from "gx/signals/synesCommuniques";
 import CommuniqueItem from "example/components/Posts/Communique";
 import Communique from "../../../../entities/communique/communique";
+import { PostCategoryState } from "gx/signals/post_categories";
+import { getPosts } from "api/posts";
+import { emit } from "process";
 
 export default function CommuniquePage() {
 
   const communiques = useSignal<SynesCommuniqueState>("synesCommuniques");
 
+  const { postCategories } = useSignal<PostCategoryState>("postCategories");
+
   const loadSynesCommuniques = useAction("synesCommuniques", "loadSynesCommuniques");
 
+  const postCategorie = useMemo(() => postCategories.find((e) => e.getName() === "communiqués"), [postCategories]);
+
+  const cachedLoadSynesCommuniques = useCallback(async () => {
+    console.log(postCategorie);
+
+    if(!postCategorie) return [];
+
+    const { data } = await getPosts(postCategorie.getId());
+
+    console.log(data.posts);
+
+    let synesCommuniquesList: Communique[] = [];
+
+    synesCommuniquesList = data.posts.map((elmt: synesCommunique) => {
+      const newSynesCommunique: synesCommunique = {
+        description: elmt.description,
+        files: elmt.files[0],
+        photos: elmt.files[0],
+        programDate: elmt.programDate,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+
+      return new Communique(newSynesCommunique);
+    });
+
+    console.log(synesCommuniquesList);
+
+    loadSynesCommuniques(synesCommuniquesList);
+  },[]);
+
   useEffect(() => {
-    loadSynesCommuniques();
-    
+    cachedLoadSynesCommuniques();
+
     return () => {
       console.log("unMounted");  
     }
@@ -51,25 +87,22 @@ export default function CommuniquePage() {
           <div>
             {columnOne.length > 0 &&
               columnOne.map((item, index) => {
-                const post = new Communique(item);
 
-                return <CommuniqueItem key={index} communique={post} />;
+                return <CommuniqueItem key={index} communique={item} />;
               })}
           </div>
           <div>
             {columnTwo.length > 0 &&
               columnTwo.map((item, index) => {
-                const post = new Communique(item);
 
-                return <CommuniqueItem key={index} communique={post} />;
+                return <CommuniqueItem key={index} communique={item} />;
               })}
           </div>
           <div>
             {columnThree.length > 0 &&
               columnThree.map((item, index) => {
-                const post = new Communique(item);
 
-                return <CommuniqueItem key={index} communique={post} />;
+                return <CommuniqueItem key={index} communique={item} />;
               })}
           </div>
         </section>

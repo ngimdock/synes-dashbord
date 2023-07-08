@@ -2,16 +2,60 @@ import { Tabs } from "../../../../constants";
 import Tab from "example/components/Tabs/Tab";
 import Layout from "example/containers/Layout";
 import style from "styles/event.module.css";
-import { useEffect, useMemo } from "react";
-import SynesEvent from "../../../../entities/events/synesEvent";
+import { useCallback, useEffect, useMemo } from "react";
+import SynesEvent, { synesEvent } from "../../../../entities/events/synesEvent";
 import { useAction, useSignal } from "@dilane3/gx";
 import EventPost from "../../../../example/components/Posts/EventPost";
+import { PostCategoryState } from "gx/signals/post_categories";
+import { getPosts } from "api/posts";
+import { SynesEventsState } from "gx/signals/synesEvents";
 
 export default function EventsPage() {
 
-  const synesEvents = useSignal("synesEvents");
+  const { events: synesEvents } = useSignal<SynesEventsState>("synesEvents");
+
+  const { postCategories } = useSignal<PostCategoryState>("postCategories");
 
   const loadSynesEvents = useAction("synesEvents", "loadSynesEvents");
+
+  const postCategorie = useMemo(() => postCategories.find((e) => e.getName() === "évènnements"), [postCategories]);
+
+  const cachedLoadSynesEvents = useCallback(async () => {
+    console.log(postCategorie);
+
+    if(!postCategorie) return [];
+
+    const { data } = await getPosts(postCategorie.getId());
+
+    console.log(data.posts);
+
+    let synesEventsList: SynesEvent[] = [];
+
+    synesEventsList = data.posts.map((elmt: synesEvent) => {
+      const newSynesEvent: synesEvent = {
+        description: elmt.description,
+        files: elmt.files[0],
+        photos: elmt.files[0],
+        programDate: elmt.programDate,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+
+      return new SynesEvent(newSynesEvent);
+    });
+
+    console.log(synesEventsList);
+
+    loadSynesEvents(synesEventsList);
+  },[]);
+
+  useEffect(() => {
+    cachedLoadSynesEvents();
+
+    return () => {
+      console.log("unMounted");  
+    }
+  }, []);
 
   useEffect(() => {
     loadSynesEvents();
@@ -26,16 +70,16 @@ export default function EventsPage() {
     const columnTwo = [];
     const columnThree = [];    
 
-    console.log(synesEvents.payload);
+    console.log(synesEvents);
 
-    for (let i = 0; i < synesEvents.payload.length; i++) {
+    for (let i = 0; i < synesEvents.length; i++) {
       if (i % 3 === 0) {
-        columnOne.push(synesEvents.payload[i]);
+        columnOne.push(synesEvents[i]);
       } else {
         if (i % 3 === 1) {
-          columnTwo.push(synesEvents.payload[i]);
+          columnTwo.push(synesEvents[i]);
         } else {
-          columnThree.push(synesEvents.payload[i]);
+          columnThree.push(synesEvents[i]);
         }
       }
     }
@@ -49,30 +93,27 @@ export default function EventsPage() {
           <div>
             {columnOne.length > 0 &&
               columnOne.map((item, index) => {
-                const event = new SynesEvent(item);
 
                 return <>
-                  <EventPost key={event.getDesciption()+index} event={event} />;
+                  <EventPost key={item.getDescription()+index} event={item} />;
                 </>
               })}
           </div>
           <div>
             {columnTwo.length > 0 &&
               columnTwo.map((item, index) => {
-                const event = new SynesEvent(item);
 
                 return <>
-                  <EventPost key={event.getDesciption()+index} event={event} />;
+                  <EventPost key={item.getDescription()+index} event={item} />
                 </>
               })}
           </div>
           <div>
             {columnThree.length > 0 &&
               columnThree.map((item, index) => {
-                const event = new SynesEvent(item);
 
                 return <>
-                  <EventPost key={event.getDesciption()+index} event={event} />;
+                  <EventPost key={item.getDescription()+index} event={item} />;
                 </>
               })}
           </div>

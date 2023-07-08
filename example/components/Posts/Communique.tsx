@@ -37,16 +37,15 @@ const CommuniqueItem = ({ communique }: CommuniqueItemType) => {
         {communique.getFile() && <FilepdfPost />}
         {communique.getPhoto() && (
           <Image
-            // src="/assets/img/login-office.jpeg"
-            src={imagePath}
-            width={500}
+            src={`/assets/img/${communique.getPhoto()}`}
+              width={500}
             height={100}
             alt="Picture of the communique"
             className={style.imageCommunique}
           />
         )}
         <p className="my-2 text-md text-gray-700">
-          {communique.getDesciption()}
+          {communique.getDescription()}
         </p>
         <div className="flex items-start justify-between">
           <div className="flex ">
