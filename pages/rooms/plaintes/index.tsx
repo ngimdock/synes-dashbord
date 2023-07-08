@@ -11,17 +11,15 @@ import { Colors } from "utils";
 import style from "styles/communique.module.css";
 import { useAction, useActions, useSignal } from "@dilane3/gx";
 import { ModalType } from "gx/signals/modal";
-import { SynesComplainsState } from "gx/signals/synesComplains";
 import EventComplain from "example/components/Posts/EventComplain";
-import SynesComplain from "../../../entities/complains/synesComplain";
+import { SynesPostsState } from "gx/signals/synesPosts";
 
 export default function PlaintePage() {
   const { openModal } = useActions("modal");
 
-  const loadSynesComplains = useAction("synesComplains", "loadSynesComplains");
-  const synesComplains = useSignal<SynesComplainsState>("synesComplains");
+  const loadSynesComplains = useAction("synesPosts", "loadSynesComplains");
 
-  const { complains } = synesComplains;
+  const {complains: synesComplains} = useSignal<SynesPostsState>("synesPosts");
 
   useEffect(() => {
     loadSynesComplains();
@@ -47,22 +45,22 @@ export default function PlaintePage() {
     const columnTwo = [];
     const columnThree = [];
 
-    console.log("Executed", complains)
+    console.log("Executed", synesComplains)
 
-    for (let i = 0; i < complains.length; i++) {
+    for (let i = 0; i < synesComplains.length; i++) {
       if (i % 3 === 0) {
-        columnOne.push(complains[i]);
+        columnOne.push(synesComplains[i]);
       } else {
         if (i % 3 === 1) {
-          columnTwo.push(complains[i]);
+          columnTwo.push(synesComplains[i]);
         } else {
-          columnThree.push(complains[i]);
+          columnThree.push(synesComplains[i]);
         }
       }
     }
 
     return [columnOne, columnTwo, columnThree];
-  }, [complains]);
+  }, [synesComplains]);
 
   return (
     <Layout title="complains" description="complains">
@@ -87,30 +85,27 @@ export default function PlaintePage() {
         <div>
           {columnOne.length > 0 &&
             columnOne.map((item, index) => {
-              const complain = new SynesComplain(item);
 
               return  (<>
-                <EventComplain key={index+(item.content[index] ?? "")} complain={complain} />;
+                <EventComplain key={index+(item.getDescription()[index] ?? "")} complain={item} />;
               </>)
             })}
         </div>
         <div>
           {columnTwo.length > 0 &&
             columnTwo.map((item, index) => {
-              const complain = new SynesComplain(item);
 
               return  (<>
-                <EventComplain key={index+(item.content[index] ?? "")} complain={complain} />;
+                <EventComplain key={index+(item.getDescription()[index] ?? "")} complain={item} />;
               </>)
             })}
         </div>
         <div>
           {columnThree.length > 0 &&
             columnThree.map((item, index) => {
-              const complain = new SynesComplain(item);
 
               return  (<>
-                <EventComplain key={index+(item.content[index] ?? "")} complain={complain} />;
+                <EventComplain key={index+(item.getDescription()[index] ?? "")} complain={item} />;
               </>)
             })}
         </div>

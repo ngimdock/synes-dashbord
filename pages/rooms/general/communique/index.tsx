@@ -3,22 +3,21 @@ import { Tabs } from "../../../../constants";
 import Tab from "example/components/Tabs/Tab";
 import Layout from "example/containers/Layout";
 import style from "styles/communique.module.css";
-import Post, { synesCommunique } from "../../../../entities/communique/communique";
+import { synesCommunique } from "../../../../entities/communique/communique";
 import { useAction, useSignal } from "@dilane3/gx";
-import { SynesCommuniqueState } from "gx/signals/synesCommuniques";
 import CommuniqueItem from "example/components/Posts/Communique";
 import Communique from "../../../../entities/communique/communique";
 import { PostCategoryState } from "gx/signals/post_categories";
 import { getPosts } from "api/posts";
-import { emit } from "process";
+import { SynesPostsState } from "gx/signals/synesPosts";
 
 export default function CommuniquePage() {
 
-  const communiques = useSignal<SynesCommuniqueState>("synesCommuniques");
+  const { communiques: synesCommuniques } = useSignal<SynesPostsState>("synesPosts");
 
   const { postCategories } = useSignal<PostCategoryState>("postCategories");
 
-  const loadSynesCommuniques = useAction("synesCommuniques", "loadSynesCommuniques");
+  const loadSynesCommuniques = useAction("synesPosts", "loadSynesCommuniques");
 
   const postCategorie = useMemo(() => postCategories.find((e) => e.getName() === "communiqués"), [postCategories]);
 
@@ -59,7 +58,6 @@ export default function CommuniquePage() {
     }
   }, []);
 
-  const { communiques: synesCommuniques } = communiques;
 
   const [columnOne, columnTwo, columnThree] = useMemo(() => {
     const columnOne = [];

@@ -1,11 +1,14 @@
 import { createStore } from "@dilane3/gx";
 import { currentUserSignal } from "gx/signals/current-user";
 import postCategoriesSignal from "gx/signals/post_categories";
-import synesCommuniquesSignal from "gx/signals/synesCommuniques";
-import synesComplainSignal from "gx/signals/synesComplains";
-import synesEventsSignal from "gx/signals/synesEvents";
+import synesPostsSignal from "gx/signals/synesPosts";
 import modalSignal from "../signals/modal";
 
-const store = createStore([modalSignal, synesEventsSignal, currentUserSignal, synesComplainSignal, synesCommuniquesSignal, postCategoriesSignal]);
+const store = createStore([
+  modalSignal, 
+  currentUserSignal, 
+  synesPostsSignal,
+  postCategoriesSignal,
+]);
 
 export default store;

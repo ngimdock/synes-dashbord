@@ -8,15 +8,15 @@ import { useAction, useSignal } from "@dilane3/gx";
 import EventPost from "../../../../example/components/Posts/EventPost";
 import { PostCategoryState } from "gx/signals/post_categories";
 import { getPosts } from "api/posts";
-import { SynesEventsState } from "gx/signals/synesEvents";
+import { SynesPostsState } from "gx/signals/synesPosts";
 
 export default function EventsPage() {
 
-  const { events: synesEvents } = useSignal<SynesEventsState>("synesEvents");
+  const { events: synesEvents } = useSignal<SynesPostsState>("synesPosts");
 
   const { postCategories } = useSignal<PostCategoryState>("postCategories");
 
-  const loadSynesEvents = useAction("synesEvents", "loadSynesEvents");
+  const loadSynesEvents = useAction("synesPosts", "loadSynesEvents");
 
   const postCategorie = useMemo(() => postCategories.find((e) => e.getName() === "évènnements"), [postCategories]);
 
@@ -52,14 +52,6 @@ export default function EventsPage() {
   useEffect(() => {
     cachedLoadSynesEvents();
 
-    return () => {
-      console.log("unMounted");  
-    }
-  }, []);
-
-  useEffect(() => {
-    loadSynesEvents();
-    
     return () => {
       console.log("unMounted");  
     }
