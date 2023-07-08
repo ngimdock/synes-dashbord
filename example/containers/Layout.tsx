@@ -10,6 +10,7 @@ import { CurrentUserState } from "gx/signals/current-user";
 import { LOGIN_PAGE_LINK } from "../../constants";
 import { getModifiedCookieValues } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import useGetUsers from "hooks/useGetUsers";
+import useGetSchools from "hooks/useGetSchools";
 
 interface ILayout {
   children: React.ReactNode;
@@ -29,6 +30,9 @@ function Layout({ children, title, description }: ILayout) {
 
   // Load users
   useGetUsers();
+
+  // Load schoools
+  useGetSchools();
 
   React.useEffect(() => {
     if (!loading && !currentUser) {

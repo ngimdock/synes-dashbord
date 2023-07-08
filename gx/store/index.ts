@@ -4,6 +4,7 @@ import synesEventsSignal from "gx/signals/synesEvents";
 import modalSignal from "../signals/modal";
 import { usersSignals } from "gx/signals/users";
 import { contributionsSignals } from "gx/signals/contributions";
+import { schoolsSignal } from "gx/signals/schools";
 
 const store = createStore([
   modalSignal,
@@ -11,6 +12,7 @@ const store = createStore([
   currentUserSignal,
   usersSignals,
   contributionsSignals,
+  schoolsSignal,
 ]);
 
 export default store;
