@@ -25,3 +25,37 @@ export const getPosts = async (id: string) => {
     };
   }
 };
+
+export type CreatePostDto = {
+  description: string;
+  programDate?: Date;
+  files?: string[];
+  categoryId: string;
+}
+
+/**
+ * Create a new post
+ * @param payload post data
+ * @returns data or error
+ */
+export const createPost = async (payload: CreatePostDto) => {
+  try {
+    const response = await instance.post("/posts", payload);
+
+    if (response.status === 200) {
+      return {
+        data: response.data
+      };
+    }
+
+    return {
+      error: false
+    }
+  } catch (error) {
+    console.log(error);
+
+    return {
+      error: false
+    };
+  }
+}
