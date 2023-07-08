@@ -113,7 +113,7 @@ export default function ProfilePage() {
                 color: "#888",
               }}
             >
-              Sécrétaire du BEN
+              { user.establishment?.name }
             </Typography>
           </Box>
 

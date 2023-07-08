@@ -93,13 +93,23 @@ export default function ContributionPage() {
     }
   };
 
+  const calculateTotal = () => {
+    let total = 0;
+
+    contributions.forEach((contribution) => {
+      total += contribution.amount;
+    });
+
+    return total;
+  }
+
   return (
     <Layout title="Contribution" description="Contribution">
       <Tab tabname={Tabs.Contributions}>
         <section className={styles.com_containt}>
           <div className={styles.com_title}>
             <span> Contribution 2023 </span>
-            <span> 16.650.500F </span>
+            <span> {calculateTotal()} XAF </span>
           </div>
           <TableContainer className="mb-8">
             <Table>

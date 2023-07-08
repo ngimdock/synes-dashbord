@@ -22,6 +22,7 @@ import { Colors } from "utils";
 import { baseURL } from "api";
 import { useSignal } from "@dilane3/gx";
 import { CurrentUserState } from "gx/signals/current-user";
+import Link from "next/link";
 
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext);
@@ -155,13 +156,15 @@ function Header() {
               isOpen={isProfileMenuOpen}
               onClose={() => setIsProfileMenuOpen(false)}
             >
-              <DropdownItem tag="a" href="#">
-                <OutlinePersonIcon
-                  className="w-4 h-4 mr-3"
-                  aria-hidden="true"
-                />
-                <span>Profil</span>
-              </DropdownItem>
+              <Link href="/profile">
+                <DropdownItem tag="span">
+                  <OutlinePersonIcon
+                    className="w-4 h-4 mr-3"
+                    aria-hidden="true"
+                  />
+                  <span>Profil</span>
+                </DropdownItem>
+              </Link>
               <DropdownItem tag="a" href="#">
                 <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
                 <span>Parametres</span>

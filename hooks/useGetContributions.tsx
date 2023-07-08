@@ -23,7 +23,7 @@ export default function useGetContributions() {
 
   // Some handlers
   const getContributionsHandler = async () => {
-    const { data } = await getContributions(20);
+    const { data } = await getContributions(40);
 
     if (data) {
       const contributions: Contribution[] = data.contributions.map(
@@ -33,11 +33,7 @@ export default function useGetContributions() {
           return new Contribution({ ...contribution, owner });
         }
       );
-
-      console.log(data);
-
-      console.log(contributions);
-
+      
       addContributions({ contributions, hasMore: data.hasMore, total: data.total });
     } else {
       console.log("error");
