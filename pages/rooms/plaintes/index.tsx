@@ -1,37 +1,24 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Button } from "@roketid/windmill-react-ui";
-import { Tabs } from "../../../constants";
-// import Tab from "example/components/Tabs/Tab";
-import { Tab as TabBar } from "@headlessui/react";
 import PageTitle from "example/components/Typography/PageTitle";
 import Layout from "example/containers/Layout";
 import { AddIcon } from "icons";
 import { Colors } from "utils";
 
 import style from "styles/communique.module.css";
-import { useAction, useActions, useSignal } from "@dilane3/gx";
+import { useActions, useSignal } from "@dilane3/gx";
 import { ModalType } from "gx/signals/modal";
-import EventComplain from "example/components/Posts/EventComplain";
 import { SynesPostsState } from "gx/signals/synesPosts";
-// import { useSynesComplains } from "hooks/useSynesComplains";
+import { useSynesComplains } from "hooks/useSynesComplains";
+import PostItem from "example/components/Posts/Post";
 
 export default function PlaintePage() {
   const { openModal } = useActions("modal");
 
-  const loadSynesComplains = useAction("synesPosts", "loadSynesComplains");
-
   // Loading the complains from the server
-  // useSynesComplains();
+  useSynesComplains();
 
   const {complains: synesComplains} = useSignal<SynesPostsState>("synesPosts");
-
-  useEffect(() => {
-    loadSynesComplains();
-    
-    return () => {
-      console.log("unMounted");  
-    }
-  }, []);
   
   const handleOpenModal = () => {
     const payload = {
@@ -42,7 +29,6 @@ export default function PlaintePage() {
 
     openModal(payload);
   };
-
 
   const [columnOne, columnTwo, columnThree] = useMemo(() => {
     const columnOne = [];
@@ -91,7 +77,7 @@ export default function PlaintePage() {
             columnOne.map((item, index) => {
 
               return  (<>
-                <EventComplain key={index+(item.getDescription()[index] ?? "")} complain={item} />;
+                <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />;
               </>)
             })}
         </div>
@@ -100,7 +86,7 @@ export default function PlaintePage() {
             columnTwo.map((item, index) => {
 
               return  (<>
-                <EventComplain key={index+(item.getDescription()[index] ?? "")} complain={item} />;
+                <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />;
               </>)
             })}
         </div>
@@ -109,7 +95,7 @@ export default function PlaintePage() {
             columnThree.map((item, index) => {
 
               return  (<>
-                <EventComplain key={index+(item.getDescription()[index] ?? "")} complain={item} />;
+                <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />;
               </>)
             })}
         </div>

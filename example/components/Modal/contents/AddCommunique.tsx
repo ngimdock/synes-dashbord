@@ -15,7 +15,6 @@ import Communique, { synesCommunique } from "../../../../entities/communique/com
 import RoundSpinner from "example/components/Spinner/RoundSpinner";
 
 const AddCommunique = () => {
-  const { closeModal } = useActions("modal");
 
   const { addSynesCommunique } = useActions("synesPosts");
 
@@ -30,10 +29,6 @@ const AddCommunique = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [error, setError] = useState<boolean| null>(null);
-
-  const annulerCommunique = () => {
-    closeModal();
-  };
 
   const handleUploadClick = () => {
     if (inputRef.current) {
@@ -165,7 +160,7 @@ const AddCommunique = () => {
               marginRight: 8,
               boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)"
             }}
-            onClick={annulerCommunique}
+            onClick={clearForm}
           >
             Annuler
           </Button>

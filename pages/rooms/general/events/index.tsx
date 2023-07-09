@@ -4,9 +4,9 @@ import Layout from "example/containers/Layout";
 import style from "styles/event.module.css";
 import { useMemo } from "react";
 import {  useSignal } from "@dilane3/gx";
-import EventPost from "../../../../example/components/Posts/EventPost";
 import { SynesPostsState } from "gx/signals/synesPosts";
 import { useSynesEvents } from "hooks/useSynesEvents";
+import PostItem from "example/components/Posts/Post";
 
 export default function EventsPage() {
 
@@ -45,7 +45,7 @@ export default function EventsPage() {
               columnOne.map((item, index) => {
 
                 return <>
-                  <EventPost key={item.getDescription()+index} event={item} />;
+                  <PostItem key={item.getDescription()+index} post={item} />;
                 </>
               })}
           </div>
@@ -54,7 +54,7 @@ export default function EventsPage() {
               columnTwo.map((item, index) => {
 
                 return <>
-                  <EventPost key={item.getDescription()+index} event={item} />
+                  <PostItem key={item.getDescription()+index} post={item} />
                 </>
               })}
           </div>
@@ -63,7 +63,7 @@ export default function EventsPage() {
               columnThree.map((item, index) => {
 
                 return <>
-                  <EventPost key={item.getDescription()+index} event={item} />;
+                  <PostItem key={item.getDescription()+index} post={item} />;
                 </>
               })}
           </div>

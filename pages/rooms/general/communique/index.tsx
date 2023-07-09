@@ -1,17 +1,12 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Tabs } from "../../../../constants";
 import Tab from "example/components/Tabs/Tab";
 import Layout from "example/containers/Layout";
 import style from "styles/communique.module.css";
-import { synesCommunique } from "../../../../entities/communique/communique";
-import { useAction, useSignal } from "@dilane3/gx";
-import CommuniqueItem from "example/components/Posts/Communique";
-import Communique from "../../../../entities/communique/communique";
-import { getPosts } from "api/posts";
+import { useSignal } from "@dilane3/gx";
 import { SynesPostsState } from "gx/signals/synesPosts";
-import { useSynesCategory } from "hooks/useSynesCategory";
-import { useSynesPostsCategories } from "hooks/useSynesCategories";
 import { useCommuniques } from "hooks/useCommuniques";
+import PostItem from "example/components/Posts/Post";
 
 export default function CommuniquePage() {
 
@@ -47,21 +42,21 @@ export default function CommuniquePage() {
             {columnOne.length > 0 &&
               columnOne.map((item, index) => {
 
-                return <CommuniqueItem key={index} communique={item} />;
+                return <PostItem key={index} post={item} />;
               })}
           </div>
           <div>
             {columnTwo.length > 0 &&
               columnTwo.map((item, index) => {
 
-                return <CommuniqueItem key={index} communique={item} />;
+                return <PostItem key={index} post={item} />;
               })}
           </div>
           <div>
             {columnThree.length > 0 &&
               columnThree.map((item, index) => {
 
-                return <CommuniqueItem key={index} communique={item} />;
+                return <PostItem key={index} post={item} />;
               })}
           </div>
         </section>
