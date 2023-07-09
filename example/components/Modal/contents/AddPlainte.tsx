@@ -132,7 +132,6 @@ const AddPlainte = () => {
         files: [],
         createdAt: new Date(),
         updatedAt: new Date(),
-        programDate: new Date(),
       }
 
       addSynesComplain(new SynesComplain(newClientSynesComplain));

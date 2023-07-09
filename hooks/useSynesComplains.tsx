@@ -21,12 +21,13 @@ export const useSynesComplains = () => {
 
     let synesComplainsList: SynesComplain[] = [];
 
-    synesComplainsList = data.posts.map((elmt: synesComplain) => {
+    synesComplainsList = data.posts.map((elmt: any) => {
+      const filename = elmt.files[0] ? [elmt.files[0].name] : [];
+
       const newSynesCommunique: synesComplain = {
         description: elmt.description,
-        files: elmt.files[0],
-        photos: elmt.files[0],
-        programDate: elmt.programDate,
+        files: filename,
+        photos: filename,
         createdAt: new Date(),
         updatedAt: new Date(),
       }
@@ -37,7 +38,7 @@ export const useSynesComplains = () => {
     console.log(synesComplainsList);
 
     loadSynesComplains(synesComplainsList);
-  },[]);
+  },[categoryId]);
 
   useEffect(() => {
     if(categoryId) cachedLoadSynesComplains();
