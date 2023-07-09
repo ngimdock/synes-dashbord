@@ -60,12 +60,12 @@
 
 .events_modals {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
 .coms_modals_first_part {
-  width: 100%;
+  width: 50%;
 }
 
 .default_file_input {

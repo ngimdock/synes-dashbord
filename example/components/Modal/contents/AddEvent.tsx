@@ -1,8 +1,9 @@
 import { Button, Textarea } from "@roketid/windmill-react-ui";
 import Image from "next/image";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 
 import style from "styles/event.module.css";
+import comStyle from "styles/communique.module.css";
 import { Colors, formatDate, formatDateWithHour } from "utils";
 import SectionTitle from "example/components/Typography/SectionTitle";
 import { MdAccessAlarm } from "react-icons/md";
@@ -12,13 +13,18 @@ import { createPost, CreatePostDto } from "api/posts";
 import { useSynesCategory } from "hooks/useSynesCategory";
 import SynesEvent, { synesEvent } from "../../../../entities/events/synesEvent";
 import FormSubmitResponse from "example/components/Response/FormResponse";
+import { AddIcon } from "icons";
+import { AiOutlineClose } from "react-icons/ai";
+import FilepdfPost from "example/components/Posts/FilepdfPost";
+import { saveImage } from "api/files";
 
 const AddEvent = () => {
-  // const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
-
   const [error, setError] = useState<boolean| null>(null);
+  const [files, setFiles] = useState<FileList[]>([]);
+  const [image, setPath] = useState<string[]>([]);
 
   const { categoryId } = useSynesCategory("évènnements");
 
@@ -36,6 +42,47 @@ const AddEvent = () => {
       eventDate: event.eventDate
     });
   }
+
+  const handleUploadClick = () => {
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
+
+  // to check that file does not already contain the file to upload
+  const checkExistance = (file: FileList) => {
+    return files.find((item) => item[0].name === file[0].name);
+  };
+
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!checkExistance(e.target.files || new DataTransfer().files)) {
+      const newArrayState: FileList[] = [
+        ...files,
+        e.target.files || new DataTransfer().files,
+      ];
+      setFiles(newArrayState);
+      if (e.target.files) {
+        const imageUrl = URL.createObjectURL(e.target.files[0]);
+        setPath([...image, imageUrl]);
+      }
+    }
+  };
+
+  const handleRemoveFile = (name: string) => {
+    let tmp: FileList[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const element = files[i];
+      if (element[0].name !== name) {
+        tmp.push(element);
+      } else {
+        let secondPath = [...image];
+        secondPath.splice(i, 1);
+        setPath(secondPath);
+      }
+    }
+    setFiles(tmp);
+  };
+  
 
   //   /**
   //  * Function to create a post
@@ -101,23 +148,51 @@ const AddEvent = () => {
     if(event.description.trim() != "") {
       setLoading(true);
 
-      console.log("description", event.description.trim());
-      console.log("categorieId", categoryId);
-      console.log("EventDate", event.eventDate);
+      const imagesFormData = new FormData();
+
+      let imageResult;
+
+      if (files.length > 0) {
+        console.log(files);
+        if (files.length < 2) {
+          imagesFormData.append("file", files[0][0]);
+        } else {
+          for (let index = 0; index < files.length; index++) {
+            imagesFormData.append("files", files[index][0]);
+          }
+        }
+        imageResult = await saveImage(
+          files.length > 1 ? true : false,
+          imagesFormData
+        );
+      }
+
+      console.log(imageResult?.data);
+
+      let imagesList: string[] = [];
+
+      if (imageResult?.data.fileName) {
+        imagesList.push(imageResult.data.fileName);
+      } else if (imageResult?.data.files) {
+        for (const file of imageResult.data.files) {
+          imagesList.push(file);
+        }
+      }
+
+      console.log("imageList", imagesList);
 
       const newServerSynesEvent: CreatePostDto = {
         description: event.description.trim(),
         categoryId: categoryId ? categoryId : "",
         programDate: event.eventDate,
+        files: imagesList,
       }
 
-      const result = await createPost(newServerSynesEvent);
-
-      console.log(result)
+      await createPost(newServerSynesEvent);
 
       const newClientSynesEvent: synesEvent = {
         description: event.description.trim(),
-        photos: [],
+        photos: imagesList,
         files: [],
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -200,14 +275,100 @@ const AddEvent = () => {
         </div>
       </div>
       <div className="ml-6">
-        <Image
-            priority
-            // src={"/assets/img" + `${item[0].name}`}
-            src={"/assets/img/add_event_illustration.svg"}
-            height={200}
-            width={349}
-            alt="Click to upload your file"
-          />
+        <p className="mb-8 text-xl font-semibold dark:text-gray-300">
+          Ajouter des images
+        </p>
+        {files.length > 0 ? (
+          <div className={comStyle.files_section}>
+            <Button
+              icon={AddIcon}
+              size="regular"
+              style={{
+                backgroundColor: Colors.primary,
+                fill: "#fff",
+                borderRadius: "120px",
+                right: "0px",
+                position: "relative",
+                left: "34vh",
+                top: "-20px",
+              }}
+              onClick={handleUploadClick}
+            ></Button>
+            <div className={comStyle.files_display}>
+              <input
+                className={`${comStyle.default_file_input} `}
+                type="file"
+                accept="image/*"
+                onChange={handleOnChange}
+                ref={inputRef}
+                name="files"
+                multiple
+              />
+
+              {files.map((item, index) => {
+                const file = item[0];
+                const imgFile = "/assets/img" + `${item[0].name}`;
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      borderBottom: "2px gray",
+                      // height: "80px",
+                    }}
+                  >
+                    <Button
+                      icon={AiOutlineClose}
+                      size="small"
+                      style={{
+                        backgroundColor: Colors.red,
+                        fill: "#fff",
+                        fontWeight: "bold",
+                        borderRadius: "120px",
+                        left: "210px",
+                        top: "34px",
+                        position: "relative",
+                      }}
+                      onClick={() => handleRemoveFile(item[0].name)}
+                    ></Button>
+
+                    {file.type === "application/pdf" ? (
+                      <FilepdfPost file={file} />
+                    ) : (
+                      <Image
+                        priority
+                        // src={"/assets/img" + `${item[0].name}`}
+                        src={image[index]}
+                        height={100}
+                        width={200}
+                        alt="Click to upload your file"
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <div className={comStyle.upload_section} onClick={handleUploadClick}>
+            <Image
+              className={comStyle.upload_image_illustration}
+              priority
+              src="/assets/img/Uploading.png"
+              height={200}
+              width={200}
+              alt="Click to upload your images"
+            />
+            <input
+              className={`${comStyle.default_file_input} `}
+              type="file"
+              accept="image/*"
+              onChange={handleOnChange}
+              ref={inputRef}
+              name="files"
+              multiple
+            />
+          </div>
+        )}
       </div>
     </div>
   );
