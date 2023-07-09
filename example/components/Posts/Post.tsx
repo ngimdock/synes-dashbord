@@ -14,8 +14,6 @@ type PostItemType = {
 }
 
 const PostItem = ({ post }: PostItemType) => {
-  const imagePath = "/assets/img/" + post.getPhoto();
-  console.log("images paths", imagePath);
   return (
     <Card className={`${style.singlePost} max-w-sm mb-3`}>
       <CardBody>
@@ -36,11 +34,11 @@ const PostItem = ({ post }: PostItemType) => {
             </div>
           </div>
 
-          {post.getFile() && <FilepdfPost />}
-          {post.getPhoto() && (
+          {post.getFiles() && <FilepdfPost />}
+          {post.getPhotos() && (
             <Image
-              src={`/assets/img/${post.getPhoto()}`}
-                width={500}
+              src={`http://localhost:3333/v1/upload/image/${post.getPhotos()[0]}`}
+              width={500}
               height={100}
               alt="Picture of the post"
               className={style.imagePost}

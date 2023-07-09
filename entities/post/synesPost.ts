@@ -1,7 +1,7 @@
 export type synesPost = {
   description: string;
-  photos: string;
-  files: string;
+  photos: string[];
+  files: string[];
   programDate: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -9,8 +9,8 @@ export type synesPost = {
 
 abstract class SynesPost {
   private description: string;
-  private files: string;
-  private photos: string;
+  private files: string[];
+  private photos: string[];
   private createdAt: Date;
   private programDate: Date;
   private updatedAt: Date;
@@ -28,11 +28,11 @@ abstract class SynesPost {
     return this.description;
   }
 
-  public getPhoto(): string {
+  public getPhotos(): string[] {
     return this.photos;
   }
 
-  public getFile(): string {
+  public getFiles(): string[] {
     return this.files;
   }
 

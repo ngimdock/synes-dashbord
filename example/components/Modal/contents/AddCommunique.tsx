@@ -13,6 +13,7 @@ import { useSynesCategory } from "hooks/useSynesCategory";
 import FormSubmitResponse from "example/components/Response/FormResponse";
 import Communique, { synesCommunique } from "../../../../entities/communique/communique";
 import RoundSpinner from "example/components/Spinner/RoundSpinner";
+import { saveImage } from "api/files";
 
 const AddCommunique = () => {
 
@@ -22,7 +23,7 @@ const AddCommunique = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [files, setFiles] = useState<FileList[]>([]);
+  const [files, setFiles] = useState<any>([]);
   const [image, setPath] = useState<string[]>([]);
   const [description, setDescription] = useState<string>("")
 
@@ -38,7 +39,7 @@ const AddCommunique = () => {
 
   // to check that file does not already contain the file to upload
   const checkExistance = (file: FileList) => {
-    return files.find((item) => item[0].name === file[0].name);
+    return files.find((item: FileList) => item[0].name === file[0].name);
   };
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -87,25 +88,58 @@ const AddCommunique = () => {
       console.log("description", description.trim());
       console.log("categorieId", categoryId);
 
+      const imagesFormData = new FormData();
+
+      let imageResult;
+
+      if(files.length > 0) {
+        console.log("Entered")
+        console.log(files)
+        if(files.length < 2) {
+          imagesFormData.append('file', files[0][0])
+        } else {
+          for (let index = 0; index < files.length; index++) {
+            imagesFormData.append('files', files[index][0]);
+          }
+        }
+        imageResult = await saveImage(files.length > 1 ? true: false, imagesFormData);
+      } 
+
+      console.log(imageResult?.data)
+
+      let imagesList: string[] = []
+
+      if(imageResult?.data.fileName) {
+        console.log("Entered mouf")
+        imagesList.push(imageResult.data.fileName);
+      } else if (imageResult?.data.files) {
+        console.log("Entered mouf le retour")
+        for (const file of imageResult.data.files) {
+          imagesList.push(file);
+        }
+      }
+
+      console.log("imageList", imagesList);
+      
       const newServerSynesCommunique: CreatePostDto = {
         description: description,
+        files: imagesList,
         categoryId: categoryId ? categoryId : ""
       }
 
       const result = await createPost(newServerSynesCommunique);
 
-      console.log(result)
-
       const newClientSynesCommunique: synesCommunique = {
         description: description.trim(),
-        photos: "",
-        files: "",
+        photos: imagesList,
+        files: [],
         createdAt: new Date(),
         updatedAt: new Date(),
         programDate: new Date(),
       }
 
       addSynesCommunique(new Communique(newClientSynesCommunique));
+      
       setLoading(false);
       setError(false)
       setTimeout(() => {
@@ -210,7 +244,7 @@ const AddCommunique = () => {
                 multiple
               />
 
-              {files.map((item, index) => {
+              {files.map((item: FileList, index: number) => {
                 const file = item[0];
                 const imgFile = "/assets/img" + `${item[0].name}`;
                 return (
