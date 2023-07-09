@@ -8,9 +8,9 @@ import useAuth from "hooks/useAuth";
 import { useSignal } from "@dilane3/gx";
 import { CurrentUserState } from "gx/signals/current-user";
 import { LOGIN_PAGE_LINK } from "../../constants";
-import { getModifiedCookieValues } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import useGetUsers from "hooks/useGetUsers";
 import useGetSchools from "hooks/useGetSchools";
+import { useSynesPostsCategories } from "hooks/useSynesCategories";
 
 interface ILayout {
   children: React.ReactNode;
@@ -39,6 +39,14 @@ function Layout({ children, title, description }: ILayout) {
       window.location.href = LOGIN_PAGE_LINK;
     }
   }, [loading, currentUser]);
+
+  React.useEffect(() => {
+    if (!loading && !currentUser) {
+      window.location.href = LOGIN_PAGE_LINK;
+    }
+  }, [loading, currentUser]);
+
+  useSynesPostsCategories();
 
   return (
     <>

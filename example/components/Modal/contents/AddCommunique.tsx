@@ -8,18 +8,29 @@ import React, { ChangeEvent, useRef, useState } from "react";
 import style from "styles/communique.module.css";
 import { Colors } from "utils";
 import { useActions } from "@dilane3/gx";
+import { createPost, CreatePostDto } from "api/posts";
+import { useSynesCategory } from "hooks/useSynesCategory";
+import FormSubmitResponse from "example/components/Response/FormResponse";
+import Communique, { synesCommunique } from "../../../../entities/communique/communique";
+import RoundSpinner from "example/components/Spinner/RoundSpinner";
+import { saveImage } from "api/files";
 
 const AddCommunique = () => {
-  const { closeModal } = useActions("modal");
+
+  const { addSynesCommunique } = useActions("synesPosts");
+
+  const { categoryId } = useSynesCategory("communiqués");
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [files, setFiles] = useState<FileList[]>([]);
+  const [files, setFiles] = useState<any>([]);
   const [image, setPath] = useState<string[]>([]);
+  const [description, setDescription] = useState<string>("")
 
-  const annulerCommunique = () => {
-    closeModal();
-  };
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [error, setError] = useState<boolean| null>(null);
+
   const handleUploadClick = () => {
     if (inputRef.current) {
       inputRef.current.click();
@@ -28,7 +39,7 @@ const AddCommunique = () => {
 
   // to check that file does not already contain the file to upload
   const checkExistance = (file: FileList) => {
-    return files.find((item) => item[0].name === file[0].name);
+    return files.find((item: FileList) => item[0].name === file[0].name);
   };
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,36 +71,142 @@ const AddCommunique = () => {
     setFiles(tmp);
   };
 
+  /**
+   * Function to create a post
+   */
+  const handleSubmit = async () => {
+
+    console.log("Clicked");
+    
+    if(description.trim() != "") {
+      setLoading(true)
+
+      console.log(loading);
+
+      console.log("description", description.trim());
+      console.log("categorieId", categoryId);
+
+      const imagesFormData = new FormData();
+
+      let imageResult;
+
+      if(files.length > 0) {
+        console.log("Entered")
+        console.log(files)
+        if(files.length < 2) {
+          imagesFormData.append('file', files[0][0])
+        } else {
+          for (let index = 0; index < files.length; index++) {
+            imagesFormData.append('files', files[index][0]);
+          }
+        }
+        imageResult = await saveImage(files.length > 1 ? true: false, imagesFormData);
+      } 
+
+      console.log(imageResult?.data)
+
+      let imagesList: string[] = []
+
+      if(imageResult?.data.fileName) {
+        console.log("Entered mouf")
+        imagesList.push(imageResult.data.fileName);
+      } else if (imageResult?.data.files) {
+        console.log("Entered mouf le retour")
+        for (const file of imageResult.data.files) {
+          imagesList.push(file);
+        }
+      }
+
+      console.log("imageList", imagesList);
+      
+      const newServerSynesCommunique: CreatePostDto = {
+        description: description,
+        files: imagesList,
+        categoryId: categoryId ? categoryId : ""
+      }
+
+      const result = await createPost(newServerSynesCommunique);
+
+      const newClientSynesCommunique: synesCommunique = {
+        description: description.trim(),
+        photos: imagesList,
+        files: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        programDate: new Date(),
+      }
+
+      addSynesCommunique(new Communique(newClientSynesCommunique));
+      
+      setLoading(false);
+      setError(false)
+      setTimeout(() => {
+        setError(null)
+        clearForm();
+      }, 3000);
+      setLoading(false);
+      
+      console.log(loading);
+
+    } else {
+      setError(true)
+      setTimeout(() => {
+        setError(null)
+        clearForm();
+      }, 3000);
+    }
+  }
+
+  const clearForm = () => {
+    setDescription("");
+  }
+
   return (
     <div className={style.coms_modals}>
       <div className={`${style.coms_modals_first_part} ml-2 flex flex-col`}>
         <p className="mb-8 text-xl font-semibold dark:text-gray-300  self-start">
           Créer un communiqué
         </p>
+
+        {error != null ? !error ? 
+        <FormSubmitResponse message="Event added successfully" status={true} />: 
+        <FormSubmitResponse message="Event has not been added" status={false} /> : null}
+
         <Textarea
           className="mt-1 h-40"
           rows={3}
           placeholder="Contenu de votre communiqué."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
         <div className="flex justify-between mt-8 ">
           <Button
             // iconLeft={AddIcon}
             size="regular"
             style={{
-              backgroundColor: Colors.lightGray,
+              backgroundColor: Colors.lowLightGray,
               fill: "#000",
               color: "#000",
+              width: '100%', 
+              borderRadius: 4,
+              marginRight: 8,
+              boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)"
             }}
-            onClick={annulerCommunique}
+            onClick={clearForm}
           >
             Annuler
           </Button>
           <Button
             // iconLeft={AddIcon}
             size="regular"
-            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
-            // onClick={handleOpenModal}
+            style={{ marginLeft: 8, backgroundColor: Colors.primary, fill: "#fff", width: '100%', borderRadius: 4, 
+              boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)" }}
+            onClick={handleSubmit}
+            disabled={loading}
           >
+            { loading ? 
+              <RoundSpinner />
+            : null}
             Publier
           </Button>
         </div>
@@ -125,7 +242,7 @@ const AddCommunique = () => {
                 multiple
               />
 
-              {files.map((item, index) => {
+              {files.map((item: FileList, index: number) => {
                 const file = item[0];
                 const imgFile = "/assets/img" + `${item[0].name}`;
                 return (

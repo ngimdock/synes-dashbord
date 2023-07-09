@@ -1,21 +1,28 @@
 import { Button, Textarea } from "@roketid/windmill-react-ui";
 import Image from "next/image";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 import style from "styles/event.module.css";
 import { Colors, formatDate, formatDateWithHour } from "utils";
 import SectionTitle from "example/components/Typography/SectionTitle";
 import { MdAccessAlarm } from "react-icons/md";
-import { useAction } from "@dilane3/gx";
+import { useAction, useSignal } from "@dilane3/gx";
+import RoundSpinner from "example/components/Spinner/RoundSpinner";
+import { createPost, CreatePostDto } from "api/posts";
+import { useSynesCategory } from "hooks/useSynesCategory";
+import SynesEvent, { synesEvent } from "../../../../entities/events/synesEvent";
+import FormSubmitResponse from "example/components/Response/FormResponse";
 
 const AddEvent = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  // const inputRef = useRef<HTMLInputElement>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
 
   const [error, setError] = useState<boolean| null>(null);
 
-  const addSynesEvent  = useAction("synesEvents", "addSynesEvent");
+  const { categoryId } = useSynesCategory("évènnements");
+
+  const addSynesEvent = useAction("synesPosts", "addSynesEvent");
 
   const [event, setEvent] = useState({
     description: "",
@@ -30,25 +37,107 @@ const AddEvent = () => {
     });
   }
 
-  const handleSubmit = () => {
+  //   /**
+  //  * Function to create a post
+  //  */
+  // const handleSubmit = async () => {
+
+  //   console.log("description", description.trim());
+  //   console.log("categorieId", postCategorie?.getId());
+
+  //   // const formData = new FormData();
+  //   // formData.append('description', description.trim());
+  //   // if(postCategorie) formData.append('categoryId', postCategorie.getId());
+  //   // formData.append('programDate', new Date());
+  //   // formData.append('files', description.trim());
+
+  //   const newSynesCommunique: CreatePostDto = {
+  //     description: description,
+  //     categoryId: postCategorie ? postCategorie.getId() : ""
+  //   }
+
+  //   // const result = await createPost(formData);
+  //   const result = await createPost(newSynesCommunique);
+
+  //   console.log(result)
+  // }
+
+
+  // const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   console.log("target :", e.target.files, e.target.value);
+
+  //   if (!checkExistance(e.target.files || new DataTransfer().files)) {
+  //     const newArrayState: FileList[] = [
+  //       ...files,
+  //       e.target.files || new DataTransfer().files,
+  //     ];
+  //     setFiles(newArrayState);
+  //     if (e.target.files) {
+  //       const imageUrl = URL.createObjectURL(e.target.files[0]);
+  //       setPath([...image, imageUrl]);
+  //     }
+  //   }
+  // };
+
+  // const handleRemoveFile = (name: string) => {
+  //   let tmp: FileList[] = [];
+  //   for (let i = 0; i < files.length; i++) {
+  //     const element = files[i];
+  //     if (element[0].name !== name) {
+  //       tmp.push(element);
+  //     } else {
+  //       let secondPath = [...image];
+  //       secondPath.splice(i, 1);
+  //       setPath(secondPath);
+  //     }
+  //   }
+  //   setFiles(tmp);
+  // };
+
+  const handleSubmit = async () => {
+
+    console.log("Clicked");
+    
     if(event.description.trim() != "") {
       setLoading(true);
 
-      addSynesEvent({
+      console.log("description", event.description.trim());
+      console.log("categorieId", categoryId);
+      console.log("EventDate", event.eventDate);
+
+      const newServerSynesEvent: CreatePostDto = {
         description: event.description.trim(),
-        file: "",
-        photo: "",
-        createdAt: new Date('12-05-2005'),
-      });
+        categoryId: categoryId ? categoryId : "",
+        programDate: event.eventDate,
+      }
+
+      const result = await createPost(newServerSynesEvent);
+
+      console.log(result)
+
+      const newClientSynesEvent: synesEvent = {
+        description: event.description.trim(),
+        photos: [],
+        files: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        programDate: new Date(),
+      }
+
+      addSynesEvent(new SynesEvent(newClientSynesEvent));
       setLoading(false);
       setError(false)
       setTimeout(() => {
         setError(null)
         clearForm();
-      }, 3000)
+      }, 3000);
       setLoading(false);
     } else {
-      throw new Error("The description is needed");
+      setError(true)
+      setTimeout(() => {
+        setError(null)
+        clearForm();
+      }, 3000);
     }
   }
 
@@ -65,7 +154,7 @@ const AddEvent = () => {
         <SectionTitle>Préparer un évènement</SectionTitle>
         {error != null ? !error ? 
         <FormSubmitResponse message="Event added successfully" status={true} />: 
-        <FormSubmitResponse message="Event added successfully" status={false} /> : null}
+        <FormSubmitResponse message="Event has not been added" status={false} /> : null}
         
         <Textarea
           className="mt-1 h-40 resize-x-none max-h-60 min-h-[100px]"
@@ -101,8 +190,12 @@ const AddEvent = () => {
             style={{ marginLeft: 8, backgroundColor: Colors.primary, fill: "#fff", width: '100%', borderRadius: 4, 
               boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)" }}
             onClick={handleSubmit}
+            disabled={loading}
           >
-            {loading.toString()}
+            { loading ? 
+              <RoundSpinner />
+            : null}
+            Publier
           </Button>
         </div>
       </div>
@@ -121,16 +214,3 @@ const AddEvent = () => {
 };
 
 export default AddEvent;
-
-type FormReponseType = {
-  message: string,
-  status: boolean,
-}
-
-const FormSubmitResponse = ({ message, status }: FormReponseType ) => {
-  return (
-    <div className={`w-full py-2 ${status ? 'text-green-600 border-green-600': 'text-red-600 border-red-600'} rounded-md mb-2 border-2 flex items-center justify-center `}>
-      {message}
-    </div>
-  )
-}

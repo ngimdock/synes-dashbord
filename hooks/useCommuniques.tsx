@@ -3,27 +3,25 @@ import { getPosts } from "api/posts";
 import Communique, { synesCommunique } from "../entities/communique/communique";
 import { useCallback, useEffect } from "react";
 import { useSynesCategory } from "./useSynesCategory";
-import SynesEvent, { synesEvent } from "../entities/events/synesEvent";
 
-export const useSynesEvents = () => {
-  const loadSynesEvents = useAction("synesPosts", "loadSynesEvents");
+export const useCommuniques = () => {
+  const { categoryId } = useSynesCategory("communiqués");
 
-  const { categoryId } = useSynesCategory("évènnements");
+  const loadSynesCommuniques = useAction("synesPosts", "loadSynesCommuniques");
 
-  const cachedLoadSynesEvents = useCallback(async () => {
-    console.log(categoryId);
-
+  const cachedLoadSynesCommuniques = useCallback(async () => {
     if (!categoryId) return [];
 
     const { data } = await getPosts(categoryId);
 
-    let synesEventsList: SynesEvent[] = [];
+    console.log(data.posts);
 
-    synesEventsList = data.posts.map((elmt: any) => {
-      console.log(elmt)
+    let synesCommuniquesList: Communique[] = [];
+
+    synesCommuniquesList = data.posts.map((elmt: any) => {
       const filename = elmt.files[0] ? [elmt.files[0].name] : [];
 
-      const newSynesEvent: synesEvent = {
+      const newSynesCommunique: synesCommunique = {
         description: elmt.description,
         files: filename,
         photos: filename,
@@ -32,16 +30,16 @@ export const useSynesEvents = () => {
         updatedAt: new Date(),
       };
 
-      return new SynesEvent(newSynesEvent);
+      return new Communique(newSynesCommunique);
     });
 
-    console.log(synesEventsList);
+    console.log(synesCommuniquesList);
 
-    loadSynesEvents(synesEventsList);
+    loadSynesCommuniques(synesCommuniquesList);
   }, [categoryId]);
 
   useEffect(() => {
-    cachedLoadSynesEvents();
+    if (categoryId) cachedLoadSynesCommuniques();
 
     return () => {
       console.log("unMounted");

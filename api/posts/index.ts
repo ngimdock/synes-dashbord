@@ -1,13 +1,12 @@
 import instance from "api";
-import { CreatePostDto } from "./dto";
 
 /**
- * Get current user
- * @returns user data
+ * Get Post Categories
+ * @returns post categories data
  */
-export const findAllPostCategories = async () => {
+export const getPosts = async (id: string) => {
   try {
-    const response = await instance.get("/post-categories");
+    const response = await instance.get(`/post-categories/${id}`);
 
     if (response.status === 200) {
       return {
@@ -27,28 +26,39 @@ export const findAllPostCategories = async () => {
   }
 };
 
+export type CreatePostDto = {
+  description: string;
+  programDate?: Date;
+  files?: string[];
+  categoryId: string;
+}
+
 /**
- * Create post by category
- * @param {CreatePostDto} payload
+ * Create a new post
+ * @param payload post data
+ * @returns data or error
  */
-export const createPost = async (payload: CreatePostDto) => {
+export const createPost = async (
+  // payload: FormData
+  payload: CreatePostDto
+  ) => {
   try {
     const response = await instance.post("/posts", payload);
 
-    if (response.status === 201) {
+    if (response.status === 200) {
       return {
-        data: response.data.data,
+        data: response.data
       };
     }
 
     return {
-      error: true,
-    };
+      error: false
+    }
   } catch (error) {
     console.log(error);
 
     return {
-      error: true,
+      error: false
     };
   }
 }

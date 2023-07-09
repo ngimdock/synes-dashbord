@@ -408,7 +408,7 @@ export const coms = [
     photo: "profil3.jpg",
   },
 ];
-export const Plaintes = [
+export const complains = [
   {
     description:
       "C'est avec mecontentement que je viens au pres de vous en tant simple membre du SYNES a la SSE de l'unuversite de Yaounde 1 pour denoncer et meme devoiler la terrible situation qui se passe au sein du bureau de cette institution. En effect les membres du bureau son malsein et son de meches avec l'arrestation rescente du secretaire general du BEN. Ces derniers nous doivent de explications pour cela je suggere qu'une commission Add-hoc soit enclenche. Merci pour votre attention!  ",
