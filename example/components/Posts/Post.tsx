@@ -29,13 +29,13 @@ const PostItem = ({ post }: PostItemType) => {
             />
             <div className="ml-2">
               <p className="text-lg lg:text-xl font-semibold dark:text-gray-300">Omer-alt</p>
-              <p className="text-sm lg:text-md text-gray-500">Secretaire du BEN</p>
+              {/* <p className="text-sm lg:text-md text-gray-500">Secretaire du BEN</p> */}
               <p className="text-xs lg:text-sm text-gray-500">{"Publié le " + formatDate(new Date())}</p>
             </div>
           </div>
 
           {/* {post.getFiles() && <FilepdfPost />} */}
-          {post.getPhotos().length > 0 && (
+          {post.getPhotos() && post.getPhotos().length > 0 && (
             <Image
               src={`http://localhost:3333/v1/upload/image/${post.getPhotos()[0]}`}
               width={500}

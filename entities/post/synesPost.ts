@@ -2,7 +2,7 @@ export type synesPost = {
   description: string;
   photos: string[];
   files: string[];
-  programDate: Date;
+  programDate?: Date;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -12,7 +12,7 @@ abstract class SynesPost {
   private files: string[];
   private photos: string[];
   private createdAt: Date;
-  private programDate: Date;
+  private programDate?: Date;
   private updatedAt: Date;
 
   public constructor(payload: synesPost) {
@@ -36,7 +36,7 @@ abstract class SynesPost {
     return this.files;
   }
 
-  public getProgramDate(): Date {
+  public getProgramDate(): Date | undefined {
     return this.programDate;
   }
 

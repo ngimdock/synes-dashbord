@@ -50,7 +50,7 @@ export default function PlaintePage() {
     }
 
     return [columnOne, columnTwo, columnThree];
-  }, [synesComplains]);
+  }, [synesComplains, synesComplains.length]);
 
   return (
     <Layout title="complains" description="complains">
@@ -77,7 +77,7 @@ export default function PlaintePage() {
             columnOne.map((item, index) => {
 
               return  (<>
-                <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />;
+                <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />
               </>)
             })}
         </div>
@@ -86,7 +86,7 @@ export default function PlaintePage() {
             columnTwo.map((item, index) => {
 
               return  (<>
-                <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />;
+                <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />
               </>)
             })}
         </div>

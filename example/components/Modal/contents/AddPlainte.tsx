@@ -13,6 +13,7 @@ import SynesComplain, { synesComplain } from "../../../../entities/complains/syn
 import { createPost, CreatePostDto } from "api/posts";
 import { useSynesCategory } from "hooks/useSynesCategory";
 import FormSubmitResponse from "example/components/Response/FormResponse";
+import { saveImage } from "api/files";
 
 const AddPlainte = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -79,14 +80,46 @@ const AddPlainte = () => {
     if(description.trim() != "") {
       setLoading(true)
 
-      console.log(loading);
+      const imagesFormData = new FormData();
 
-      console.log("description", description.trim());
-      console.log("categorieId", categoryId);
+      let imageResult;
+
+      if (files.length > 0) {
+        console.log("Entered");
+        console.log(files);
+        if (files.length < 2) {
+          imagesFormData.append("file", files[0][0]);
+        } else {
+          for (let index = 0; index < files.length; index++) {
+            imagesFormData.append("files", files[index][0]);
+          }
+        }
+        imageResult = await saveImage(
+          files.length > 1 ? true : false,
+          imagesFormData
+        );
+      }
+
+      console.log(imageResult?.data);
+
+      let imagesList: string[] = [];
+
+      if (imageResult?.data.fileName) {
+        console.log("Entered mouf");
+        imagesList.push(imageResult.data.fileName);
+      } else if (imageResult?.data.files) {
+        console.log("Entered mouf le retour");
+        for (const file of imageResult.data.files) {
+          imagesList.push(file);
+        }
+      }
+
+      console.log("imageList", imagesList);
 
       const newServerSynesComplain: CreatePostDto = {
         description: description,
-        categoryId: categoryId ? categoryId : ""
+        categoryId: categoryId ? categoryId : "",
+        files: imagesList,
       }
 
       const result = await createPost(newServerSynesComplain);
@@ -95,14 +128,15 @@ const AddPlainte = () => {
 
       const newClientSynesComplain: synesComplain = {
         description: description.trim(),
-        photos: "",
-        files: "",
+        photos: imagesList,
+        files: [],
         createdAt: new Date(),
         updatedAt: new Date(),
         programDate: new Date(),
       }
 
       addSynesComplain(new SynesComplain(newClientSynesComplain));
+
       setLoading(false);
       setError(false)
       setTimeout(() => {
@@ -134,8 +168,8 @@ const AddPlainte = () => {
         </p>
 
         {error != null ? !error ? 
-        <FormSubmitResponse message="Event added successfully" status={true} />: 
-        <FormSubmitResponse message="Event has not been added" status={false} /> : null}
+        <FormSubmitResponse message="Complain added successfully" status={true} />: 
+        <FormSubmitResponse message="Complain has not been added" status={false} /> : null}
 
         <Textarea
           className="mt-1 h-40"

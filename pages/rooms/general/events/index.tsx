@@ -20,8 +20,6 @@ export default function EventsPage() {
     const columnTwo = [];
     const columnThree = [];    
 
-    console.log(synesEvents);
-
     for (let i = 0; i < synesEvents.length; i++) {
       if (i % 3 === 0) {
         columnOne.push(synesEvents[i]);
@@ -34,7 +32,7 @@ export default function EventsPage() {
       }
     }
     return [columnOne, columnTwo, columnThree];
-  }, [synesEvents]);
+  }, [synesEvents, synesEvents.length]);
 
   return (
     <Layout title="Evenements" description="Evenements">

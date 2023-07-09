@@ -32,7 +32,7 @@ export default function CommuniquePage() {
       }
     }
     return [columnOne, columnTwo, columnThree];
-  }, [synesCommuniques]);
+  }, [synesCommuniques, synesCommuniques.length]);
 
   return (
     <Layout title="Communiqué" description="Communiqué">
