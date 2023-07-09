@@ -2,60 +2,19 @@ import { Tabs } from "../../../../constants";
 import Tab from "example/components/Tabs/Tab";
 import Layout from "example/containers/Layout";
 import style from "styles/event.module.css";
-import { useCallback, useEffect, useMemo } from "react";
-import SynesEvent, { synesEvent } from "../../../../entities/events/synesEvent";
-import { useAction, useSignal } from "@dilane3/gx";
+import { useMemo } from "react";
+import {  useSignal } from "@dilane3/gx";
 import EventPost from "../../../../example/components/Posts/EventPost";
-import { PostCategoryState } from "gx/signals/post_categories";
-import { getPosts } from "api/posts";
 import { SynesPostsState } from "gx/signals/synesPosts";
-import { useSynesCategory } from "hooks/useSynesCategory";
+import { useSynesEvents } from "hooks/useSynesEvents";
 
 export default function EventsPage() {
 
+  // Loading the SynesEvents from the server
+  useSynesEvents();
+
   const { events: synesEvents } = useSignal<SynesPostsState>("synesPosts");
 
-  const loadSynesEvents = useAction("synesPosts", "loadSynesEvents");
-
-  const { categoryId } = useSynesCategory("évènnements");
-
-  const cachedLoadSynesEvents = useCallback(async () => {
-    console.log(categoryId);
-
-    if(!categoryId) return [];
-
-    const { data } = await getPosts(categoryId);
-
-    console.log(data.posts);
-
-    let synesEventsList: SynesEvent[] = [];
-
-    synesEventsList = data.posts.map((elmt: synesEvent) => {
-      const newSynesEvent: synesEvent = {
-        description: elmt.description,
-        files: elmt.files[0],
-        photos: elmt.files[0],
-        programDate: elmt.programDate,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
-
-      return new SynesEvent(newSynesEvent);
-    });
-
-    console.log(synesEventsList);
-
-    loadSynesEvents(synesEventsList);
-  },[]);
-
-  useEffect(() => {
-    cachedLoadSynesEvents();
-
-    return () => {
-      console.log("unMounted");  
-    }
-  }, []);
-  
   const [columnOne, columnTwo, columnThree] = useMemo(() => {
     const columnOne = [];
     const columnTwo = [];

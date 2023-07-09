@@ -10,9 +10,14 @@ import { Colors } from "utils";
 import { useActions } from "@dilane3/gx";
 import { createPost, CreatePostDto } from "api/posts";
 import { useSynesCategory } from "hooks/useSynesCategory";
+import FormSubmitResponse from "example/components/Response/FormResponse";
+import Communique, { synesCommunique } from "../../../../entities/communique/communique";
+import RoundSpinner from "example/components/Spinner/RoundSpinner";
 
 const AddCommunique = () => {
   const { closeModal } = useActions("modal");
+
+  const { addSynesCommunique } = useActions("synesPosts");
 
   const { categoryId } = useSynesCategory("communiqués");
 
@@ -21,6 +26,10 @@ const AddCommunique = () => {
   const [files, setFiles] = useState<FileList[]>([]);
   const [image, setPath] = useState<string[]>([]);
   const [description, setDescription] = useState<string>("")
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [error, setError] = useState<boolean| null>(null);
 
   const annulerCommunique = () => {
     closeModal();
@@ -73,17 +82,56 @@ const AddCommunique = () => {
    */
   const handleSubmit = async () => {
 
-    console.log("description", description.trim());
-    console.log("categorieId", categoryId);
+    console.log("Clicked");
+    
+    if(description.trim() != "") {
+      setLoading(true)
 
-    const newSynesCommunique: CreatePostDto = {
-      description: description,
-      categoryId: categoryId ? categoryId : ""
+      console.log(loading);
+
+      console.log("description", description.trim());
+      console.log("categorieId", categoryId);
+
+      const newServerSynesCommunique: CreatePostDto = {
+        description: description,
+        categoryId: categoryId ? categoryId : ""
+      }
+
+      const result = await createPost(newServerSynesCommunique);
+
+      console.log(result)
+
+      const newClientSynesCommunique: synesCommunique = {
+        description: description.trim(),
+        photos: "",
+        files: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        programDate: new Date(),
+      }
+
+      addSynesCommunique(new Communique(newClientSynesCommunique));
+      setLoading(false);
+      setError(false)
+      setTimeout(() => {
+        setError(null)
+        clearForm();
+      }, 3000);
+      setLoading(false);
+      
+      console.log(loading);
+
+    } else {
+      setError(true)
+      setTimeout(() => {
+        setError(null)
+        clearForm();
+      }, 3000);
     }
+  }
 
-    const result = await createPost(newSynesCommunique);
-
-    console.log(result)
+  const clearForm = () => {
+    setDescription("");
   }
 
   return (
@@ -92,6 +140,11 @@ const AddCommunique = () => {
         <p className="mb-8 text-xl font-semibold dark:text-gray-300  self-start">
           Créer un communiqué
         </p>
+
+        {error != null ? !error ? 
+        <FormSubmitResponse message="Event added successfully" status={true} />: 
+        <FormSubmitResponse message="Event has not been added" status={false} /> : null}
+
         <Textarea
           className="mt-1 h-40"
           rows={3}
@@ -104,9 +157,13 @@ const AddCommunique = () => {
             // iconLeft={AddIcon}
             size="regular"
             style={{
-              backgroundColor: Colors.lightGray,
+              backgroundColor: Colors.lowLightGray,
               fill: "#000",
               color: "#000",
+              width: '100%', 
+              borderRadius: 4,
+              marginRight: 8,
+              boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)"
             }}
             onClick={annulerCommunique}
           >
@@ -115,9 +172,14 @@ const AddCommunique = () => {
           <Button
             // iconLeft={AddIcon}
             size="regular"
-            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
-            onClick={() => handleSubmit()}
+            style={{ marginLeft: 8, backgroundColor: Colors.primary, fill: "#fff", width: '100%', borderRadius: 4, 
+              boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)" }}
+            onClick={handleSubmit}
+            disabled={loading}
           >
+            { loading ? 
+              <RoundSpinner />
+            : null}
             Publier
           </Button>
         </div>

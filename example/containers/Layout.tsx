@@ -1,16 +1,14 @@
-import React, { useCallback, useContext, useMemo } from "react";
+import React, { useContext } from "react";
 import SidebarContext, { SidebarProvider } from "context/SidebarContext";
 import Sidebar from "example/components/Sidebar";
 import Header from "example/components/Header";
 import Main from "./Main";
 import Head from "next/head";
 import useAuth from "hooks/useAuth";
-import { useActions, useSignal } from "@dilane3/gx";
+import { useSignal } from "@dilane3/gx";
 import { CurrentUserState } from "gx/signals/current-user";
 import { LOGIN_PAGE_LINK } from "../../constants";
-import { getModifiedCookieValues } from "next/dist/server/web/spec-extension/adapters/request-cookies";
-import { getPostCategories } from "api/posts_categories";
-import PostCategory, { postCategory } from "../../entities/post_categories/postCategory";
+import { useSynesPostsCategories } from "hooks/useSynesCategories";
 
 interface ILayout {
   children: React.ReactNode;
@@ -28,8 +26,6 @@ function Layout({ children, title, description }: ILayout) {
   // Get current user data
   useAuth();
 
-  const {loadPostCategories} = useActions("postCategories");
-
   React.useEffect(() => {
     if (!loading && !currentUser) {
       window.location.href = LOGIN_PAGE_LINK;
@@ -42,29 +38,7 @@ function Layout({ children, title, description }: ILayout) {
     }
   }, [loading, currentUser]);
 
-
-  const newCurrentUser = useMemo(() => currentUser, [currentUser])
-
-  const cachedLoadPostCategories = useCallback( async () => {
-    const result = await getPostCategories();
-
-    let postCategories: PostCategory[] = [];
-
-    if(result.data.count > 0) { 
-      console.log(result.data.data);
-      postCategories = result.data.data.map((postCategory: postCategory) => {        
-        return new PostCategory(postCategory)
-      })
-    }
-
-    loadPostCategories(postCategories);
-    },[loadPostCategories]);
-
-  React.useEffect(() => {
-    if(newCurrentUser) {
-      cachedLoadPostCategories();
-    }
-  }, [newCurrentUser]);
+  useSynesPostsCategories();
 
   return (
     <>

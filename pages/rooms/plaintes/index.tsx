@@ -13,11 +13,15 @@ import { useAction, useActions, useSignal } from "@dilane3/gx";
 import { ModalType } from "gx/signals/modal";
 import EventComplain from "example/components/Posts/EventComplain";
 import { SynesPostsState } from "gx/signals/synesPosts";
+// import { useSynesComplains } from "hooks/useSynesComplains";
 
 export default function PlaintePage() {
   const { openModal } = useActions("modal");
 
   const loadSynesComplains = useAction("synesPosts", "loadSynesComplains");
+
+  // Loading the complains from the server
+  // useSynesComplains();
 
   const {complains: synesComplains} = useSignal<SynesPostsState>("synesPosts");
 

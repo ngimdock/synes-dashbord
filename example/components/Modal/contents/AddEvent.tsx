@@ -3,13 +3,15 @@ import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 
 import style from "styles/event.module.css";
-import { asynchronousEmulation, Colors, formatDate, formatDateWithHour } from "utils";
+import { Colors, formatDate, formatDateWithHour } from "utils";
 import SectionTitle from "example/components/Typography/SectionTitle";
 import { MdAccessAlarm } from "react-icons/md";
 import { useAction, useSignal } from "@dilane3/gx";
 import RoundSpinner from "example/components/Spinner/RoundSpinner";
 import { createPost, CreatePostDto } from "api/posts";
 import { useSynesCategory } from "hooks/useSynesCategory";
+import SynesEvent, { synesEvent } from "../../../../entities/events/synesEvent";
+import FormSubmitResponse from "example/components/Response/FormResponse";
 
 const AddEvent = () => {
   // const inputRef = useRef<HTMLInputElement>(null);
@@ -105,22 +107,26 @@ const AddEvent = () => {
       console.log("categorieId", categoryId);
       console.log("EventDate", event.eventDate);
 
-      const newSynesEvent: CreatePostDto = {
+      const newServerSynesEvent: CreatePostDto = {
         description: event.description.trim(),
         categoryId: categoryId ? categoryId : "",
         programDate: event.eventDate,
       }
 
-      const result = await createPost(newSynesEvent);
+      const result = await createPost(newServerSynesEvent);
 
       console.log(result)
 
-      addSynesEvent({
+      const newClientSynesEvent: synesEvent = {
         description: event.description.trim(),
-        file: "",
-        photo: "",
-        createdAt: new Date('12-05-2005'),
-      });
+        photos: "",
+        files: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        programDate: new Date(),
+      }
+
+      addSynesEvent(new SynesEvent(newClientSynesEvent));
       setLoading(false);
       setError(false)
       setTimeout(() => {
@@ -189,6 +195,7 @@ const AddEvent = () => {
             style={{ marginLeft: 8, backgroundColor: Colors.primary, fill: "#fff", width: '100%', borderRadius: 4, 
               boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)" }}
             onClick={handleSubmit}
+            disabled={loading}
           >
             { loading ? 
               <RoundSpinner />
@@ -212,16 +219,3 @@ const AddEvent = () => {
 };
 
 export default AddEvent;
-
-type FormReponseType = {
-  message: string,
-  status: boolean,
-}
-
-const FormSubmitResponse = ({ message, status }: FormReponseType ) => {
-  return (
-    <div className={`w-full py-2 ${status ? 'text-green-600 border-green-600': 'text-red-600 border-red-600'} rounded-md mb-2 border-2 flex items-center justify-center `}>
-      {message}
-    </div>
-  )
-}

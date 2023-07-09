@@ -20,7 +20,7 @@ const CommuniqueItem = ({ communique }: CommuniqueItemType) => {
   return (
     <Card className={`${style.singleCommunique} max-w-sm mb-3`}>
       <CardBody>
-        <div className="flex">
+        <div className="flex items-center">
           <Image
             src="/assets/img/profil2.jpg"
             width={60}
@@ -28,9 +28,9 @@ const CommuniqueItem = ({ communique }: CommuniqueItemType) => {
             alt="Picture of the author"
             className="rounded-full"
           />
-          <div className="ml-2 ">
-            <p className="text-xl font-semibold dark:text-gray-300">Omer-alt</p>
-            <p className="text-md text-gray-500">Secretaire du BEN</p>
+          <div className="ml-2">
+            <p className="text-lg lg:text-xl font-semibold dark:text-gray-300">Omer-alt</p>
+            <p className="text-sm lg:text-md text-gray-500">Secretaire du BEN</p>
           </div>
         </div>
 

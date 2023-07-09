@@ -10,51 +10,15 @@ import Communique from "../../../../entities/communique/communique";
 import { getPosts } from "api/posts";
 import { SynesPostsState } from "gx/signals/synesPosts";
 import { useSynesCategory } from "hooks/useSynesCategory";
+import { useSynesPostsCategories } from "hooks/useSynesCategories";
+import { useCommuniques } from "hooks/useCommuniques";
 
 export default function CommuniquePage() {
 
+  // Loading the communiques from the server
+  useCommuniques();
+
   const { communiques: synesCommuniques } = useSignal<SynesPostsState>("synesPosts");
-
-  const { categoryId } = useSynesCategory("communiqués");
-
-  const loadSynesCommuniques = useAction("synesPosts", "loadSynesCommuniques");
-
-  const cachedLoadSynesCommuniques = useCallback(async () => {
-    console.log(categoryId);
-
-    if(!categoryId) return [];
-
-    const { data } = await getPosts(categoryId);
-
-    console.log(data.posts);
-
-    let synesCommuniquesList: Communique[] = [];
-
-    synesCommuniquesList = data.posts.map((elmt: synesCommunique) => {
-      const newSynesCommunique: synesCommunique = {
-        description: elmt.description,
-        files: elmt.files[0],
-        photos: elmt.files[0],
-        programDate: elmt.programDate,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
-
-      return new Communique(newSynesCommunique);
-    });
-
-    console.log(synesCommuniquesList);
-
-    loadSynesCommuniques(synesCommuniquesList);
-  },[]);
-
-  useEffect(() => {
-    cachedLoadSynesCommuniques();
-
-    return () => {
-      console.log("unMounted");  
-    }
-  }, []);
 
   const [columnOne, columnTwo, columnThree] = useMemo(() => {
     const columnOne = [];

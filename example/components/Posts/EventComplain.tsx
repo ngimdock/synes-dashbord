@@ -45,7 +45,7 @@ const EventComplain = ({complain}: ComplainType) => {
               className={style.eventImage}
             />
           )}
-          <p className="py-2 text-md text-gray-700">{complain.getContent()}</p>
+          <p className="py-2 text-md text-gray-700">{complain.getDescription()}</p>
         </div>
       </CardBody>
       <div

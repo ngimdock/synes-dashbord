@@ -17,20 +17,20 @@ const EventPost = ({ event }: EventPostType) => {
     <Card className={`${style.singleEvent} max-w-sm mb-3`}>
       <CardBody className="p-0">
         <div>
-          <div className="flex items-center">
+          <div className="md:flex items-center">
             <Image
               src="/assets/img/profil2.jpg"
-              width={50}
-              height={50}
+              width={60}
+              height={60}
               alt="Picture of the author"
               className="rounded-full"
             />
-            <div className="ml-2">
-              <p className="text-xl font-semibold dark:text-gray-300">
+            <div className="md:ml-2">
+              <p className="text-lg lg:text-xl font-semibold dark:text-gray-300">
                 Omer-alt
               </p>
-              <p className="text-md text-gray-500">Secretaire du BEN</p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm lg:text-md text-gray-500">Secretaire du BEN</p>
+              <p className="text-xs lg:text-sm text-gray-500">
                 {"Publié le " + formatDate(new Date())}
               </p>
             </div>
