@@ -1,10 +1,15 @@
-import { Button, Textarea } from "@roketid/windmill-react-ui";
+import { Button, Input, Label, Textarea } from "@roketid/windmill-react-ui";
 import Image from "next/image";
 import React, { ChangeEvent, useRef, useState } from "react";
 
 import style from "styles/event.module.css";
 import comStyle from "styles/communique.module.css";
-import { Colors, formatDate, formatDateWithHour } from "utils";
+import {
+  Colors,
+  formatDate,
+  formatDateForInput,
+  formatDateWithHour,
+} from "utils";
 import SectionTitle from "example/components/Typography/SectionTitle";
 import { MdAccessAlarm } from "react-icons/md";
 import { useAction, useSignal } from "@dilane3/gx";
@@ -22,7 +27,7 @@ const AddEvent = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean| null>(null);
+  const [error, setError] = useState<boolean | null>(null);
   const [files, setFiles] = useState<FileList[]>([]);
   const [image, setPath] = useState<string[]>([]);
 
@@ -32,16 +37,27 @@ const AddEvent = () => {
 
   const [event, setEvent] = useState({
     description: "",
-    eventDate: new Date()
+    eventDate: new Date(),
   });
 
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+    target: string
+  ) => {
     e.preventDefault();
-    setEvent({
-      description: e.target.value,
-      eventDate: event.eventDate
-    });
-  }
+
+    if (target === "date") {
+      setEvent({
+        description: event.description,
+        eventDate: new Date(e.target.value),
+      });
+    } else {
+      setEvent({
+        description: e.target.value,
+        eventDate: event.eventDate,
+      });
+    }
+  };
 
   const handleUploadClick = () => {
     if (inputRef.current) {
@@ -82,70 +98,11 @@ const AddEvent = () => {
     }
     setFiles(tmp);
   };
-  
-
-  //   /**
-  //  * Function to create a post
-  //  */
-  // const handleSubmit = async () => {
-
-  //   console.log("description", description.trim());
-  //   console.log("categorieId", postCategorie?.getId());
-
-  //   // const formData = new FormData();
-  //   // formData.append('description', description.trim());
-  //   // if(postCategorie) formData.append('categoryId', postCategorie.getId());
-  //   // formData.append('programDate', new Date());
-  //   // formData.append('files', description.trim());
-
-  //   const newSynesCommunique: CreatePostDto = {
-  //     description: description,
-  //     categoryId: postCategorie ? postCategorie.getId() : ""
-  //   }
-
-  //   // const result = await createPost(formData);
-  //   const result = await createPost(newSynesCommunique);
-
-  //   console.log(result)
-  // }
-
-
-  // const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   console.log("target :", e.target.files, e.target.value);
-
-  //   if (!checkExistance(e.target.files || new DataTransfer().files)) {
-  //     const newArrayState: FileList[] = [
-  //       ...files,
-  //       e.target.files || new DataTransfer().files,
-  //     ];
-  //     setFiles(newArrayState);
-  //     if (e.target.files) {
-  //       const imageUrl = URL.createObjectURL(e.target.files[0]);
-  //       setPath([...image, imageUrl]);
-  //     }
-  //   }
-  // };
-
-  // const handleRemoveFile = (name: string) => {
-  //   let tmp: FileList[] = [];
-  //   for (let i = 0; i < files.length; i++) {
-  //     const element = files[i];
-  //     if (element[0].name !== name) {
-  //       tmp.push(element);
-  //     } else {
-  //       let secondPath = [...image];
-  //       secondPath.splice(i, 1);
-  //       setPath(secondPath);
-  //     }
-  //   }
-  //   setFiles(tmp);
-  // };
 
   const handleSubmit = async () => {
-
     console.log("Clicked");
-    
-    if(event.description.trim() != "") {
+
+    if (event.description.trim() != "") {
       setLoading(true);
 
       const imagesFormData = new FormData();
@@ -186,7 +143,7 @@ const AddEvent = () => {
         categoryId: categoryId ? categoryId : "",
         programDate: event.eventDate,
         files: imagesList,
-      }
+      };
 
       await createPost(newServerSynesEvent);
 
@@ -196,52 +153,70 @@ const AddEvent = () => {
         files: [],
         createdAt: new Date(),
         updatedAt: new Date(),
-        programDate: new Date(),
-      }
+        programDate: event.eventDate,
+      };
 
       addSynesEvent(new SynesEvent(newClientSynesEvent));
       setLoading(false);
-      setError(false)
+      setError(false);
       setTimeout(() => {
-        setError(null)
+        setError(null);
         clearForm();
       }, 3000);
       setLoading(false);
     } else {
-      setError(true)
+      setError(true);
       setTimeout(() => {
-        setError(null)
+        setError(null);
         clearForm();
       }, 3000);
     }
-  }
+  };
 
   const clearForm = () => {
     setEvent({
       description: "",
-      eventDate: new Date()
+      eventDate: new Date(),
     });
-  }
+  };
 
   return (
     <div className={style.events_modals}>
       <div className={`${style.coms_modals_first_part} ml-2 flex flex-col`}>
         <SectionTitle>Préparer un évènement</SectionTitle>
-        {error != null ? !error ? 
-        <FormSubmitResponse message="Event added successfully" status={true} />: 
-        <FormSubmitResponse message="Event has not been added" status={false} /> : null}
-        
+        {error != null ? (
+          !error ? (
+            <FormSubmitResponse
+              message="Event added successfully"
+              status={true}
+            />
+          ) : (
+            <FormSubmitResponse
+              message="Event has not been added"
+              status={false}
+            />
+          )
+        ) : null}
+
         <Textarea
           className="mt-1 h-40 resize-x-none max-h-60 min-h-[100px]"
           rows={2}
           placeholder="Votre énènement."
-          onChange={handleChange}
+          onChange={(e) => handleChange(e, "description")}
           value={event.description}
         />
-        <div className="p-2 mt-4 border-2 rounded-sm flex items-center">
-          <MdAccessAlarm className="h-6 w-6 text-black mr-1" />
-          {formatDate(event.eventDate)}, {formatDateWithHour(event.eventDate)}
-        </div>
+
+        <Label className="mt-4">
+          <span>Date d'adhésion</span>
+          <Input
+            className="mt-1"
+            type="date"
+            placeholder="Date d'adhésion"
+            value={formatDateForInput(event.eventDate)}
+            onChange={(e) => handleChange(e, "date")}
+          />
+        </Label>
+
         <div className="flex justify-between mt-8 ">
           <Button
             // iconLeft={AddIcon}
@@ -250,10 +225,10 @@ const AddEvent = () => {
               backgroundColor: Colors.lowLightGray,
               fill: "#000",
               color: "#000",
-              width: '100%', 
+              width: "100%",
               borderRadius: 4,
               marginRight: 8,
-              boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)"
+              boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)",
             }}
             onClick={clearForm}
           >
@@ -262,14 +237,18 @@ const AddEvent = () => {
           <Button
             // iconLeft={AddIcon}
             size="regular"
-            style={{ marginLeft: 8, backgroundColor: Colors.primary, fill: "#fff", width: '100%', borderRadius: 4, 
-              boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)" }}
+            style={{
+              marginLeft: 8,
+              backgroundColor: Colors.primary,
+              fill: "#fff",
+              width: "100%",
+              borderRadius: 4,
+              boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)",
+            }}
             onClick={handleSubmit}
             disabled={loading}
           >
-            { loading ? 
-              <RoundSpinner />
-            : null}
+            {loading ? <RoundSpinner /> : null}
             Publier
           </Button>
         </div>

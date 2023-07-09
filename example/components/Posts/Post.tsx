@@ -55,7 +55,7 @@ const PostItem = ({ post }: PostItemType) => {
           }}
         >
           <MdAccessAlarm className="h-6 w-6 text-white" />
-          <p className="ml-2 text-sm text-white ">{formatDate(new Date())}</p>
+          <p className="ml-2 text-sm text-white ">{formatDate(post.getProgramDate())}</p>
         </div>) : null
       }
     </Card>
