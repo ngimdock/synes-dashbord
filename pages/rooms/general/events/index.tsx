@@ -32,10 +32,10 @@ export default function EventsPage() {
       }
     }
     return [columnOne, columnTwo, columnThree];
-  }, [synesEvents, synesEvents.length]);
+  }, [synesEvents]);
 
   return (
-    <Layout title="Evenements" description="Evenements">
+    <Layout title="Évènements" description="Évènements">
       <Tab tabname={Tabs.Events}>
         <section className={style.eventRoom}>
           <div>

@@ -32,10 +32,10 @@ export default function CommuniquePage() {
       }
     }
     return [columnOne, columnTwo, columnThree];
-  }, [synesCommuniques, synesCommuniques.length]);
+  }, [synesCommuniques]);
 
   return (
-    <Layout title="Communiqué" description="Communiqué">
+    <Layout title="Communiqués" description="Communiqués">
       <Tab tabname={Tabs.Communique}>
         <section className={style.salonComs}>
           <div>

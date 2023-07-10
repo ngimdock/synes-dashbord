@@ -215,7 +215,7 @@ const AddCommunique = () => {
               boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)",
             }}
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={description === "" || loading}
           >
             {loading ? <RoundSpinner /> : null}
             Publier

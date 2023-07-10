@@ -207,7 +207,7 @@ const AddEvent = () => {
         />
 
         <Label className="mt-4">
-          <span>Date d'adhésion</span>
+          <span>{"Date d'adhésion"}</span>
           <Input
             className="mt-1"
             type="date"
@@ -246,7 +246,7 @@ const AddEvent = () => {
               boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)",
             }}
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={event.description === "" || loading}
           >
             {loading ? <RoundSpinner /> : null}
             Publier
