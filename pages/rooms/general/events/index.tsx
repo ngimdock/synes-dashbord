@@ -32,7 +32,7 @@ export default function EventsPage() {
       }
     }
     return [columnOne, columnTwo, columnThree];
-  }, [synesEvents]);
+  }, [synesEvents, synesEvents.length]);
 
   return (
     <Layout title="Évènements" description="Évènements">

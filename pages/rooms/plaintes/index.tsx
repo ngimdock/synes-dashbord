@@ -50,7 +50,7 @@ export default function PlaintePage() {
     }
 
     return [columnOne, columnTwo, columnThree];
-  }, [synesComplains]);
+  }, [synesComplains, synesComplains.length]);
 
   return (
     <Layout title="complains" description="complains">
