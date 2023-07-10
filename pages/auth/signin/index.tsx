@@ -13,6 +13,7 @@ import { object, string } from 'yup';
 import { toast } from "react-toastify";
 import { asynchronousEmulation } from '../../../utils';
 import { HOME_PAGE_LINK } from '../../../constants';
+import Loader from "example/components/Loader/Loader";
 
 const LoginSchema = object({
   email: string().email("Invalid email").required("Required"),
@@ -30,8 +31,6 @@ function LoginPage() {
   React.useEffect(() => {
     const verification = async () => {
       const payload = await verifyForm();
-
-      console.log(payload);
 
       if (payload) setVerified(true);
       else setVerified(false);
@@ -155,6 +154,10 @@ function LoginPage() {
                 </Link>
               </p>
             </div>
+
+            {
+              loading && <Loader />
+            }
           </main>
         </div>
       </div>

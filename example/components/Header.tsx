@@ -19,6 +19,10 @@ import {
   WindmillContext,
 } from "@roketid/windmill-react-ui";
 import { Colors } from "utils";
+import { baseURL } from "api";
+import { useSignal } from "@dilane3/gx";
+import { CurrentUserState } from "gx/signals/current-user";
+import Link from "next/link";
 
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext);
@@ -27,6 +31,9 @@ function Header() {
   const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
+  // Global state
+  const { user } = useSignal<CurrentUserState>("current-user");
+
   function handleNotificationsClick() {
     setIsNotificationsMenuOpen(!isNotificationsMenuOpen);
   }
@@ -34,6 +41,8 @@ function Header() {
   function handleProfileClick() {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   }
+
+  if (!user) return null;
 
   return (
     <header
@@ -137,7 +146,7 @@ function Header() {
             >
               <Avatar
                 className="align-middle"
-                src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
+                src={`${baseURL}/static/${user.avatar}`}
                 alt=""
                 aria-hidden="true"
               />
@@ -147,13 +156,15 @@ function Header() {
               isOpen={isProfileMenuOpen}
               onClose={() => setIsProfileMenuOpen(false)}
             >
-              <DropdownItem tag="a" href="#">
-                <OutlinePersonIcon
-                  className="w-4 h-4 mr-3"
-                  aria-hidden="true"
-                />
-                <span>Profil</span>
-              </DropdownItem>
+              <Link href="/profile">
+                <DropdownItem tag="span">
+                  <OutlinePersonIcon
+                    className="w-4 h-4 mr-3"
+                    aria-hidden="true"
+                  />
+                  <span>Profil</span>
+                </DropdownItem>
+              </Link>
               <DropdownItem tag="a" href="#">
                 <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
                 <span>Parametres</span>

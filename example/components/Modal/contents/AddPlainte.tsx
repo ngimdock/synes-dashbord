@@ -8,16 +8,28 @@ import React, { ChangeEvent, useRef, useState } from "react";
 
 import style from "styles/communique.module.css";
 import { Colors } from "utils";
+import RoundSpinner from "example/components/Spinner/RoundSpinner";
+import SynesComplain, { synesComplain } from "../../../../entities/complains/synesComplain";
+import { createPost, CreatePostDto } from "api/posts";
+import { useSynesCategory } from "hooks/useSynesCategory";
+import FormSubmitResponse from "example/components/Response/FormResponse";
+import { saveImage } from "api/files";
 
 const AddPlainte = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { closeModal } = useActions("modal");
+
+  const { addSynesComplain } = useActions("synesPosts");
+
+  const { categoryId } = useSynesCategory("complains");
+  
+  const [description, setDescription] = useState("");
   const [files, setFiles] = useState<FileList[]>([]);
   const [image, setPath] = useState<string[]>([]);
 
-  const annulerPlainte = () => {
-    closeModal();
-  };
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [error, setError] = useState<boolean| null>(null);
+
   const handleUploadClick = () => {
     if (inputRef.current) {
       inputRef.current.click();
@@ -30,8 +42,6 @@ const AddPlainte = () => {
   };
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log("target :", e.target.files, e.target.value);
-
     if (!checkExistance(e.target.files || new DataTransfer().files)) {
       const newArrayState: FileList[] = [
         ...files,
@@ -60,37 +70,142 @@ const AddPlainte = () => {
     setFiles(tmp);
   };
 
+    /**
+   * Function to create a post
+   */
+  const handleSubmit = async () => {
+
+    console.log("Clicked");
+    
+    if(description.trim() != "") {
+      setLoading(true)
+
+      const imagesFormData = new FormData();
+
+      let imageResult;
+
+      if (files.length > 0) {
+        console.log("Entered");
+        console.log(files);
+        if (files.length < 2) {
+          imagesFormData.append("file", files[0][0]);
+        } else {
+          for (let index = 0; index < files.length; index++) {
+            imagesFormData.append("files", files[index][0]);
+          }
+        }
+        imageResult = await saveImage(
+          files.length > 1 ? true : false,
+          imagesFormData
+        );
+      }
+
+      console.log(imageResult?.data);
+
+      let imagesList: string[] = [];
+
+      if (imageResult?.data.fileName) {
+        console.log("Entered mouf");
+        imagesList.push(imageResult.data.fileName);
+      } else if (imageResult?.data.files) {
+        console.log("Entered mouf le retour");
+        for (const file of imageResult.data.files) {
+          imagesList.push(file);
+        }
+      }
+
+      console.log("imageList", imagesList);
+
+      const newServerSynesComplain: CreatePostDto = {
+        description: description,
+        categoryId: categoryId ? categoryId : "",
+        files: imagesList,
+      }
+
+      const result = await createPost(newServerSynesComplain);
+
+      console.log(result)
+
+      const newClientSynesComplain: synesComplain = {
+        description: description.trim(),
+        photos: imagesList,
+        files: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+
+      addSynesComplain(new SynesComplain(newClientSynesComplain));
+
+      setLoading(false);
+      setError(false)
+      setTimeout(() => {
+        setError(null)
+        clearForm();
+      }, 3000);
+      setLoading(false);
+      
+      console.log(loading);
+
+    } else {
+      setError(true)
+      setTimeout(() => {
+        setError(null)
+        clearForm();
+      }, 3000);
+    }
+  }
+
+  const clearForm = () => {
+    setDescription("");
+  }
+
   return (
     <div className={style.coms_modals}>
       <div className={`${style.coms_modals_first_part} ml-2 flex flex-col`}>
         <p className="mb-8 text-xl font-semibold dark:text-gray-300  self-start">
           Créer une plainte
         </p>
+
+        {error != null ? !error ? 
+        <FormSubmitResponse message="Complain added successfully" status={true} />: 
+        <FormSubmitResponse message="Complain has not been added" status={false} /> : null}
+
         <Textarea
           className="mt-1 h-40"
           rows={3}
           placeholder="Contenu explicite de votre plainte."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
         <div className="flex justify-between mt-8 ">
           <Button
             // iconLeft={AddIcon}
             size="regular"
             style={{
-              backgroundColor: Colors.lightGray,
+              backgroundColor: Colors.lowLightGray,
               fill: "#000",
               color: "#000",
+              width: '100%', 
+              borderRadius: 4,
+              marginRight: 8,
+              boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)"
             }}
-            onClick={annulerPlainte}
+            onClick={clearForm}
           >
             Annuler
           </Button>
           <Button
             // iconLeft={AddIcon}
             size="regular"
-            style={{ backgroundColor: Colors.primary, fill: "#fff" }}
-            // onClick={handleOpenModal}
+            style={{ marginLeft: 8, backgroundColor: Colors.primary, fill: "#fff", width: '100%', borderRadius: 4, 
+              boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)" }}
+            onClick={handleSubmit}
+            disabled={loading}
           >
-            Se plaindre
+            { loading ? 
+              <RoundSpinner />
+            : null}
+            Publier
           </Button>
         </div>
       </div>
@@ -130,6 +245,7 @@ const AddPlainte = () => {
                 const imgFile = "/assets/img" + `${item[0].name}`;
                 return (
                   <div
+                    key={index}
                     style={{
                       borderBottom: "2px gray",
                       // height: "80px",

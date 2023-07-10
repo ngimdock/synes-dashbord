@@ -10,7 +10,7 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Presentation | SYNES</title>
+        <title>Présentation | SYNES</title>
         <meta
           name="description"
           content="Plateforme regroupant tout les membres du SYNES"
@@ -40,9 +40,11 @@ const Home: NextPage = () => {
           </p>
 
           <div className={styles.grid}>
-            <Button style={{ paddingInline: 30, color: "#fff" }} size="regular" layout="outline">
-              Télécharger le status
-            </Button>
+            <Link href="/api/download-status">
+              <Button style={{ paddingInline: 30, color: "#fff" }} size="regular" layout="outline">
+                Télécharger le status
+              </Button>
+            </Link>
 
             <Link href="/rooms/general/communique">
               <Button

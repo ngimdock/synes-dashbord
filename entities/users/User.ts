@@ -1,3 +1,6 @@
+import Contribution from "entities/contributions/Contribution";
+import School from "../schools/School";
+
 enum Sexe {
   MALE = "male",
   FEMALE = "female",
@@ -14,6 +17,8 @@ type UserData = {
   sexe: Sexe;
   specialization: string;
   memberAt: Date;
+  contributions: Contribution[];
+  establishment: any;
 };
 
 export default class User {
@@ -27,6 +32,8 @@ export default class User {
   private _sexe: Sexe;
   private _specialization: string;
   private _memberAt: Date;
+  private _contributions: Contribution[];
+  private _establishment: School | null;
 
   constructor(data: UserData) {
     this._id = data.id;
@@ -39,6 +46,18 @@ export default class User {
     this._sexe = data.sexe;
     this._specialization = data.specialization;
     this._memberAt = data.memberAt;
+    this._contributions = data.contributions;
+
+    console.log(data.establishment)
+
+    if (data.establishment) {
+      this._establishment = new School({
+        ...data.establishment,
+        address: data.establishment.adresse,
+      });
+    } else {
+      this._establishment = null;
+    }
   }
 
   get id(): string {
@@ -79,5 +98,13 @@ export default class User {
 
   get memberAt(): Date {
     return this._memberAt;
+  }
+
+  get contributions(): Contribution[] {
+    return this._contributions;
+  }
+
+  get establishment(): School | null {
+    return this._establishment;
   }
 }

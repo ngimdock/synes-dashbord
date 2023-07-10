@@ -1,23 +1,25 @@
 import { useMemo } from "react";
 import { Button } from "@roketid/windmill-react-ui";
-import { Tabs } from "../../../constants";
-// import Tab from "example/components/Tabs/Tab";
-import { Tab as TabBar } from "@headlessui/react";
 import PageTitle from "example/components/Typography/PageTitle";
 import Layout from "example/containers/Layout";
 import { AddIcon } from "icons";
 import { Colors } from "utils";
-import { Plaintes } from "utils/demo/tableData";
-import Post from "../../../entities/posts/Post";
 
 import style from "styles/communique.module.css";
-import Communique from "example/components/Posts/Communique";
-import { useActions } from "@dilane3/gx";
+import { useActions, useSignal } from "@dilane3/gx";
 import { ModalType } from "gx/signals/modal";
+import { SynesPostsState } from "gx/signals/synesPosts";
+import { useSynesComplains } from "hooks/useSynesComplains";
+import PostItem from "example/components/Posts/Post";
 
 export default function PlaintePage() {
   const { openModal } = useActions("modal");
 
+  // Loading the complains from the server
+  useSynesComplains();
+
+  const {complains: synesComplains} = useSignal<SynesPostsState>("synesPosts");
+  
   const handleOpenModal = () => {
     const payload = {
       modalStatus: true,
@@ -27,28 +29,31 @@ export default function PlaintePage() {
 
     openModal(payload);
   };
-  console.log("les plaintes :", Plaintes);
+  
   const [columnOne, columnTwo, columnThree] = useMemo(() => {
     const columnOne = [];
     const columnTwo = [];
     const columnThree = [];
 
-    for (let i = 0; i < Plaintes.length; i++) {
+    console.log("Executed", synesComplains)
+
+    for (let i = 0; i < synesComplains.length; i++) {
       if (i % 3 === 0) {
-        columnOne.push(Plaintes[i]);
+        columnOne.push(synesComplains[i]);
       } else {
         if (i % 3 === 1) {
-          columnTwo.push(Plaintes[i]);
+          columnTwo.push(synesComplains[i]);
         } else {
-          columnThree.push(Plaintes[i]);
+          columnThree.push(synesComplains[i]);
         }
       }
     }
+
     return [columnOne, columnTwo, columnThree];
-  }, [Plaintes]);
+  }, [synesComplains, synesComplains.length]);
 
   return (
-    <Layout title="Plaintes" description="Plaintes">
+    <Layout title="complains" description="complains">
       <div className="flex flex-row justify-between items-center">
         <PageTitle>Plaintes</PageTitle>
 
@@ -70,25 +75,28 @@ export default function PlaintePage() {
         <div>
           {columnOne.length > 0 &&
             columnOne.map((item, index) => {
-              const post = new Post(item);
 
-              return <Communique key={index} communique={post} />;
+              return  (<>
+                <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />
+              </>)
             })}
         </div>
         <div>
           {columnTwo.length > 0 &&
             columnTwo.map((item, index) => {
-              const post = new Post(item);
 
-              return <Communique key={index} communique={post} />;
+              return  (<>
+                <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />
+              </>)
             })}
         </div>
         <div>
           {columnThree.length > 0 &&
             columnThree.map((item, index) => {
-              const post = new Post(item);
 
-              return <Communique key={index} communique={post} />;
+              return  (<>
+                <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />;
+              </>)
             })}
         </div>
       </section>

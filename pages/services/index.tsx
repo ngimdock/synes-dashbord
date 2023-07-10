@@ -1,4 +1,4 @@
-import { useActions } from "@dilane3/gx";
+import { useActions, useSignal } from "@dilane3/gx";
 import {
   TableContainer,
   Table,
@@ -12,42 +12,20 @@ import {
   Pagination,
   Button,
 } from "@roketid/windmill-react-ui";
+import { baseURL } from "api";
+import { getUsers } from "api/users";
+import User from "../../entities/users/User";
 import ServiceCard from "example/components/Services/ServiceCard";
 import PageTitle from "example/components/Typography/PageTitle";
 import Layout from "example/containers/Layout";
 import { ModalType } from "gx/signals/modal";
+import { UsersState } from "gx/signals/users";
+import useGetUsers from "hooks/useGetUsers";
 import { AddIcon } from "icons";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { Colors } from "utils";
-
-const users = [
-  {
-    id: 1,
-    name: "Hans Burger",
-    avatar: "https://picsum.photos/200",
-    role: "Membre",
-    adhesion: "2020-01-01",
-    status: "démissionné",
-    active: "danger" as "danger",
-  },
-  {
-    id: 2,
-    name: "Daniela Dewitt",
-    avatar: "https://picsum.photos/201",
-    role: "Sécrétaire du BEN",
-    adhesion: "2020-01-01",
-    status: "actif",
-    active: "success" as "success",
-  },
-  {
-    id: 3,
-    name: "Hans Jonatan",
-    avatar: "https://picsum.photos/202",
-    role: "Membre",
-    adhesion: "2020-01-01",
-    status: "actif",
-    active: "success" as "success",
-  },
-];
+import Loader from "example/components/Loader/Loader";
 
 const services = [
   {
@@ -64,7 +42,7 @@ const services = [
   },
   {
     id: 3,
-    name: "Bureau Exécutif National",
+    name: "Bureau Exécutif Nat.",
     members: 5,
     color: "orange",
   },
@@ -76,8 +54,30 @@ const services = [
   },
 ];
 
+const USERS_PER_PAGE = 5;
+
 export default function ServicePage() {
+  // Global actions
   const { openModal } = useActions("modal");
+  const { addUsers } = useActions("users");
+
+  // Global state
+  const { users, total, hasMore } = useSignal<UsersState>("users");
+
+  // Local state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Verify if the current page do not contain users
+    if (
+      users.length > 0 &&
+      users.length < currentPage * USERS_PER_PAGE &&
+      hasMore
+    ) {
+      handleFetchMore();
+    }
+  }, [currentPage]);
 
   const handleOpenModal = () => {
     const payload = {
@@ -87,6 +87,29 @@ export default function ServicePage() {
     };
 
     openModal(payload);
+  };
+
+  const getUsersForCurrentPage = () => {
+    const start = (currentPage - 1) * USERS_PER_PAGE;
+    const end = start + USERS_PER_PAGE;
+
+    return users.slice(start, end);
+  };
+
+  const handleFetchMore = async () => {
+    setLoading(true);
+
+    const { data } = await getUsers(USERS_PER_PAGE, users.length);
+
+    setLoading(false);
+
+    if (data) {
+      const users: User[] = data.users.map((user: any) => new User(user));
+
+      addUsers({ users, hasMore: data.hasMore, total: data.total });
+    } else {
+      toast.error("Une erreur est survenue");
+    }
   };
 
   return (
@@ -105,7 +128,7 @@ export default function ServicePage() {
 
       <div className="w-full flex flex-col align-start mt-10">
         <div className="flex flex-row justify-between">
-          <h2 className="text-xl">Les membres (104)</h2>
+          <h2 className="text-xl">Les membres ({total})</h2>
           <Button
             iconLeft={AddIcon}
             size="regular"
@@ -122,34 +145,40 @@ export default function ServicePage() {
               <TableHeader>
                 <tr>
                   <TableCell>Noms</TableCell>
+                  <TableCell>Université</TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell>Date d'adhésion</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
-                {users.map((user, i) => (
+                {getUsersForCurrentPage().map((user, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <Avatar
                           className="hidden mr-3 md:block"
-                          src={user.avatar}
+                          src={`${baseURL}/static/${user.avatar}`}
                           alt="User avatar"
                         />
                         <div>
                           <p className="font-semibold">{user.name}</p>
                           <p className="text-xs text-gray-600 dark:text-gray-400">
-                            {user.role}
+                            Professeur en {user.specialization}
                           </p>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge type={user.active}>{user.status}</Badge>
+                      <span className="text-sm">
+                        {user.establishment?.name}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <Badge type={true}>{"Actif"}</Badge>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">
-                        {new Date(user.adhesion).toLocaleDateString()}
+                        {new Date(user.memberAt).toLocaleDateString()}
                       </span>
                     </TableCell>
                   </TableRow>
@@ -158,14 +187,16 @@ export default function ServicePage() {
             </Table>
             <TableFooter>
               <Pagination
-                totalResults={users.length}
-                resultsPerPage={5}
-                onChange={() => {}}
+                totalResults={total}
+                resultsPerPage={USERS_PER_PAGE}
+                onChange={(activePage) => setCurrentPage(activePage)}
                 label="Table navigation"
               />
             </TableFooter>
           </TableContainer>
         </div>
+
+        {loading && <Loader />}
       </div>
     </Layout>
   );

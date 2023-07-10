@@ -23,9 +23,9 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
       <div className="p-5">
         <p className="mt-1 text-lg text-medium">{service.name}</p>
-        <p className="text-sm text-light" style={styles.members}>
+        {/* <p className="text-sm text-light" style={styles.members}>
           {service.members} membres
-        </p>
+        </p> */}
       </div>
     </div>
   );
@@ -35,7 +35,7 @@ const styles = {
   card: {
     marginTop: 20,
     width: 252,
-    height: 130,
+    height: "auto",
     border: "1px solid #eee",
   },
 

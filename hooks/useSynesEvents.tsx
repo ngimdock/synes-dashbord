@@ -1,67 +1,50 @@
-import { synesEvent } from "entities/events/SynesEvent";
-import { useEffect, useState } from "react"
-import { synesEvents } from "utils/demo/tableData";
+import { useAction } from "@dilane3/gx";
+import { getPosts } from "api/posts";
+import Communique, { synesCommunique } from "../entities/communique/communique";
+import { useCallback, useEffect } from "react";
+import { useSynesCategory } from "./useSynesCategory";
+import SynesEvent, { synesEvent } from "../entities/events/synesEvent";
 
 export const useSynesEvents = () => {
-  const [synesEventsList, setSynesEventsList] = useState<synesEvent[]>([]);
-  const [eventsLoading, setEventsLoading] = useState<boolean>(false);
-  const [error, setError] = useState(null);
+  const loadSynesEvents = useAction("synesPosts", "loadSynesEvents");
 
-  const loadSynesEvents = async () => {
-    setEventsLoading(true)
+  const { categoryId } = useSynesCategory("évènnements");
 
-    console.log("Rexecuted");
-    
+  const cachedLoadSynesEvents = useCallback(async () => {
+    console.log(categoryId);
 
-    const synesEventsList: synesEvent[] = [];
+    if (!categoryId) return [];
 
-    for (let index = 0; index < synesEvents.length; index++) {
+    const { data } = await getPosts(categoryId);
+
+    let synesEventsList: SynesEvent[] = [];
+
+    synesEventsList = data.posts.map((elmt: any) => {
+      console.log(elmt)
+      const filename = elmt.files[0] ? [elmt.files[0].name] : [];
+
       const newSynesEvent: synesEvent = {
-        description: synesEvents[index].description,
-        file: synesEvents[index].file,
-        photo: synesEvents[index].photo,
+        description: elmt.description,
+        files: filename,
+        photos: filename,
+        programDate: elmt.programDate,
         createdAt: new Date(),
-      }
+        updatedAt: new Date(),
+      };
 
-      synesEventsList.push(newSynesEvent);
-    }
-
-    console.log(synesEventsList);
-
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve("Loading the events");
-      }, 1000);
+      return new SynesEvent(newSynesEvent);
     });
 
-    setEventsLoading(false);
-
-    setSynesEventsList(synesEventsList);
-  };
-  
-  useEffect(() => {
-    loadSynesEvents()
-  
-    return () => {
-      console.log("Unmounted");
-    }
-  }, []);
-
-  const addSynesEvent = (newSynesevent: synesEvent) => {
-    const newSynesEventsList = synesEventsList;
-    newSynesEventsList.push(newSynesevent);
-    setSynesEventsList(newSynesEventsList);    
     console.log(synesEventsList);
-  }
 
-  const removeSynesEvent = (newSynesevent: synesEvent) => {
-    const newSynesEventsList = synesEventsList.filter((e) => e.description != newSynesevent.description);
-    setSynesEventsList([...newSynesEventsList]);
-  }
+    loadSynesEvents(synesEventsList);
+  }, [categoryId]);
 
-  return {
-    synesEvents: synesEventsList,
-    eventsLoading: eventsLoading,
-    addSynesEvent: addSynesEvent,
-  }
-}
+  useEffect(() => {
+    cachedLoadSynesEvents();
+
+    return () => {
+      console.log("unMounted");
+    };
+  }, [categoryId]);
+};

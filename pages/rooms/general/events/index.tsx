@@ -2,73 +2,67 @@ import { Tabs } from "../../../../constants";
 import Tab from "example/components/Tabs/Tab";
 import Layout from "example/containers/Layout";
 import style from "styles/event.module.css";
-// import { synesEvents } from "utils/demo/tableData";
-import { useEffect, useMemo } from "react";
-import SynesEvent from "../../../../entities/events/SynesEvent";
-import EventPost from "example/components/Posts/EventPost";
-import { useAction, useSignal } from "@dilane3/gx";
+import { useMemo } from "react";
+import {  useSignal } from "@dilane3/gx";
+import { SynesPostsState } from "gx/signals/synesPosts";
+import { useSynesEvents } from "hooks/useSynesEvents";
+import PostItem from "example/components/Posts/Post";
 
 export default function EventsPage() {
 
-  const synesEvents = useSignal("synesEvents");
+  // Loading the SynesEvents from the server
+  useSynesEvents();
 
-  const loadSynesEvents = useAction("synesEvents", "loadSynesEvents");
+  const { events: synesEvents } = useSignal<SynesPostsState>("synesPosts");
 
-  useEffect(() => {
-    loadSynesEvents();
-    
-    return () => {
-      console.log("unMounted");  
-    }
-  }, []);
-  
   const [columnOne, columnTwo, columnThree] = useMemo(() => {
     const columnOne = [];
     const columnTwo = [];
     const columnThree = [];    
 
-    console.log(synesEvents.payload);
-
-    for (let i = 0; i < synesEvents.payload.length; i++) {
+    for (let i = 0; i < synesEvents.length; i++) {
       if (i % 3 === 0) {
-        columnOne.push(synesEvents.payload[i]);
+        columnOne.push(synesEvents[i]);
       } else {
         if (i % 3 === 1) {
-          columnTwo.push(synesEvents.payload[i]);
+          columnTwo.push(synesEvents[i]);
         } else {
-          columnThree.push(synesEvents.payload[i]);
+          columnThree.push(synesEvents[i]);
         }
       }
     }
     return [columnOne, columnTwo, columnThree];
-  }, [synesEvents]);
+  }, [synesEvents, synesEvents.length]);
 
   return (
-    <Layout title="Evenements" description="Evenements">
+    <Layout title="Évènements" description="Évènements">
       <Tab tabname={Tabs.Events}>
         <section className={style.eventRoom}>
           <div>
             {columnOne.length > 0 &&
               columnOne.map((item, index) => {
-                const event = new SynesEvent(item);
 
-                return <EventPost key={index} synesEvent={event} />;
+                return <>
+                  <PostItem key={item.getDescription()+index} post={item} />
+                </>
               })}
           </div>
           <div>
             {columnTwo.length > 0 &&
               columnTwo.map((item, index) => {
-                const event = new SynesEvent(item);
 
-                return <EventPost key={index} synesEvent={event} />;
+                return <>
+                  <PostItem key={item.getDescription()+index} post={item} />
+                </>
               })}
           </div>
           <div>
             {columnThree.length > 0 &&
               columnThree.map((item, index) => {
-                const event = new SynesEvent(item);
 
-                return <EventPost key={index} synesEvent={event} />;
+                return <>
+                  <PostItem key={item.getDescription()+index} post={item} />
+                </>
               })}
           </div>
         </section>

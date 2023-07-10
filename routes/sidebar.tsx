@@ -64,12 +64,12 @@ const routes: IRoute[] = [
     name: "Profil",
   },
   {
-    path: "/example/modals",
+    path: "#",
     icon: "OutlineCogIcon",
     name: "Parametres",
   },
   {
-    path: "/example/tables",
+    path: "#",
     icon: "OutlineLogoutIcon",
     name: "Déconnexion",
   },
