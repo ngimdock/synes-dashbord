@@ -1,3 +1,5 @@
+import User from "../../entities/users/User";
+
 export type synesPost = {
   description: string;
   photos: string[];
@@ -5,6 +7,7 @@ export type synesPost = {
   programDate?: Date;
   createdAt: Date;
   updatedAt: Date;
+  owner: User;
 };
 
 abstract class SynesPost {
@@ -14,6 +17,7 @@ abstract class SynesPost {
   private createdAt: Date;
   private programDate?: Date;
   private updatedAt: Date;
+  private owner: User;
 
   public constructor(payload: synesPost) {
     this.description = payload.description;
@@ -22,6 +26,7 @@ abstract class SynesPost {
     this.programDate = payload.programDate;
     this.createdAt = payload.createdAt;
     this.updatedAt = payload.updatedAt;
+    this.owner = payload.owner;
   }
 
   public getDescription(): string {
@@ -44,8 +49,12 @@ abstract class SynesPost {
     return this.createdAt;
   }
 
-  public getUpdated(): Date {
+  public getUpdatedAt(): Date {
     return this.updatedAt;
+  }
+
+  public getOwner(): User {
+    return this.owner;
   }
 }
 

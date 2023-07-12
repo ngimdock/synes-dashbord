@@ -70,3 +70,10 @@ export const asynchronousEmulation = async (ms = 1000) => {
     }, ms);
   });
 };
+
+export const capitalizeFirstLetter = (text: string): string => {
+    if(!text || text.length < 1) return "";
+    const firstLetter = text[0].toUpperCase();
+    const newText = text.substring(1);
+    return firstLetter+newText;
+}

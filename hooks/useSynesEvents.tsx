@@ -1,19 +1,21 @@
 import { useAction } from "@dilane3/gx";
 import { getPosts } from "api/posts";
 import Communique, { synesCommunique } from "../entities/communique/communique";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSynesCategory } from "./useSynesCategory";
 import SynesEvent, { synesEvent } from "../entities/events/synesEvent";
 
 export const useSynesEvents = () => {
   const loadSynesEvents = useAction("synesPosts", "loadSynesEvents");
 
-  const { categoryId } = useSynesCategory("évènnements");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const { categoryId } = useSynesCategory("événements");
 
   const cachedLoadSynesEvents = useCallback(async () => {
-    console.log(categoryId);
-
     if (!categoryId) return [];
+
+    setLoading(true);
 
     const { data } = await getPosts(categoryId);
 
@@ -27,6 +29,7 @@ export const useSynesEvents = () => {
         description: elmt.description,
         files: filename,
         photos: filename,
+        owner: elmt.owner,
         programDate: elmt.programDate,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -35,9 +38,9 @@ export const useSynesEvents = () => {
       return new SynesEvent(newSynesEvent);
     });
 
-    console.log(synesEventsList);
-
     loadSynesEvents(synesEventsList);
+
+    setLoading(false)
   }, [categoryId]);
 
   useEffect(() => {
@@ -47,4 +50,8 @@ export const useSynesEvents = () => {
       console.log("unMounted");
     };
   }, [categoryId]);
+
+  return {
+    loading: loading,
+  }
 };

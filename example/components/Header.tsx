@@ -146,8 +146,8 @@ function Header() {
             >
               <Avatar
                 className="align-middle"
-                src={`${baseURL}/static/${user.avatar}`}
-                alt=""
+                src={user.avatar ? `${baseURL}/static/${user.avatar}`: '/assets/img/user.png'}
+                alt="user profile image"
                 aria-hidden="true"
               />
             </button>

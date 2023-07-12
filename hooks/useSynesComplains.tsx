@@ -1,19 +1,21 @@
 import { useAction } from "@dilane3/gx";
 import { getPosts } from "api/posts";
 import Communique, { synesCommunique } from "../entities/communique/communique";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSynesCategory } from "./useSynesCategory";
 import SynesComplain, { synesComplain } from "../entities/complains/synesComplain";
 
 export const useSynesComplains = () => {
   const { categoryId } = useSynesCategory("complains");
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const loadSynesComplains = useAction("synesPosts", "loadSynesComplains");
 
   const cachedLoadSynesComplains = useCallback(async () => {
-    console.log(categoryId);
-
     if(!categoryId) return [];
+    
+    setLoading(true);
 
     const { data } = await getPosts(categoryId);
 
@@ -28,6 +30,7 @@ export const useSynesComplains = () => {
         description: elmt.description,
         files: filename,
         photos: filename,
+        owner: elmt.owner,
         createdAt: new Date(),
         updatedAt: new Date(),
       }
@@ -35,9 +38,9 @@ export const useSynesComplains = () => {
       return new SynesComplain(newSynesCommunique);
     });
 
-    console.log(synesComplainsList);
-
     loadSynesComplains(synesComplainsList);
+
+    setLoading(false);
   },[categoryId]);
 
   useEffect(() => {
@@ -47,4 +50,8 @@ export const useSynesComplains = () => {
       console.log("unMounted");  
     }
   }, [categoryId]);
+
+  return {
+    loading: loading
+  }
 }

@@ -14,7 +14,7 @@ import SectionTitle from "example/components/Typography/SectionTitle";
 import { MdAccessAlarm } from "react-icons/md";
 import { useAction, useSignal } from "@dilane3/gx";
 import RoundSpinner from "example/components/Spinner/RoundSpinner";
-import { createPost, CreatePostDto } from "api/posts";
+import { createPost } from "api/posts";
 import { useSynesCategory } from "hooks/useSynesCategory";
 import SynesEvent, { synesEvent } from "../../../../entities/events/synesEvent";
 import FormSubmitResponse from "example/components/Response/FormResponse";
@@ -22,6 +22,8 @@ import { AddIcon } from "icons";
 import { AiOutlineClose } from "react-icons/ai";
 import FilepdfPost from "example/components/Posts/FilepdfPost";
 import { saveImage } from "api/files";
+import { CurrentUserState } from "gx/signals/current-user";
+import { CreatePostDto } from "api/posts/dto";
 
 const AddEvent = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -30,8 +32,10 @@ const AddEvent = () => {
   const [error, setError] = useState<boolean | null>(null);
   const [files, setFiles] = useState<FileList[]>([]);
   const [image, setPath] = useState<string[]>([]);
+  
+  const { categoryId } = useSynesCategory("événements");
 
-  const { categoryId } = useSynesCategory("évènnements");
+  const { user: currentUser } = useSignal<CurrentUserState>("current-user");
 
   const addSynesEvent = useAction("synesPosts", "addSynesEvent");
 
@@ -100,9 +104,8 @@ const AddEvent = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("Clicked");
 
-    if (event.description.trim() != "") {
+    try {
       setLoading(true);
 
       const imagesFormData = new FormData();
@@ -123,9 +126,7 @@ const AddEvent = () => {
           imagesFormData
         );
       }
-
-      console.log(imageResult?.data);
-
+      
       let imagesList: string[] = [];
 
       if (imageResult?.data.fileName) {
@@ -136,36 +137,36 @@ const AddEvent = () => {
         }
       }
 
-      console.log("imageList", imagesList);
-
       const newServerSynesEvent: CreatePostDto = {
         description: event.description.trim(),
         categoryId: categoryId ? categoryId : "",
         programDate: event.eventDate,
+        createdAt: new Date(),
         files: imagesList,
       };
 
       await createPost(newServerSynesEvent);
 
+      if(!currentUser) throw new Error("No current user");;
+
       const newClientSynesEvent: synesEvent = {
-        description: event.description.trim(),
-        photos: imagesList,
+        description: newServerSynesEvent.description,
+        photos: newServerSynesEvent.files ?? [],
         files: [],
-        createdAt: new Date(),
+        owner: currentUser,
+        createdAt: newServerSynesEvent.createdAt,
         updatedAt: new Date(),
         programDate: event.eventDate,
       };
 
       addSynesEvent(new SynesEvent(newClientSynesEvent));
-      setLoading(false);
+
       setError(false);
-      setTimeout(() => {
-        setError(null);
-        clearForm();
-      }, 3000);
-      setLoading(false);
-    } else {
+    } catch (error) {
       setError(true);
+      console.error("Error: ", error);
+    } finally {
+      setLoading(false);
       setTimeout(() => {
         setError(null);
         clearForm();
@@ -178,6 +179,7 @@ const AddEvent = () => {
       description: "",
       eventDate: new Date(),
     });
+    setFiles([]);
   };
 
   return (
@@ -246,7 +248,7 @@ const AddEvent = () => {
               boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)",
             }}
             onClick={handleSubmit}
-            disabled={event.description === "" || loading}
+            disabled={event.description.trim() === "" || loading}
           >
             {loading ? <RoundSpinner /> : null}
             Publier

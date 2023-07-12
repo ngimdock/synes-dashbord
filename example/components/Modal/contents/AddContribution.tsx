@@ -57,22 +57,23 @@ const AddContribution = () => {
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    target: string
   ) => {
-    if (target === "amount") {
-      const amountParsed = parseInt(e.target.value);
+    const amountParsed = parseInt(e.target.value);
 
-      if (e.target.value === "") {
-        setAmount(0);
-        return;
-      }
-
-      if (isNaN(amountParsed)) return;
-
-      setAmount(amountParsed);
-    } else if (target === "motif") {
-      setMotif(e.target.value as ContributionType);
+    if (e.target.value === "") {
+      setAmount(0);
+      return;
     }
+
+    if (isNaN(amountParsed)) return;
+
+    setAmount(amountParsed);
+  };
+  
+  const handleSelectChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+      setMotif(e.target.value as ContributionType);
   };
 
   const handleSelectMember = (userId: string) => {
@@ -146,7 +147,7 @@ const AddContribution = () => {
 
         <Label>
           <span className="mb-2 text-gray-800 dark:text-gray-300">Motif</span>
-          <Select value={motif} onChange={(e) => handleChange(e, "motif")}>
+          <Select value={motif} onChange={handleSelectChange}>
             <option value="MEMBER">Adhésion</option>
             <option value="YEAR">Contribution annuelle</option>
           </Select>
@@ -157,7 +158,7 @@ const AddContribution = () => {
           <Input
             placeholder="Montant"
             value={amount}
-            onChange={(e) => handleChange(e, "amount")}
+            onChange={handleChange}
           />
         </Label>
 
@@ -212,7 +213,7 @@ const AddContribution = () => {
               >
                 <Avatar
                   className="hidden mr-3 md:block"
-                  src={`${baseURL}/static/${user.avatar}`}
+                  src={user.avatar ? `${baseURL}/static/${user.avatar}` : '/assets/img/user.png'}
                   alt="User avatar"
                 />
                 <p className={styles.memberName}>{user.name}</p>

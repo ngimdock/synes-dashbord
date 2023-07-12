@@ -3,22 +3,26 @@ import FilepdfPost from "example/components/Posts/FilepdfPost";
 import { AddIcon } from "icons";
 import { AiOutlineClose } from "react-icons/ai";
 import Image from "next/image";
-import { useActions } from "@dilane3/gx";
+import { useActions, useSignal } from "@dilane3/gx";
 import React, { ChangeEvent, useRef, useState } from "react";
 
 import style from "styles/communique.module.css";
 import { Colors } from "utils";
 import RoundSpinner from "example/components/Spinner/RoundSpinner";
 import SynesComplain, { synesComplain } from "../../../../entities/complains/synesComplain";
-import { createPost, CreatePostDto } from "api/posts";
+import { createPost } from "api/posts";
 import { useSynesCategory } from "hooks/useSynesCategory";
 import FormSubmitResponse from "example/components/Response/FormResponse";
 import { saveImage } from "api/files";
+import { CurrentUserState } from "gx/signals/current-user";
+import { CreatePostDto } from "api/posts/dto";
 
 const AddPlainte = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { addSynesComplain } = useActions("synesPosts");
+
+  const { user: currentUser } = useSignal<CurrentUserState>("current-user")
 
   const { categoryId } = useSynesCategory("complains");
   
@@ -74,10 +78,7 @@ const AddPlainte = () => {
    * Function to create a post
    */
   const handleSubmit = async () => {
-
-    console.log("Clicked");
-    
-    if(description.trim() != "") {
+    try {
       setLoading(true)
 
       const imagesFormData = new FormData();
@@ -85,8 +86,6 @@ const AddPlainte = () => {
       let imageResult;
 
       if (files.length > 0) {
-        console.log("Entered");
-        console.log(files);
         if (files.length < 2) {
           imagesFormData.append("file", files[0][0]);
         } else {
@@ -100,56 +99,46 @@ const AddPlainte = () => {
         );
       }
 
-      console.log(imageResult?.data);
-
       let imagesList: string[] = [];
 
       if (imageResult?.data.fileName) {
-        console.log("Entered mouf");
         imagesList.push(imageResult.data.fileName);
       } else if (imageResult?.data.files) {
-        console.log("Entered mouf le retour");
         for (const file of imageResult.data.files) {
           imagesList.push(file);
         }
       }
 
-      console.log("imageList", imagesList);
-
       const newServerSynesComplain: CreatePostDto = {
-        description: description,
+        description: description.trim(),
         categoryId: categoryId ? categoryId : "",
         files: imagesList,
+        createdAt: new Date(),
       }
 
-      const result = await createPost(newServerSynesComplain);
+      await createPost(newServerSynesComplain);
 
-      console.log(result)
+      if(!currentUser) throw new Error("No current user");
 
       const newClientSynesComplain: synesComplain = {
-        description: description.trim(),
-        photos: imagesList,
+        description: newServerSynesComplain.description,
+        photos: newServerSynesComplain.files ?? [],
         files: [],
-        createdAt: new Date(),
+        owner: currentUser,
+        createdAt: newServerSynesComplain.createdAt,
         updatedAt: new Date(),
       }
 
       addSynesComplain(new SynesComplain(newClientSynesComplain));
 
-      setLoading(false);
-      setError(false)
-      setTimeout(() => {
-        setError(null)
-        clearForm();
-      }, 3000);
-      setLoading(false);
-      
-      console.log(loading);
-
-    } else {
+      setError(false);
+    } catch (error) {
       setError(true)
+      console.error("Error: ", error);      
+    } finally {
+      setLoading(false);    
       setTimeout(() => {
-        setError(null)
+        setError(null);
         clearForm();
       }, 3000);
     }
@@ -157,6 +146,7 @@ const AddPlainte = () => {
 
   const clearForm = () => {
     setDescription("");
+    setFiles([]);
   }
 
   return (
@@ -200,7 +190,7 @@ const AddPlainte = () => {
             style={{ marginLeft: 8, backgroundColor: Colors.primary, fill: "#fff", width: '100%', borderRadius: 4, 
               boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)" }}
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={description.trim() === "" || loading}
           >
             { loading ? 
               <RoundSpinner />

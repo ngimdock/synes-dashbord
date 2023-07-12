@@ -1,4 +1,5 @@
 import instance from "api";
+import { CreatePostDto } from "./dto";
 
 /**
  * Get Post Categories
@@ -25,13 +26,6 @@ export const getPosts = async (id: string) => {
     };
   }
 };
-
-export type CreatePostDto = {
-  description: string;
-  programDate?: Date;
-  files?: string[];
-  categoryId: string;
-}
 
 /**
  * Create a new post
