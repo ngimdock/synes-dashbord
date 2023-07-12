@@ -1,16 +1,20 @@
 import { useAction } from "@dilane3/gx";
 import { getPosts } from "api/posts";
 import Communique, { synesCommunique } from "../entities/communique/communique";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSynesCategory } from "./useSynesCategory";
 
 export const useCommuniques = () => {
   const { categoryId } = useSynesCategory("communiqués");
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const loadSynesCommuniques = useAction("synesPosts", "loadSynesCommuniques");
 
   const cachedLoadSynesCommuniques = useCallback(async () => {
     if (!categoryId) return [];
+
+    setLoading(true);
 
     const { data } = await getPosts(categoryId);
 
@@ -37,6 +41,8 @@ export const useCommuniques = () => {
     console.log(synesCommuniquesList);
 
     loadSynesCommuniques(synesCommuniquesList);
+
+    setLoading(false);
   }, [categoryId]);
 
   useEffect(() => {
@@ -46,4 +52,8 @@ export const useCommuniques = () => {
       console.log("unMounted");
     };
   }, [categoryId]);
+
+  return {
+    loading: loading,
+  }
 };

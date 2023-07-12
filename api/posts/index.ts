@@ -9,7 +9,6 @@ export const getPosts = async (id: string) => {
     const response = await instance.get(`/post-categories/${id}`);
 
     if (response.status === 200) {
-      console.log(response.data.data);
       return {
         data: response.data.data,
       };

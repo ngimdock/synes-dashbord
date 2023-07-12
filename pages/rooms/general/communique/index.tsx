@@ -8,11 +8,12 @@ import { SynesPostsState } from "gx/signals/synesPosts";
 import { useCommuniques } from "hooks/useCommuniques";
 import PostItem from "example/components/Posts/Post";
 import PostSkeleton from "example/components/Skeleton/PostSkeleton";
+import PostSuspense from "example/containers/PostSuspense";
 
 export default function CommuniquePage() {
 
   // Loading the communiques from the server
-  useCommuniques();
+  const { loading } = useCommuniques();
 
   const { communiques: synesCommuniques } = useSignal<SynesPostsState>("synesPosts");
 
@@ -39,28 +40,31 @@ export default function CommuniquePage() {
     <Layout title="Communiqués" description="Communiqués">
       <Tab tabname={Tabs.Communique}>
         <section className={style.salonComs}>
-          <PostSkeleton />
-          <div>
-            {columnOne.length > 0 &&
-              columnOne.map((item, index) => {
+          <PostSuspense loading={loading}>
+            <>
+              <div>
+                {columnOne.length > 0 &&
+                  columnOne.map((item, index) => {
 
-                return <PostItem key={index} post={item} />;
-              })}
-          </div>
-          <div>
-            {columnTwo.length > 0 &&
-              columnTwo.map((item, index) => {
+                    return <PostItem key={index} post={item} />;
+                  })}
+              </div>
+              <div>
+                {columnTwo.length > 0 &&
+                  columnTwo.map((item, index) => {
 
-                return <PostItem key={index} post={item} />;
-              })}
-          </div>
-          <div>
-            {columnThree.length > 0 &&
-              columnThree.map((item, index) => {
+                    return <PostItem key={index} post={item} />;
+                  })}
+              </div>
+              <div>
+                {columnThree.length > 0 &&
+                  columnThree.map((item, index) => {
 
-                return <PostItem key={index} post={item} />;
-              })}
-          </div>
+                    return <PostItem key={index} post={item} />;
+                  })}
+              </div>
+            </>
+          </PostSuspense>
         </section>
       </Tab>
     </Layout>

@@ -11,12 +11,13 @@ import { ModalType } from "gx/signals/modal";
 import { SynesPostsState } from "gx/signals/synesPosts";
 import { useSynesComplains } from "hooks/useSynesComplains";
 import PostItem from "example/components/Posts/Post";
+import PostSuspense from "example/containers/PostSuspense";
 
 export default function PlaintePage() {
   const { openModal } = useActions("modal");
 
   // Loading the complains from the server
-  useSynesComplains();
+  const { loading } = useSynesComplains();
 
   const {complains: synesComplains} = useSignal<SynesPostsState>("synesPosts");
   
@@ -72,33 +73,37 @@ export default function PlaintePage() {
 
       <hr className="mb-3"></hr>
       <section className={style.salonComs}>
-        <div>
-          {columnOne.length > 0 &&
-            columnOne.map((item, index) => {
+        <PostSuspense loading={loading}>
+          <>
+            <div>
+              {columnOne.length > 0 &&
+                columnOne.map((item, index) => {
 
-              return  (<>
-                <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />
-              </>)
-            })}
-        </div>
-        <div>
-          {columnTwo.length > 0 &&
-            columnTwo.map((item, index) => {
+                  return  (<>
+                    <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />
+                  </>)
+                })}
+            </div>
+            <div>
+              {columnTwo.length > 0 &&
+                columnTwo.map((item, index) => {
 
-              return  (<>
-                <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />
-              </>)
-            })}
-        </div>
-        <div>
-          {columnThree.length > 0 &&
-            columnThree.map((item, index) => {
+                  return  (<>
+                    <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />
+                  </>)
+                })}
+            </div>
+            <div>
+              {columnThree.length > 0 &&
+                columnThree.map((item, index) => {
 
-              return  (<>
-                <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />;
-              </>)
-            })}
-        </div>
+                  return  (<>
+                    <PostItem key={index+(item.getDescription()[index] ?? "")} post={item} />;
+                  </>)
+                })}
+            </div>
+          </>
+        </PostSuspense>
       </section>
     </Layout>
   );

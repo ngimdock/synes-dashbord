@@ -7,11 +7,12 @@ import {  useSignal } from "@dilane3/gx";
 import { SynesPostsState } from "gx/signals/synesPosts";
 import { useSynesEvents } from "hooks/useSynesEvents";
 import PostItem from "example/components/Posts/Post";
+import PostSuspense from "example/containers/PostSuspense";
 
 export default function EventsPage() {
 
   // Loading the SynesEvents from the server
-  useSynesEvents();
+  const { loading } = useSynesEvents();
 
   const { events: synesEvents } = useSignal<SynesPostsState>("synesPosts");
 
@@ -38,33 +39,37 @@ export default function EventsPage() {
     <Layout title="Évènements" description="Évènements">
       <Tab tabname={Tabs.Events}>
         <section className={style.eventRoom}>
-          <div>
-            {columnOne.length > 0 &&
-              columnOne.map((item, index) => {
+          <PostSuspense loading={loading}>
+            <>
+              <div>
+                {columnOne.length > 0 &&
+                  columnOne.map((item, index) => {
 
-                return <>
-                  <PostItem key={item.getDescription()+index} post={item} />
-                </>
-              })}
-          </div>
-          <div>
-            {columnTwo.length > 0 &&
-              columnTwo.map((item, index) => {
+                    return <>
+                      <PostItem key={item.getDescription()+index} post={item} />
+                    </>
+                  })}
+              </div>
+              <div>
+                {columnTwo.length > 0 &&
+                  columnTwo.map((item, index) => {
 
-                return <>
-                  <PostItem key={item.getDescription()+index} post={item} />
-                </>
-              })}
-          </div>
-          <div>
-            {columnThree.length > 0 &&
-              columnThree.map((item, index) => {
+                    return <>
+                      <PostItem key={item.getDescription()+index} post={item} />
+                    </>
+                  })}
+              </div>
+              <div>
+                {columnThree.length > 0 &&
+                  columnThree.map((item, index) => {
 
-                return <>
-                  <PostItem key={item.getDescription()+index} post={item} />
-                </>
-              })}
-          </div>
+                    return <>
+                      <PostItem key={item.getDescription()+index} post={item} />
+                    </>
+                  })}
+              </div>
+            </>  
+          </PostSuspense>
         </section>
       </Tab>
     </Layout>
