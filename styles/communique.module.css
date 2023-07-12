@@ -81,28 +81,3 @@
   cursor: pointer;
   display: none;
 }
-
-.salonComs {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  column-gap: 15px;
-  grid-auto-rows: auto;
-  grid-auto-flow: dense;
-  row-gap: 25px;
-}
-
-@media (max-width: 767px) {
-  /* styles pour les appareils mobiles */
-  .salonComs {
-    grid-template-columns: repeat(1, 1fr);
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  /* styles pour les appareils mobiles large et tablettes */
-  .salonComs {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}

@@ -200,25 +200,27 @@ const AddPlainte = () => {
         </div>
       </div>
       <div className="ml-6">
-        <p className="mb-8 text-xl font-semibold dark:text-gray-300">
-          Ajouter des images
-        </p>
-        {files.length > 0 ? (
-          <div className={style.files_section}>
+        <div className="flex justify-between items-center">
+          <p className="mb-8 text-xl font-semibold dark:text-gray-300">
+            Ajouter des images
+          </p>
+          {files.length > 0 ?
             <Button
               icon={AddIcon}
               size="regular"
               style={{
                 backgroundColor: Colors.primary,
                 fill: "#fff",
-                borderRadius: "120px",
-                right: "0px",
+                borderRadius: "50%",
                 position: "relative",
-                left: "34vh",
-                top: "-20px",
               }}
               onClick={handleUploadClick}
             ></Button>
+            : null
+          }
+        </div>
+        {files.length > 0 ? (
+          <div className={style.files_section}>
             <div className={style.files_display}>
               <input
                 className={`${style.default_file_input} `}
@@ -238,20 +240,20 @@ const AddPlainte = () => {
                     key={index}
                     style={{
                       borderBottom: "2px gray",
+                      position: 'relative'
                       // height: "80px",
                     }}
                   >
                     <Button
                       icon={AiOutlineClose}
                       size="small"
+                      className={"top-2 right-2"}
                       style={{
                         backgroundColor: Colors.red,
                         fill: "#fff",
+                        borderRadius: '50%',
                         fontWeight: "bold",
-                        borderRadius: "120px",
-                        left: "210px",
-                        top: "34px",
-                        position: "relative",
+                        position: "absolute",
                       }}
                       onClick={() => handleRemoveFile(item[0].name)}
                     ></Button>
@@ -264,7 +266,8 @@ const AddPlainte = () => {
                         // src={"/assets/img" + `${item[0].name}`}
                         src={image[index]}
                         height={100}
-                        width={200}
+                        width="0"
+                        className={"w-full"}
                         alt="Click to upload your file"
                       />
                     )}
