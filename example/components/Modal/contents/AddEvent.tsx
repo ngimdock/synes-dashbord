@@ -22,6 +22,7 @@ import { AddIcon } from "icons";
 import { AiOutlineClose } from "react-icons/ai";
 import FilepdfPost from "example/components/Posts/FilepdfPost";
 import { saveImage } from "api/files";
+import { CurrentUserState } from "gx/signals/current-user";
 
 const AddEvent = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -30,8 +31,10 @@ const AddEvent = () => {
   const [error, setError] = useState<boolean | null>(null);
   const [files, setFiles] = useState<FileList[]>([]);
   const [image, setPath] = useState<string[]>([]);
+  
+  const { categoryId } = useSynesCategory("événements");
 
-  const { categoryId } = useSynesCategory("évènnements");
+  const { user: currentUser } = useSignal<CurrentUserState>("current-user");
 
   const addSynesEvent = useAction("synesPosts", "addSynesEvent");
 
@@ -147,10 +150,13 @@ const AddEvent = () => {
 
       await createPost(newServerSynesEvent);
 
+      if(!currentUser) return;
+
       const newClientSynesEvent: synesEvent = {
         description: event.description.trim(),
         photos: imagesList,
         files: [],
+        owner: currentUser,
         createdAt: new Date(),
         updatedAt: new Date(),
         programDate: event.eventDate,

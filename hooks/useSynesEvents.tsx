@@ -8,7 +8,7 @@ import SynesEvent, { synesEvent } from "../entities/events/synesEvent";
 export const useSynesEvents = () => {
   const loadSynesEvents = useAction("synesPosts", "loadSynesEvents");
 
-  const { categoryId } = useSynesCategory("évènnements");
+  const { categoryId } = useSynesCategory("événements");
 
   const cachedLoadSynesEvents = useCallback(async () => {
     console.log(categoryId);
@@ -27,6 +27,7 @@ export const useSynesEvents = () => {
         description: elmt.description,
         files: filename,
         photos: filename,
+        owner: elmt.owner,
         programDate: elmt.programDate,
         createdAt: new Date(),
         updatedAt: new Date(),

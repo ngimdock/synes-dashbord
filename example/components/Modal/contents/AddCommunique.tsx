@@ -7,7 +7,7 @@ import React, { ChangeEvent, useRef, useState } from "react";
 
 import style from "styles/communique.module.css";
 import { Colors } from "utils";
-import { useActions } from "@dilane3/gx";
+import { useActions, useSignal } from "@dilane3/gx";
 import { createPost, CreatePostDto } from "api/posts";
 import { useSynesCategory } from "hooks/useSynesCategory";
 import FormSubmitResponse from "example/components/Response/FormResponse";
@@ -16,11 +16,14 @@ import Communique, {
 } from "../../../../entities/communique/communique";
 import RoundSpinner from "example/components/Spinner/RoundSpinner";
 import { saveImage } from "api/files";
+import { CurrentUserState } from "gx/signals/current-user";
 
 const AddCommunique = () => {
   const { addSynesCommunique } = useActions("synesPosts");
 
   const { categoryId } = useSynesCategory("communiqués");
+
+  const { user: currentUser } = useSignal<CurrentUserState>("current-user");
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -125,10 +128,13 @@ const AddCommunique = () => {
 
       await createPost(newServerSynesCommunique);
 
+      if(!currentUser) return;
+
       const newClientSynesCommunique: synesCommunique = {
         description: description.trim(),
         photos: imagesList,
         files: [],
+        owner: currentUser,
         createdAt: new Date(),
         updatedAt: new Date(),
       };

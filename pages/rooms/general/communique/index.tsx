@@ -7,6 +7,7 @@ import { useSignal } from "@dilane3/gx";
 import { SynesPostsState } from "gx/signals/synesPosts";
 import { useCommuniques } from "hooks/useCommuniques";
 import PostItem from "example/components/Posts/Post";
+import PostSkeleton from "example/components/Skeleton/PostSkeleton";
 
 export default function CommuniquePage() {
 
@@ -38,6 +39,7 @@ export default function CommuniquePage() {
     <Layout title="Communiqués" description="Communiqués">
       <Tab tabname={Tabs.Communique}>
         <section className={style.salonComs}>
+          <PostSkeleton />
           <div>
             {columnOne.length > 0 &&
               columnOne.map((item, index) => {

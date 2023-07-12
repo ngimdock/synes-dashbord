@@ -1,11 +1,11 @@
 import Image from "next/image";
-import { Avatar, Button, Card, CardBody } from "@roketid/windmill-react-ui";
+import { Avatar, Card, CardBody } from "@roketid/windmill-react-ui";
 import React from "react";
 import { GiAlarmClock } from "react-icons/gi";
 import { MdAccessAlarm } from "react-icons/md";
 
-import { Colors, formatDate } from "utils";
-import FilepdfPost from "./FilepdfPost";
+import { capitalizeFirstLetter, Colors, formatDate } from "utils";
+// import FilepdfPost from "./FilepdfPost";
 import style from "styles/post.module.css";
 import SynesPost from "entities/post/synesPost";
 
@@ -15,20 +15,18 @@ type PostItemType = {
 
 const PostItem = ({ post }: PostItemType) => {
   return (
-    <Card className={`${style.singlePost} max-w-sm mb-3`}>
+    <Card className={`${style.singlePost} max-w-sm mb-3 shadow-lg`}>
       <CardBody>
         <div>
 
           <div className="flex items-center">
-            <Image
-              src="/assets/img/profil2.jpg"
-              width={60}
-              height={60}
-              alt="Picture of the author"
-              className="rounded-full"
+            <Avatar
+              src={post.getOwner().avatar !== "avatar.png" ? `http://localhost:3333/v1/upload/image/${post.getOwner().avatar}` : `/assets/img/user.png`}
+              alt="Picture of the post author"
+              size={"large"}
             />
             <div className="ml-2">
-              <p className="text-lg lg:text-xl font-semibold dark:text-gray-300">Omer-alt</p>
+              <p className="text-lg lg:text-xl font-semibold dark:text-gray-300">{capitalizeFirstLetter(post.getOwner().name)}</p>
               {/* <p className="text-sm lg:text-md text-gray-500">Secretaire du BEN</p> */}
               <p className="text-xs lg:text-sm text-gray-500">{"Publié le " + formatDate(new Date())}</p>
             </div>

@@ -26,6 +26,7 @@ export const useCommuniques = () => {
         files: filename,
         photos: filename,
         programDate: elmt.programDate,
+        owner: elmt.owner,
         createdAt: new Date(),
         updatedAt: new Date(),
       };

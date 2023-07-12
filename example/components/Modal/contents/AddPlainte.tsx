@@ -3,7 +3,7 @@ import FilepdfPost from "example/components/Posts/FilepdfPost";
 import { AddIcon } from "icons";
 import { AiOutlineClose } from "react-icons/ai";
 import Image from "next/image";
-import { useActions } from "@dilane3/gx";
+import { useActions, useSignal } from "@dilane3/gx";
 import React, { ChangeEvent, useRef, useState } from "react";
 
 import style from "styles/communique.module.css";
@@ -14,11 +14,14 @@ import { createPost, CreatePostDto } from "api/posts";
 import { useSynesCategory } from "hooks/useSynesCategory";
 import FormSubmitResponse from "example/components/Response/FormResponse";
 import { saveImage } from "api/files";
+import { CurrentUserState } from "gx/signals/current-user";
 
 const AddPlainte = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { addSynesComplain } = useActions("synesPosts");
+
+  const { user: currentUser } = useSignal<CurrentUserState>("current-user")
 
   const { categoryId } = useSynesCategory("complains");
   
@@ -124,12 +127,13 @@ const AddPlainte = () => {
 
       const result = await createPost(newServerSynesComplain);
 
-      console.log(result)
+      if(!currentUser) return;
 
       const newClientSynesComplain: synesComplain = {
         description: description.trim(),
         photos: imagesList,
         files: [],
+        owner: currentUser,
         createdAt: new Date(),
         updatedAt: new Date(),
       }

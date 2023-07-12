@@ -28,6 +28,7 @@ export const useSynesComplains = () => {
         description: elmt.description,
         files: filename,
         photos: filename,
+        owner: elmt.owner,
         createdAt: new Date(),
         updatedAt: new Date(),
       }
