@@ -8,7 +8,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Buffer>
 ) {
-  const filePath = path.join(process.cwd(), 'public', 'statuts_et_texte_du_SYNES_final.pdf');
+  const filePath = path.join(process.cwd(), 'public/assets/files', 'statuts_et_texte_du_SYNES_final.pdf');
 
   const fileContents = fs.readFileSync(filePath);
 
