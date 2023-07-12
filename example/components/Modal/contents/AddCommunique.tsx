@@ -153,6 +153,7 @@ const AddCommunique = () => {
 
   const clearForm = () => {
     setDescription("");
+    setFiles([]);
   };
 
   return (

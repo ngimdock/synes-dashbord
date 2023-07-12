@@ -147,7 +147,7 @@ export default function ServicePage() {
                   <TableCell>Noms</TableCell>
                   <TableCell>Université</TableCell>
                   <TableCell>Status</TableCell>
-                  <TableCell>Date d'adhésion</TableCell>
+                  <TableCell>{"Date d'adhésion"}</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>

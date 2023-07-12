@@ -213,7 +213,7 @@ const AddContribution = () => {
               >
                 <Avatar
                   className="hidden mr-3 md:block"
-                  src={`${baseURL}/static/${user.avatar}`}
+                  src={user.avatar ? `${baseURL}/static/${user.avatar}` : '/assets/img/user.png'}
                   alt="User avatar"
                 />
                 <p className={styles.memberName}>{user.name}</p>

@@ -45,16 +45,6 @@
 }
 
 /* style qui se trouve dans la section de posts de communiques */
-.salonComs {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  column-gap: 15px;
-  grid-auto-rows: auto;
-  grid-auto-flow: dense;
-  row-gap: 25px;
-  /* display: flex;
-  flex-wrap: wrap; */
-}
 
 /* style de la section d'upload */
 .upload_section {
@@ -90,6 +80,15 @@
   z-index: 100;
   cursor: pointer;
   display: none;
+}
+
+.salonComs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 15px;
+  grid-auto-rows: auto;
+  grid-auto-flow: dense;
+  row-gap: 25px;
 }
 
 @media (max-width: 767px) {

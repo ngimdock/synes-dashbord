@@ -23,8 +23,6 @@ import { baseURL } from "api";
 import { useSignal } from "@dilane3/gx";
 import { CurrentUserState } from "gx/signals/current-user";
 import Link from "next/link";
-import userImage from '../../public/assets/img/user.png';
-
 
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext);
@@ -148,7 +146,7 @@ function Header() {
             >
               <Avatar
                 className="align-middle"
-                src={user.avatar !== 'avatar.png' ? `${baseURL}/static/${user.avatar}`: '/assets/img/user.png'}
+                src={user.avatar ? `${baseURL}/static/${user.avatar}`: '/assets/img/user.png'}
                 alt="user profile image"
                 aria-hidden="true"
               />

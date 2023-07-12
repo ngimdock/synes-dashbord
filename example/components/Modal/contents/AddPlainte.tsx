@@ -138,7 +138,7 @@ const AddPlainte = () => {
     } finally {
       setLoading(false);    
       setTimeout(() => {
-        setError(null)
+        setError(null);
         clearForm();
       }, 3000);
     }
@@ -146,6 +146,7 @@ const AddPlainte = () => {
 
   const clearForm = () => {
     setDescription("");
+    setFiles([]);
   }
 
   return (
