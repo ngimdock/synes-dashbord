@@ -8,7 +8,7 @@ import React, { ChangeEvent, useRef, useState } from "react";
 import style from "styles/communique.module.css";
 import { Colors } from "utils";
 import { useActions, useSignal } from "@dilane3/gx";
-import { createPost, CreatePostDto } from "api/posts";
+import { createPost } from "api/posts";
 import { useSynesCategory } from "hooks/useSynesCategory";
 import FormSubmitResponse from "example/components/Response/FormResponse";
 import Communique, {
@@ -17,6 +17,7 @@ import Communique, {
 import RoundSpinner from "example/components/Spinner/RoundSpinner";
 import { saveImage } from "api/files";
 import { CurrentUserState } from "gx/signals/current-user";
+import { CreatePostDto } from "api/posts/dto";
 
 const AddCommunique = () => {
   const { addSynesCommunique } = useActions("synesPosts");
@@ -79,9 +80,8 @@ const AddCommunique = () => {
    * Function to create a post
    */
   const handleSubmit = async () => {
-    console.log("Clicked");
 
-    if (description.trim() != "") {
+    try {
       setLoading(true);
       
       const imagesFormData = new FormData();
@@ -89,8 +89,6 @@ const AddCommunique = () => {
       let imageResult;
 
       if (files.length > 0) {
-        console.log("Entered");
-        console.log(files);
         if (files.length < 2) {
           imagesFormData.append("file", files[0][0]);
         } else {
@@ -104,8 +102,6 @@ const AddCommunique = () => {
         );
       }
 
-      console.log(imageResult?.data);
-
       let imagesList: string[] = [];
 
       if (imageResult?.data.fileName) {
@@ -118,45 +114,40 @@ const AddCommunique = () => {
         }
       }
 
-      console.log("imageList", imagesList);
-
       const newServerSynesCommunique: CreatePostDto = {
-        description: description,
+        description: description.trim(),
         files: imagesList,
         categoryId: categoryId ? categoryId : "",
+        createdAt: new Date(),
       };
 
       await createPost(newServerSynesCommunique);
 
-      if(!currentUser) return;
+      if(!currentUser) throw new Error("No current user");
 
       const newClientSynesCommunique: synesCommunique = {
         description: description.trim(),
-        photos: imagesList,
+        photos: newServerSynesCommunique.files ?? [],
         files: [],
         owner: currentUser,
-        createdAt: new Date(),
+        createdAt: newServerSynesCommunique.createdAt,
         updatedAt: new Date(),
       };
       
       const newSynesCommunique = new Communique(newClientSynesCommunique);
-      console.log(newSynesCommunique)
 
       addSynesCommunique(newSynesCommunique);
 
-      setLoading(false);
       setError(false);
-      setTimeout(() => {
-        setError(null);
-        clearForm();
-      }, 3000);
-      setLoading(false);
-    } else {
+    } catch(error) {
       setError(true);
+      console.error("Error: ", error);
+    } finally {
+      setLoading(false);
       setTimeout(() => {
         setError(null);
         clearForm();
-      }, 3000);
+      }, 3000);  
     }
   };
 
@@ -221,7 +212,7 @@ const AddCommunique = () => {
               boxShadow: "0px 3px 3px rgba(0, 0, 0, 0.25)",
             }}
             onClick={handleSubmit}
-            disabled={description === "" || loading}
+            disabled={description.trim() === "" || loading}
           >
             {loading ? <RoundSpinner /> : null}
             Publier
