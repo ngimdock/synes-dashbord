@@ -22,6 +22,7 @@ import Loader from "example/components/Loader/Loader";
 import { toast } from "react-toastify";
 import User from "../../../../entities/users/User";
 import School from "entities/schools/School";
+import FilepdfPost from "example/components/Posts/FilepdfPost";
 
 const formSchema = object({
   name: string().required("Le nom est obligatoire"),
